@@ -104,3 +104,56 @@ export interface OrdersResponse {
   limit: number;
   totalPages: number;
 }
+
+export interface CounterSession {
+  id: number;
+  counterId: number;
+  counter?: Counter;
+  cashierName: string;
+  openingCash: number;
+  openedAt: string;
+  closingCash: number | null;
+  closedAt: string | null;
+  expectedCash: number | null;
+  difference: number | null;
+  totalSales: number;
+  totalOrders: number;
+  note: string | null;
+  status: 'Open' | 'Closed';
+}
+
+export interface Counter {
+  id: number;
+  name: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  isOpen: boolean;
+  currentSession: CounterSession | null;
+  totalSessions: number;
+}
+
+export interface CurrentCounterStatus {
+  session: CounterSession | null;
+  isOpen: boolean;
+  currentCashSales?: number;
+  currentTotalSales?: number;
+  totalOrders?: number;
+  expectedCash?: number;
+}
+
+export interface CloseShiftResult {
+  session: CounterSession;
+  counter: Counter;
+  openingCash: number;
+  closingCash: number;
+  cashSales: number;
+  totalSales: number;
+  totalOrders: number;
+  expectedCash: number;
+  difference: number;
+  isBalanced: boolean;
+  isOver: boolean;
+  isShort: boolean;
+}
+

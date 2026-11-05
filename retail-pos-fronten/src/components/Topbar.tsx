@@ -22,10 +22,14 @@ export default function Topbar() {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <span className="hidden items-center gap-2 rounded-lg border border-stone-200 bg-white px-3 py-2 text-xs font-medium text-stone-600 md:flex">
+        <Link
+          href="/counters"
+          className="hidden items-center gap-2 rounded-lg border border-stone-200 bg-white px-3 py-2 text-xs font-medium text-stone-600 transition hover:border-brand-500 hover:text-brand-700 md:flex"
+          title="Manage POS Counters & Shifts"
+        >
           <span className="h-2 w-2 rounded-full bg-emerald-500" />
           Counter 1 open
-        </span>
+        </Link>
         <Link href="/pos" className="btn-primary">
           <ShoppingCart size={17} />
           <span className="hidden sm:inline">New sale</span>

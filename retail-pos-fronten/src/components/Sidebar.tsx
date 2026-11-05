@@ -156,10 +156,17 @@ export default function Sidebar() {
 
                   {/* POS Counters */}
                   <Link
-                    href="/pos"
-                    className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-200/50 hover:text-stone-900"
+                    href="/counters"
+                    className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition ${
+                      pathname === "/counters"
+                        ? "bg-white text-brand-700 font-semibold shadow-sm border border-[#fae5d7]"
+                        : "text-stone-600 hover:bg-stone-200/50 hover:text-stone-900"
+                    }`}
                   >
-                    <ArrowRight size={14} className="text-stone-400" />
+                    <ArrowRight
+                      size={14}
+                      className={pathname === "/counters" ? "text-brand-500" : "text-stone-400"}
+                    />
                     <span>POS Counters</span>
                   </Link>
 

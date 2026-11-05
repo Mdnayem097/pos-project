@@ -1,6 +1,10 @@
 import type {
   Category,
   CategoryItem,
+  CloseShiftResult,
+  Counter,
+  CounterSession,
+  CurrentCounterStatus,
   Customer,
   Order,
   OrdersResponse,
@@ -346,3 +350,111 @@ export async function createOrder(dto: any): Promise<Order> {
   }
   return res.json();
 }
+
+// ---------------- COUNTERS ----------------
+
+export async function fetchCounters(): Promise<Counter[]> {
+  try {
+    const res = await fetch(`${API_BASE}/counters`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Failed to fetch counters`);
+    return res.json();
+  } catch (err) {
+    console.warn("Error fetching counters:", err);
+    return [];
+  }
+}
+
+export async function createCounter(dto: { name: string }): Promise<Counter> {
+  const res = await fetch(`${API_BASE}/counters`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dto),
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || `Failed to create counter`);
+  }
+  return res.json();
+}
+
+export async function updateCounter(
+  id: number | string,
+  dto: { name?: string; isActive?: boolean }
+): Promise<Counter> {
+  const res = await fetch(`${API_BASE}/counters/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dto),
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || `Failed to update counter`);
+  }
+  return res.json();
+}
+
+export async function deleteCounter(
+  id: number | string
+): Promise<{ id: number; deactivated?: boolean; deleted?: boolean; message: string }> {
+  const res = await fetch(`${API_BASE}/counters/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || `Failed to delete counter`);
+  }
+  return res.json();
+}
+
+export async function fetchCurrentSession(): Promise<CurrentCounterStatus> {
+  try {
+    const res = await fetch(`${API_BASE}/counters/current`, { cache: "no-store" });
+    if (!res.ok) return { session: null, isOpen: false };
+    return res.json();
+  } catch {
+    return { session: null, isOpen: false };
+  }
+}
+
+export async function openCounterSession(
+  id: number | string,
+  dto: { openingCash: number; cashierName?: string }
+): Promise<CounterSession> {
+  const res = await fetch(`${API_BASE}/counters/${id}/open`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dto),
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || `Failed to open counter register`);
+  }
+  return res.json();
+}
+
+export async function closeCounterSession(
+  id: number | string,
+  dto: { closingCash: number; note?: string }
+): Promise<CloseShiftResult> {
+  const res = await fetch(`${API_BASE}/counters/${id}/close`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dto),
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || `Failed to close counter register`);
+  }
+  return res.json();
+}
+
+export async function fetchCounterSessions(id: number | string): Promise<CounterSession[]> {
+  try {
+    const res = await fetch(`${API_BASE}/counters/${id}/sessions`, { cache: "no-store" });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
