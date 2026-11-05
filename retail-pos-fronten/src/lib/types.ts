@@ -86,7 +86,7 @@ export interface Order {
   email: string;
   phone?: string | null;
   source: "POS" | "Website" | string;
-  method: "Cash" | "Card" | "bKash" | "COD" | string;
+  method: "Cash" | "Card" | "bKash" | string;
   total: number;
   subtotal: number;
   vat: number;
@@ -156,4 +156,170 @@ export interface CloseShiftResult {
   isOver: boolean;
   isShort: boolean;
 }
+
+// ---------------- RETURNS ----------------
+
+export interface ReturnItem {
+  id: number;
+  returnId: number;
+  saleItemId?: number | null;
+  productId: number;
+  product: Product;
+  qty: number;
+  unitPrice: number;
+  refundAmount: number;
+  reason: string | null;
+  createdAt: string;
+}
+
+export interface ReturnOrder {
+  id: number;
+  returnNo: string;
+  orderId: number;
+  order: {
+    id: number;
+    invoiceNo: string;
+    customerName?: string | null;
+    customer?: Customer | null;
+    payment: string;
+    total: number;
+    createdAt: string;
+  };
+  refundMethod: string;
+  refundAmount: number;
+  reason: string | null;
+  status: string;
+  createdAt: string;
+  items: ReturnItem[];
+}
+
+export interface ReturnableItemLine {
+  orderItemId: number;
+  productId: number;
+  productName: string;
+  sku: string;
+  emoji: string;
+  unitPrice: number;
+  originalQty: number;
+  alreadyReturnedQty: number;
+  returnableQty: number;
+}
+
+export interface OrderReturnableInfo {
+  orderId: number;
+  invoiceNo: string;
+  orderDate: string;
+  customerName: string;
+  total: number;
+  paymentMethod: string;
+  items: ReturnableItemLine[];
+  canReturnAny: boolean;
+}
+
+export interface CreateReturnPayload {
+  orderId: number;
+  items: {
+    orderItemId: number;
+    qty: number;
+    reason?: string;
+  }[];
+  refundMethod?: string;
+  reason?: string;
+}
+
+export interface AuthUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  isSuperAdmin?: boolean;
+  mustChangePassword?: boolean;
+  avatar?: string | null;
+}
+
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  mustChangePassword?: boolean;
+  user: AuthUser;
+  permissions: string[];
+}
+
+export interface AuthMeResponse {
+  user: AuthUser;
+  permissions: string[];
+  mustChangePassword?: boolean;
+}
+
+export interface RefreshResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface Role {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  permissions: string[];
+  isSystem: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ModuleAction {
+  key: string;
+  label: string;
+}
+
+export interface ModuleDefinition {
+  module: string;
+  label: string;
+  actions: ModuleAction[];
+}
+
+export interface AdminUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  roleId: number | null;
+  roleEntity?: Role | null;
+  avatar?: string | null;
+  isActive: boolean;
+  isSuperAdmin: boolean;
+  mustChangePassword: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateUserPayload {
+  name: string;
+  email: string;
+  password: string;
+  roleId: number;
+}
+
+export interface UpdateUserPayload {
+  name?: string;
+  email?: string;
+  password?: string;
+  roleId?: number;
+  isActive?: boolean;
+  mustChangePassword?: boolean;
+}
+
+export interface CreateRolePayload {
+  name: string;
+  description?: string;
+  permissions: string[];
+}
+
+export interface UpdateRolePayload {
+  name?: string;
+  description?: string;
+  permissions?: string[];
+}
+
+
 

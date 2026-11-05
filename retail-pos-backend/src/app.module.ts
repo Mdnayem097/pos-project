@@ -7,6 +7,10 @@ import { CustomersModule } from './customers/customers.module';
 import { SalesModule } from './sales/sales.module';
 import { OrdersModule } from './orders/orders.module';
 import { CountersModule } from './counters/counters.module';
+import { ReturnsModule } from './returns/returns.module';
+import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -25,12 +29,16 @@ import { CountersModule } from './counters/counters.module';
         synchronize: true, // local development only: auto-creates and alters tables
       }),
     }),
+    AuthModule,
+    RolesModule,
+    UsersModule,
     CategoriesModule,
     ProductsModule,
     CustomersModule,
     SalesModule,
     OrdersModule,
     CountersModule,
+    ReturnsModule,
   ],
 })
 export class AppModule {}

@@ -17,7 +17,7 @@ const statusTone: Record<string, "green" | "amber" | "red" | "stone" | "brand"> 
   Cancelled: "red",
 };
 
-const paymentMethods: PaymentMethod[] = ["Cash", "Card", "bKash", "Nagad", "COD"];
+const paymentMethods: PaymentMethod[] = ["Cash", "Card", "bKash", "Nagad"];
 
 const paymentColor: Record<PaymentMethod, string> = {
   Cash: "bg-brand-500",

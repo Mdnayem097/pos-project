@@ -10,6 +10,8 @@ import {
   Edit2,
   LayoutGrid,
   List,
+  Loader2,
+  MoreVertical,
   Package,
   Plus,
   Search,
@@ -54,6 +56,11 @@ export default function ProductsPage() {
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  // Actions dropdown & Delete confirmation states
+  const [openMenuId, setOpenMenuId] = useState<string | number | null>(null);
+  const [deleteConfirmProduct, setDeleteConfirmProduct] = useState<Product | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState<{
@@ -223,16 +230,26 @@ export default function ProductsPage() {
     }
   }
 
-  // Delete product
-  async function handleDeleteProduct(id: string | number, name: string) {
-    if (confirm(`Are you sure you want to delete "${name}"?`)) {
-      try {
-        await deleteProduct(id);
-        setProducts((prev) => prev.filter((p) => p.id !== id));
-      } catch (err: any) {
-        console.error("Backend delete failed:", err);
-        alert(err.message || "Failed to delete product from database.");
-      }
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClose = () => setOpenMenuId(null);
+    window.addEventListener("click", handleClose);
+    return () => window.removeEventListener("click", handleClose);
+  }, []);
+
+  // Confirm delete product
+  async function handleConfirmDelete() {
+    if (!deleteConfirmProduct) return;
+    try {
+      setIsDeleting(true);
+      await deleteProduct(deleteConfirmProduct.id);
+      setProducts((prev) => prev.filter((p) => p.id !== deleteConfirmProduct.id));
+      setDeleteConfirmProduct(null);
+    } catch (err: any) {
+      console.error("Backend delete failed:", err);
+      alert(err.message || "Failed to delete product from database.");
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -560,25 +577,57 @@ export default function ProductsPage() {
                         </span>
                       </td>
 
-                      {/* Action buttons */}
-                      <td className="px-5 py-3.5 text-right">
-                        <div className="flex items-center justify-end gap-1 opacity-70 transition-opacity group-hover:opacity-100">
+                      {/* Action buttons (Dropdown Menu) */}
+                      <td className="px-5 py-3.5 text-right relative">
+                        <div className="relative inline-block text-left">
                           <button
                             type="button"
-                            aria-label={`Edit ${p.name}`}
-                            onClick={() => handleOpenEdit(p)}
-                            className="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100 hover:text-stone-900 transition"
+                            aria-label={`Actions for ${p.name}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenMenuId(openMenuId === p.id ? null : p.id);
+                            }}
+                            className={`flex h-8 w-8 items-center justify-center rounded-lg border transition ${
+                              openMenuId === p.id
+                                ? "border-brand-500 bg-brand-50 text-brand-700 shadow-sm"
+                                : "border-transparent text-stone-400 hover:border-stone-200 hover:bg-stone-100 hover:text-stone-700"
+                            }`}
                           >
-                            <Edit2 size={15} />
+                            <MoreVertical size={16} />
                           </button>
-                          <button
-                            type="button"
-                            aria-label={`Delete ${p.name}`}
-                            onClick={() => handleDeleteProduct(p.id, p.name)}
-                            className="rounded-lg p-1.5 text-stone-400 hover:bg-red-50 hover:text-red-600 transition"
-                          >
-                            <Trash2 size={15} />
-                          </button>
+
+                          {openMenuId === p.id && (
+                            <div
+                              onClick={(e) => e.stopPropagation()}
+                              className="absolute right-0 top-full z-40 mt-1 w-44 rounded-xl border border-stone-200 bg-white p-1.5 shadow-xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 text-left"
+                            >
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setOpenMenuId(null);
+                                  handleOpenEdit(p);
+                                }}
+                                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-stone-700 transition hover:bg-stone-50 hover:text-brand-700"
+                              >
+                                <Edit2 size={14} className="text-stone-400" />
+                                <span>Edit Product</span>
+                              </button>
+
+                              <div className="my-1 border-t border-stone-100" />
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setOpenMenuId(null);
+                                  setDeleteConfirmProduct(p);
+                                }}
+                                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+                              >
+                                <Trash2 size={14} className="text-red-500" />
+                                <span>Delete Product</span>
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -684,8 +733,9 @@ export default function ProductsPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleDeleteProduct(p.id, p.name)}
-                      className="rounded-xl border border-stone-200 p-2 text-stone-400 hover:bg-red-50 hover:text-red-600"
+                      onClick={() => setDeleteConfirmProduct(p)}
+                      className="rounded-xl border border-stone-200 p-2 text-stone-400 hover:bg-red-50 hover:text-red-600 transition"
+                      title="Delete Product"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -859,6 +909,65 @@ export default function ProductsPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* 6. Delete Confirmation Modal */}
+      {deleteConfirmProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl border border-stone-200 bg-white p-6 shadow-2xl animate-in zoom-in-95">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-red-100 text-red-600 ring-8 ring-red-50">
+                <Trash2 size={24} />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-stone-900">Delete Product</h3>
+                <p className="mt-1 text-sm text-stone-500 leading-relaxed">
+                  Are you sure you want to delete{" "}
+                  <strong className="font-semibold text-stone-900">
+                    &ldquo;{deleteConfirmProduct.name}&rdquo;
+                  </strong>
+                  ? This product will be permanently removed from your catalog and inventory.
+                </p>
+                <div className="mt-3 flex items-center gap-2 rounded-xl border border-stone-200 bg-stone-50 p-2.5 text-xs text-stone-600 font-medium">
+                  <span className="font-mono font-bold text-stone-800">{deleteConfirmProduct.sku}</span>
+                  <span>•</span>
+                  <span>{deleteConfirmProduct.category}</span>
+                  <span>•</span>
+                  <span>{deleteConfirmProduct.stock} in stock</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex items-center justify-end gap-3 border-t border-stone-100 pt-4">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setDeleteConfirmProduct(null)}
+                className="rounded-xl border border-stone-200 px-4 py-2.5 text-xs font-semibold text-stone-600 transition hover:bg-stone-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleConfirmDelete}
+                className="flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-red-700 active:scale-95 disabled:opacity-50"
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={14} />
+                    <span>Yes, Delete</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}
