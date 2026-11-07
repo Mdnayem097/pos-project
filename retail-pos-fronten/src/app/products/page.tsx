@@ -264,14 +264,14 @@ export default function ProductsPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="page-title text-2xl font-bold tracking-tight text-stone-900">
+            <h1 className="page-title text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
               Products Catalog
             </h1>
             <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-semibold text-brand-700 ring-1 ring-inset ring-brand-200">
               {products.length} Items
             </span>
           </div>
-          <p className="mt-1 text-sm text-stone-500">
+          <p className="mt-1 text-sm text-stone-500 dark:text-slate-400">
             Manage your store inventory, retail pricing, margins, and stock alerts.
           </p>
         </div>
@@ -314,41 +314,41 @@ export default function ProductsPage() {
         <div className="card group relative overflow-hidden p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="absolute inset-x-0 top-0 h-[4px] bg-transparent transition-all duration-200 group-hover:bg-brand-500 rounded-t-2xl" />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 transition-colors group-hover:text-stone-800">
+            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400 transition-colors group-hover:text-stone-800 dark:text-slate-200">
               Total Items
             </p>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-stone-100 text-stone-700 transition-all duration-200 group-hover:bg-brand-50 group-hover:text-brand-600">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-stone-100 dark:bg-[#162035] text-stone-700 dark:text-slate-300 transition-all duration-200 group-hover:bg-brand-50 group-hover:text-brand-600">
               <Package size={17} />
             </span>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-stone-900 transition-transform duration-200 group-hover:translate-x-0.5">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-stone-900 dark:text-white transition-transform duration-200 group-hover:translate-x-0.5">
             {products.length}
           </p>
-          <p className="mt-1 text-xs text-stone-500">{totalStockUnits.toLocaleString()} units in stock</p>
+          <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">{totalStockUnits.toLocaleString()} units in stock</p>
         </div>
 
         {/* Inventory Cost */}
         <div className="card group relative overflow-hidden p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="absolute inset-x-0 top-0 h-[4px] bg-transparent transition-all duration-200 group-hover:bg-brand-600 rounded-t-2xl" />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 transition-colors group-hover:text-stone-800">
+            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400 transition-colors group-hover:text-stone-800 dark:group-hover:text-slate-200">
               Inventory Cost
             </p>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand-600 transition-all duration-200 group-hover:bg-brand-100">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 dark:bg-brand-500/15 text-brand-600 dark:text-brand-400 transition-all duration-200 group-hover:bg-brand-100 dark:group-hover:bg-brand-500/25">
               <Boxes size={17} />
             </span>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-brand-700 transition-transform duration-200 group-hover:translate-x-0.5">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-brand-600 dark:text-brand-400 transition-transform duration-200 group-hover:translate-x-0.5">
             {formatCurrency(totalStockValue)}
           </p>
-          <p className="mt-1 text-xs text-stone-500">Total valuation at cost</p>
+          <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">Total valuation at cost</p>
         </div>
 
         {/* Low Stock Alert */}
         <div
           onClick={() => setStockFilter(stockFilter === "low-stock" ? "all" : "low-stock")}
           className={`card group relative overflow-hidden cursor-pointer p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
-            stockFilter === "low-stock" ? "bg-amber-50/30 shadow-sm" : ""
+            stockFilter === "low-stock" ? "bg-amber-50/30 dark:bg-amber-950/20 shadow-sm" : ""
           }`}
         >
           <div
@@ -359,22 +359,22 @@ export default function ProductsPage() {
             }`}
           />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">Low Stock Alert</p>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50 text-amber-600 transition-all duration-200 group-hover:bg-amber-100">
+            <p className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400">Low Stock Alert</p>
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 transition-all duration-200 group-hover:bg-amber-100 dark:group-hover:bg-amber-500/25">
               <AlertTriangle size={17} />
             </span>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-amber-600 transition-transform duration-200 group-hover:translate-x-0.5">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-amber-600 dark:text-amber-400 transition-transform duration-200 group-hover:translate-x-0.5">
             {lowStockCount}
           </p>
-          <p className="mt-1 text-xs text-stone-500">Items at or below reorder level</p>
+          <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">Items at or below reorder level</p>
         </div>
 
         {/* Out of Stock */}
         <div
           onClick={() => setStockFilter(stockFilter === "out-of-stock" ? "all" : "out-of-stock")}
           className={`card group relative overflow-hidden cursor-pointer p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
-            stockFilter === "out-of-stock" ? "bg-red-50/30 shadow-sm" : ""
+            stockFilter === "out-of-stock" ? "bg-red-50/30 dark:bg-rose-950/20 shadow-sm" : ""
           }`}
         >
           <div
@@ -385,15 +385,15 @@ export default function ProductsPage() {
             }`}
           />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-red-700">Out of Stock</p>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-red-50 text-red-600 transition-all duration-200 group-hover:bg-red-100">
+            <p className="text-xs font-semibold uppercase tracking-wider text-red-700 dark:text-rose-400">Out of Stock</p>
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-red-50 dark:bg-rose-500/15 text-red-600 dark:text-rose-400 transition-all duration-200 group-hover:bg-red-100 dark:group-hover:bg-rose-500/25">
               <X size={17} />
             </span>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-red-600 transition-transform duration-200 group-hover:translate-x-0.5">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-red-600 dark:text-rose-400 transition-transform duration-200 group-hover:translate-x-0.5">
             {outOfStockCount}
           </p>
-          <p className="mt-1 text-xs text-stone-500">Requires immediate restock</p>
+          <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">Requires immediate restock</p>
         </div>
       </section>
 
@@ -416,7 +416,7 @@ export default function ProductsPage() {
             <button
               type="button"
               onClick={() => setQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:text-slate-400"
             >
               <X size={15} />
             </button>
@@ -470,15 +470,15 @@ export default function ProductsPage() {
           </div>
 
           {/* View Mode Toggle */}
-          <div className="flex items-center rounded-xl border border-stone-200 bg-stone-100 p-0.5">
+          <div className="flex items-center rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-100 dark:bg-[#111827] p-0.5">
             <button
               type="button"
               aria-label="Table View"
               onClick={() => setViewMode("table")}
               className={`rounded-lg p-1.5 transition ${
                 viewMode === "table"
-                  ? "bg-white text-stone-900 shadow-sm"
-                  : "text-stone-500 hover:text-stone-900"
+                  ? "bg-white dark:bg-[#162035] text-stone-900 dark:text-white shadow-xs border border-transparent dark:border-[#1F293D]"
+                  : "text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white"
               }`}
             >
               <List size={16} />
@@ -489,8 +489,8 @@ export default function ProductsPage() {
               onClick={() => setViewMode("grid")}
               className={`rounded-lg p-1.5 transition ${
                 viewMode === "grid"
-                  ? "bg-white text-stone-900 shadow-sm"
-                  : "text-stone-500 hover:text-stone-900"
+                  ? "bg-white dark:bg-[#162035] text-stone-900 dark:text-white shadow-xs border border-transparent dark:border-[#1F293D]"
+                  : "text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:hover:text-white"
               }`}
             >
               <LayoutGrid size={16} />
@@ -503,22 +503,22 @@ export default function ProductsPage() {
       {viewMode === "table" ? (
         <div className="card overflow-hidden">
           {/* Mobile View: Responsive Product Cards (Zero Horizontal Scroll) */}
-          <div className="block sm:hidden divide-y divide-stone-100">
+          <div className="block sm:hidden divide-y divide-stone-100 dark:divide-[#1F293D]">
             {filteredProducts.map((p) => {
               const isOut = p.stock === 0;
               const isLow = p.stock > 0 && p.stock <= p.reorderLevel;
 
               return (
-                <div key={p.id} className="p-4 space-y-3 bg-white">
+                <div key={p.id} className="p-4 space-y-3 bg-white dark:bg-[#111827]">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
                       <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-2xl shadow-xs">
                         {p.emoji}
                       </span>
                       <div>
-                        <p className="font-semibold text-stone-900 text-sm leading-tight">{p.name}</p>
+                        <p className="font-semibold text-stone-900 dark:text-white text-sm leading-tight">{p.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="font-mono text-[11px] text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded">
+                          <span className="font-mono text-[11px] text-stone-500 dark:text-slate-400 bg-stone-100 dark:bg-[#162035] px-1.5 py-0.5 rounded">
                             {p.sku}
                           </span>
                           <Badge tone={categoryColors[p.category] || "brand"}>
@@ -546,22 +546,22 @@ export default function ProductsPage() {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between rounded-lg bg-stone-50 p-2.5 text-xs border border-stone-100">
-                    <span className="text-stone-500">
-                      Cost: <strong className="text-stone-700 tabular-nums">{formatCurrency(p.cost)}</strong>
+                  <div className="flex items-center justify-between rounded-lg bg-stone-50 dark:bg-[#162035] p-2.5 text-xs border border-stone-100 dark:border-[#1F293D]">
+                    <span className="text-stone-500 dark:text-slate-400">
+                      Cost: <strong className="text-stone-700 dark:text-slate-300 tabular-nums">{formatCurrency(p.cost)}</strong>
                     </span>
-                    <span className="text-stone-500">
+                    <span className="text-stone-500 dark:text-slate-400">
                       Price: <strong className="text-brand-700 font-bold text-sm tabular-nums">{formatCurrency(p.price)}</strong>
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-end gap-2 pt-1 border-t border-stone-100">
+                  <div className="flex items-center justify-end gap-2 pt-1 border-t border-stone-100 dark:border-[#1F293D]">
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(p)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-100 transition"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-3 py-1.5 text-xs font-semibold text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:bg-[#162035] transition"
                     >
-                      <Edit2 size={13} className="text-stone-500" />
+                      <Edit2 size={13} className="text-stone-500 dark:text-slate-400" />
                       <span>Edit</span>
                     </button>
                     <button
@@ -581,7 +581,7 @@ export default function ProductsPage() {
           {/* Desktop Table View */}
           <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-stone-200 bg-stone-50/90 text-xs font-semibold uppercase tracking-wider text-stone-500">
+              <thead className="border-b border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/90 dark:bg-[#162035]/90 text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400">
                 <tr>
                   <th className="px-5 py-3.5">Product</th>
                   <th className="px-5 py-3.5">SKU</th>
@@ -592,7 +592,7 @@ export default function ProductsPage() {
                   <th className="px-5 py-3.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-stone-100 dark:divide-[#1F293D]">
                 {filteredProducts.map((p) => {
                   const isOut = p.stock === 0;
                   const isLow = p.stock > 0 && p.stock <= p.reorderLevel;
@@ -600,7 +600,7 @@ export default function ProductsPage() {
                   return (
                     <tr
                       key={p.id}
-                      className="group transition-colors duration-150 hover:bg-stone-50/90"
+                      className="group transition-colors duration-150 hover:bg-stone-50 dark:hover:bg-[#162035]/60"
                     >
                       {/* Product Name & Emoji */}
                       <td className="px-5 py-3.5">
@@ -609,7 +609,7 @@ export default function ProductsPage() {
                             {p.emoji}
                           </span>
                           <div>
-                            <p className="font-semibold text-stone-900 leading-snug">{p.name}</p>
+                            <p className="font-semibold text-stone-900 dark:text-white leading-snug">{p.name}</p>
                             <p className="text-xs text-stone-400">Reorder at {p.reorderLevel} units</p>
                           </div>
                         </div>
@@ -617,7 +617,7 @@ export default function ProductsPage() {
 
                       {/* SKU */}
                       <td className="px-5 py-3.5">
-                        <span className="font-mono text-xs font-semibold text-stone-600 bg-stone-100 px-2 py-0.5 rounded-md">
+                        <span className="font-mono text-xs font-semibold text-stone-600 dark:text-slate-400 bg-stone-100 dark:bg-[#162035] px-2 py-0.5 rounded-md">
                           {p.sku}
                         </span>
                       </td>
@@ -630,12 +630,12 @@ export default function ProductsPage() {
                       </td>
 
                       {/* Cost */}
-                      <td className="px-5 py-3.5 text-right font-medium text-stone-500 tabular-nums">
+                      <td className="px-5 py-3.5 text-right font-medium text-stone-500 dark:text-slate-400 tabular-nums">
                         {formatCurrency(p.cost)}
                       </td>
 
                       {/* Price */}
-                      <td className="px-5 py-3.5 text-right font-bold text-stone-900 tabular-nums">
+                      <td className="px-5 py-3.5 text-right font-bold text-stone-900 dark:text-white tabular-nums">
                         {formatCurrency(p.price)}
                       </td>
 
@@ -672,7 +672,7 @@ export default function ProductsPage() {
                             className={`flex h-8 w-8 items-center justify-center rounded-lg border transition ${
                               openMenuId === p.id
                                 ? "border-brand-500 bg-brand-50 text-brand-700 shadow-sm"
-                                : "border-transparent text-stone-400 hover:border-stone-200 hover:bg-stone-100 hover:text-stone-700"
+                                : "border-transparent text-stone-400 hover:border-stone-200 dark:border-[#1F293D] hover:bg-stone-100 dark:bg-[#162035] hover:text-stone-700 dark:text-slate-300"
                             }`}
                           >
                             <MoreVertical size={16} />
@@ -681,7 +681,7 @@ export default function ProductsPage() {
                           {openMenuId === p.id && (
                             <div
                               onClick={(e) => e.stopPropagation()}
-                              className="absolute right-0 top-full z-40 mt-1 w-44 rounded-xl border border-stone-200 bg-white p-1.5 shadow-xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 text-left"
+                              className="absolute right-0 top-full z-40 mt-1 w-44 rounded-xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827] p-1.5 shadow-xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 text-left"
                             >
                               <button
                                 type="button"
@@ -689,13 +689,13 @@ export default function ProductsPage() {
                                   setOpenMenuId(null);
                                   handleOpenEdit(p);
                                 }}
-                                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-stone-700 transition hover:bg-stone-50 hover:text-brand-700"
+                                className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold text-stone-700 dark:text-slate-300 transition hover:bg-stone-50 dark:bg-[#162035] hover:text-brand-700"
                               >
                                 <Edit2 size={14} className="text-stone-400" />
                                 <span>Edit Product</span>
                               </button>
 
-                              <div className="my-1 border-t border-stone-100" />
+                              <div className="my-1 border-t border-stone-100 dark:border-[#1F293D]" />
 
                               <button
                                 type="button"
@@ -719,11 +719,11 @@ export default function ProductsPage() {
                 {filteredProducts.length === 0 && (
                   <tr>
                     <td colSpan={7} className="px-5 py-16 text-center">
-                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-stone-100 text-stone-400">
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-stone-100 dark:bg-[#162035] text-stone-400">
                         <Package size={26} />
                       </div>
-                      <p className="mt-3 text-base font-semibold text-stone-800">No products found</p>
-                      <p className="mt-1 text-sm text-stone-500">
+                      <p className="mt-3 text-base font-semibold text-stone-800 dark:text-slate-200">No products found</p>
+                      <p className="mt-1 text-sm text-stone-500 dark:text-slate-400">
                         Try adjusting your search query or filter options.
                       </p>
                       <button
@@ -745,10 +745,10 @@ export default function ProductsPage() {
           </div>
 
           {/* Table Footer */}
-          <div className="flex items-center justify-between border-t border-stone-200 bg-stone-50/50 px-5 py-3.5 text-xs text-stone-500">
+          <div className="flex items-center justify-between border-t border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/50 dark:bg-[#162035]/50 px-5 py-3.5 text-xs text-stone-500 dark:text-slate-400">
             <span>
-              Showing <strong className="text-stone-800">{filteredProducts.length}</strong> of{" "}
-              <strong className="text-stone-800">{products.length}</strong> items
+              Showing <strong className="text-stone-800 dark:text-slate-200">{filteredProducts.length}</strong> of{" "}
+              <strong className="text-stone-800 dark:text-slate-200">{products.length}</strong> items
             </span>
             <span>Currency: BDT (৳)</span>
           </div>
@@ -776,26 +776,26 @@ export default function ProductsPage() {
                     </Badge>
                   </div>
 
-                  <h3 className="mt-3.5 font-bold text-stone-900 leading-snug line-clamp-1">
+                  <h3 className="mt-3.5 font-bold text-stone-900 dark:text-white leading-snug line-clamp-1">
                     {p.name}
                   </h3>
-                  <p className="font-mono text-xs text-stone-500">{p.sku}</p>
+                  <p className="font-mono text-xs text-stone-500 dark:text-slate-400">{p.sku}</p>
 
-                  <div className="mt-4 flex items-baseline justify-between border-t border-stone-100 pt-3">
+                  <div className="mt-4 flex items-baseline justify-between border-t border-stone-100 dark:border-[#1F293D] pt-3">
                     <div>
-                      <p className="text-[11px] text-stone-500">Selling Price</p>
-                      <p className="text-lg font-bold text-stone-900">{formatCurrency(p.price)}</p>
+                      <p className="text-[11px] text-stone-500 dark:text-slate-400">Selling Price</p>
+                      <p className="text-lg font-bold text-stone-900 dark:text-white">{formatCurrency(p.price)}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-[11px] text-stone-500">Cost Price</p>
-                      <p className="text-sm font-semibold text-stone-600">{formatCurrency(p.cost)}</p>
+                      <p className="text-[11px] text-stone-500 dark:text-slate-400">Cost Price</p>
+                      <p className="text-sm font-semibold text-stone-600 dark:text-slate-400">{formatCurrency(p.cost)}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 space-y-3 border-t border-stone-100 pt-3">
+                <div className="mt-4 space-y-3 border-t border-stone-100 dark:border-[#1F293D] pt-3">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-stone-500">Stock Status</span>
+                    <span className="text-stone-500 dark:text-slate-400">Stock Status</span>
                     <span
                       className={`font-semibold ${
                         isOut ? "text-red-600" : isLow ? "text-amber-600" : "text-emerald-600"
@@ -816,7 +816,7 @@ export default function ProductsPage() {
                     <button
                       type="button"
                       onClick={() => setDeleteConfirmProduct(p)}
-                      className="rounded-xl border border-stone-200 p-2 text-stone-400 hover:bg-red-50 hover:text-red-600 transition"
+                      className="rounded-xl border border-stone-200 dark:border-[#1F293D] p-2 text-stone-400 hover:bg-red-50 hover:text-red-600 transition"
                       title="Delete Product"
                     >
                       <Trash2 size={14} />
@@ -833,19 +833,19 @@ export default function ProductsPage() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm">
           <div className="card w-full max-w-lg p-6 shadow-2xl animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#1F293D] pb-4">
               <div>
-                <h2 className="text-lg font-bold text-stone-900">
+                <h2 className="text-lg font-bold text-stone-900 dark:text-white">
                   {editingProduct ? "Edit Product" : "Add New Product"}
                 </h2>
-                <p className="text-xs text-stone-500">
+                <p className="text-xs text-stone-500 dark:text-slate-400">
                   {editingProduct ? "Update catalog details" : "Create a new item in your store inventory"}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700"
+                className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 dark:bg-[#162035] hover:text-stone-700 dark:text-slate-300"
               >
                 <X size={18} />
               </button>
@@ -854,7 +854,7 @@ export default function ProductsPage() {
             <form onSubmit={handleSaveProduct} className="mt-4 space-y-4">
               {/* Name */}
               <div>
-                <label className="mb-1 block text-xs font-semibold text-stone-700">
+                <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Product Name *
                 </label>
                 <input
@@ -870,7 +870,7 @@ export default function ProductsPage() {
               {/* SKU & Category */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-stone-700">SKU Code *</label>
+                  <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">SKU Code *</label>
                   <input
                     type="text"
                     required
@@ -881,7 +881,7 @@ export default function ProductsPage() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-stone-700">Category *</label>
+                  <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">Category *</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value as Category })}
@@ -899,7 +899,7 @@ export default function ProductsPage() {
               {/* Pricing: Cost vs Price */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-stone-700">Cost Price (৳) *</label>
+                  <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">Cost Price (৳) *</label>
                   <input
                     type="number"
                     min="0"
@@ -912,7 +912,7 @@ export default function ProductsPage() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-stone-700">Selling Price (৳) *</label>
+                  <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">Selling Price (৳) *</label>
                   <input
                     type="number"
                     min="0"
@@ -929,7 +929,7 @@ export default function ProductsPage() {
               {/* Stock & Reorder Level */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-stone-700">Current Stock *</label>
+                  <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">Current Stock *</label>
                   <input
                     type="number"
                     min="0"
@@ -941,7 +941,7 @@ export default function ProductsPage() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-stone-700">Reorder Alert Level</label>
+                  <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">Reorder Alert Level</label>
                   <input
                     type="number"
                     min="0"
@@ -955,10 +955,10 @@ export default function ProductsPage() {
 
               {/* Emoji Icon Picker */}
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-stone-700">
+                <label className="mb-1.5 block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Select Icon / Emoji
                 </label>
-                <div className="flex flex-wrap gap-2 rounded-xl border border-stone-200 bg-stone-50 p-2.5">
+                <div className="flex flex-wrap gap-2 rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] p-2.5">
                   {emojiOptions.map((em) => (
                     <button
                       key={em}
@@ -967,7 +967,7 @@ export default function ProductsPage() {
                       className={`grid h-9 w-9 place-items-center rounded-lg text-lg transition ${
                         formData.emoji === em
                           ? "bg-brand-500 text-white shadow-sm scale-110"
-                          : "hover:bg-white text-stone-700"
+                          : "hover:bg-white text-stone-700 dark:text-slate-300"
                       }`}
                     >
                       {em}
@@ -977,7 +977,7 @@ export default function ProductsPage() {
               </div>
 
               {/* Actions */}
-              <div className="mt-6 flex items-center justify-end gap-3 border-t border-stone-100 pt-4">
+              <div className="mt-6 flex items-center justify-end gap-3 border-t border-stone-100 dark:border-[#1F293D] pt-4">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -998,22 +998,22 @@ export default function ProductsPage() {
       {/* 6. Delete Confirmation Modal */}
       {deleteConfirmProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl border border-stone-200 bg-white p-6 shadow-2xl animate-in zoom-in-95">
+          <div className="w-full max-w-md rounded-2xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827] p-6 shadow-2xl animate-in zoom-in-95">
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-red-100 text-red-600 ring-8 ring-red-50">
                 <Trash2 size={24} />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-stone-900">Delete Product</h3>
-                <p className="mt-1 text-sm text-stone-500 leading-relaxed">
+                <h3 className="text-lg font-bold text-stone-900 dark:text-white">Delete Product</h3>
+                <p className="mt-1 text-sm text-stone-500 dark:text-slate-400 leading-relaxed">
                   Are you sure you want to delete{" "}
-                  <strong className="font-semibold text-stone-900">
+                  <strong className="font-semibold text-stone-900 dark:text-white">
                     &ldquo;{deleteConfirmProduct.name}&rdquo;
                   </strong>
                   ? This product will be permanently removed from your catalog and inventory.
                 </p>
-                <div className="mt-3 flex items-center gap-2 rounded-xl border border-stone-200 bg-stone-50 p-2.5 text-xs text-stone-600 font-medium">
-                  <span className="font-mono font-bold text-stone-800">{deleteConfirmProduct.sku}</span>
+                <div className="mt-3 flex items-center gap-2 rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] p-2.5 text-xs text-stone-600 dark:text-slate-400 font-medium">
+                  <span className="font-mono font-bold text-stone-800 dark:text-slate-200">{deleteConfirmProduct.sku}</span>
                   <span>•</span>
                   <span>{deleteConfirmProduct.category}</span>
                   <span>•</span>
@@ -1022,12 +1022,12 @@ export default function ProductsPage() {
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-end gap-3 border-t border-stone-100 pt-4">
+            <div className="mt-6 flex items-center justify-end gap-3 border-t border-stone-100 dark:border-[#1F293D] pt-4">
               <button
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setDeleteConfirmProduct(null)}
-                className="rounded-xl border border-stone-200 px-4 py-2.5 text-xs font-semibold text-stone-600 transition hover:bg-stone-50 disabled:opacity-50"
+                className="rounded-xl border border-stone-200 dark:border-[#1F293D] px-4 py-2.5 text-xs font-semibold text-stone-600 dark:text-slate-400 transition hover:bg-stone-50 dark:bg-[#162035] disabled:opacity-50"
               >
                 Cancel
               </button>

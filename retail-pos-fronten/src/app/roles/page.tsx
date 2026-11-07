@@ -215,7 +215,7 @@ export default function RolesPage() {
           <button
             type="button"
             onClick={() => setNotification(null)}
-            className="text-stone-400 hover:text-stone-600"
+            className="text-stone-400 hover:text-stone-600 dark:text-slate-400"
           >
             <X size={16} />
           </button>
@@ -230,10 +230,10 @@ export default function RolesPage() {
               <Shield size={20} />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-bold tracking-tight text-stone-900">
+              <h1 className="font-display text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
                 Roles & Permissions
               </h1>
-              <p className="text-xs font-medium text-stone-500">
+              <p className="text-xs font-medium text-stone-500 dark:text-slate-400">
                 Define custom roles and assign module-wise access control
               </p>
             </div>
@@ -254,8 +254,8 @@ export default function RolesPage() {
 
       {/* Main Content */}
       {loading ? (
-        <div className="flex h-64 items-center justify-center rounded-2xl border border-stone-200 bg-white">
-          <div className="flex items-center gap-2.5 text-sm text-stone-500">
+        <div className="flex h-64 items-center justify-center rounded-2xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827]">
+          <div className="flex items-center gap-2.5 text-sm text-stone-500 dark:text-slate-400">
             <Loader2 className="h-5 w-5 animate-spin text-brand-600" />
             <span>Loading roles & system modules...</span>
           </div>
@@ -282,12 +282,12 @@ export default function RolesPage() {
             return (
               <div
                 key={role.id}
-                className="flex flex-col justify-between rounded-2xl border border-stone-200 bg-white p-5 shadow-sm transition hover:border-[#fae5d7] hover:shadow-md"
+                className="flex flex-col justify-between rounded-2xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827] p-5 shadow-sm transition hover:border-[#fae5d7] hover:shadow-md"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="text-base font-bold text-stone-900 flex items-center gap-2">
+                      <h3 className="text-base font-bold text-stone-900 dark:text-white flex items-center gap-2">
                         <span>{role.name}</span>
                         {isSuper && (
                           <span className="inline-flex items-center gap-1 rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-bold text-purple-700">
@@ -296,7 +296,7 @@ export default function RolesPage() {
                           </span>
                         )}
                         {!isSuper && role.isSystem && (
-                          <span className="inline-flex items-center gap-1 rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-semibold text-stone-600">
+                          <span className="inline-flex items-center gap-1 rounded bg-stone-100 dark:bg-[#162035] px-1.5 py-0.5 text-[10px] font-semibold text-stone-600 dark:text-slate-400">
                             <Lock size={10} />
                             System
                           </span>
@@ -307,17 +307,17 @@ export default function RolesPage() {
                       </p>
                     </div>
 
-                    <span className="rounded-full bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-600">
+                    <span className="rounded-full bg-stone-100 dark:bg-[#162035] px-2.5 py-1 text-xs font-semibold text-stone-600 dark:text-slate-400">
                       {isSuper ? "All" : `${permsCount} / ${totalPossiblePermissions}`} perms
                     </span>
                   </div>
 
-                  <p className="mt-3 text-xs text-stone-600 line-clamp-2 min-h-[32px]">
+                  <p className="mt-3 text-xs text-stone-600 dark:text-slate-400 line-clamp-2 min-h-[32px]">
                     {role.description || "No description provided."}
                   </p>
                 </div>
 
-                <div className="mt-5 border-t border-stone-100 pt-3 flex items-center justify-between">
+                <div className="mt-5 border-t border-stone-100 dark:border-[#1F293D] pt-3 flex items-center justify-between">
                   <span className="text-[11px] text-stone-400">
                     {role.isSystem ? "Built-in Role" : "Custom Role"}
                   </span>
@@ -327,7 +327,7 @@ export default function RolesPage() {
                       <button
                         type="button"
                         onClick={() => handleOpenEdit(role)}
-                        className="rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-700 hover:bg-white hover:border-brand-500 hover:text-brand-600 transition"
+                        className="rounded-lg border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-2.5 py-1 text-xs font-semibold text-stone-700 dark:text-slate-300 hover:bg-white hover:border-brand-500 hover:text-brand-600 transition"
                       >
                         Edit Grid
                       </button>
@@ -354,18 +354,18 @@ export default function RolesPage() {
       {/* Add / Edit Role Modal with Checkbox Grid */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm overflow-y-auto">
-          <div className="my-4 sm:my-8 w-full max-w-3xl rounded-2xl border border-[#fae5d7] bg-white p-4 sm:p-6 shadow-2xl">
+          <div className="my-4 sm:my-8 w-full max-w-3xl rounded-2xl border border-[#fae5d7] dark:border-[#1F293D] bg-white dark:bg-[#111827] p-4 sm:p-6 shadow-2xl">
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#1F293D] pb-4">
               <div className="flex items-center gap-2.5">
                 <div className="grid h-9 w-9 place-items-center rounded-xl bg-brand-50 text-brand-600">
                   <Shield size={19} />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-stone-900">
+                  <h2 className="text-base font-bold text-stone-900 dark:text-white">
                     {editingRole ? `Edit Role: ${editingRole.name}` : "Create New Custom Role"}
                   </h2>
-                  <p className="text-xs text-stone-500">
+                  <p className="text-xs text-stone-500 dark:text-slate-400">
                     Check the boxes below to grant specific module operations
                   </p>
                 </div>
@@ -373,7 +373,7 @@ export default function RolesPage() {
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}
-                className="text-stone-400 hover:text-stone-600"
+                className="text-stone-400 hover:text-stone-600 dark:text-slate-400"
               >
                 <X size={20} />
               </button>
@@ -383,7 +383,7 @@ export default function RolesPage() {
               {/* Form Inputs */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 dark:text-slate-400 mb-1">
                     Role Name *
                   </label>
                   <input
@@ -393,12 +393,12 @@ export default function RolesPage() {
                     placeholder="e.g. Shift Supervisor"
                     required
                     disabled={editingRole?.isSystem}
-                    className="w-full rounded-xl border border-stone-200 bg-stone-50/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
+                    className="w-full rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/50 dark:bg-[#162035]/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 dark:text-slate-400 mb-1">
                     Description
                   </label>
                   <input
@@ -406,14 +406,14 @@ export default function RolesPage() {
                     value={formDescription}
                     onChange={(e) => setFormDescription(e.target.value)}
                     placeholder="Brief description of role responsibilities"
-                    className="w-full rounded-xl border border-stone-200 bg-stone-50/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
+                    className="w-full rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/50 dark:bg-[#162035]/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
                   />
                 </div>
               </div>
 
               {/* Module Checkbox Grid Header */}
               <div className="flex items-center justify-between pt-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-stone-700">
+                <span className="text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-slate-300">
                   Module Permissions Grid ({selectedPermissions.length} selected)
                 </span>
                 <button
@@ -428,20 +428,20 @@ export default function RolesPage() {
               </div>
 
               {/* Mobile Module Cards (Zero Horizontal Scroll) */}
-              <div className="block sm:hidden rounded-xl border border-stone-200 max-h-[360px] overflow-y-auto divide-y divide-stone-100 bg-white">
+              <div className="block sm:hidden rounded-xl border border-stone-200 dark:border-[#1F293D] max-h-[360px] overflow-y-auto divide-y divide-stone-100 dark:divide-[#1F293D] bg-white dark:bg-[#111827]">
                 {modules.map((mod) => {
                   const allSelected = isModuleAllSelected(mod);
                   return (
                     <div key={mod.module} className="p-3 space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-xs text-stone-900">{mod.label}</span>
+                        <span className="font-semibold text-xs text-stone-900 dark:text-white">{mod.label}</span>
                         <button
                           type="button"
                           onClick={() => toggleModuleAll(mod)}
                           className={`text-[11px] font-medium px-2 py-0.5 rounded transition ${
                             allSelected
                               ? "bg-brand-100 text-brand-700 font-bold"
-                              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                              : "bg-stone-100 dark:bg-[#162035] text-stone-600 dark:text-slate-400 hover:bg-stone-200"
                           }`}
                         >
                           {allSelected ? "All ✓" : "Select All"}
@@ -460,7 +460,7 @@ export default function RolesPage() {
                               className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium border transition ${
                                 isChecked
                                   ? "bg-brand-500 border-brand-500 text-white shadow-xs"
-                                  : "bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100"
+                                  : "bg-stone-50 dark:bg-[#162035] border-stone-200 dark:border-[#1F293D] text-stone-600 dark:text-slate-400 hover:bg-stone-100 dark:bg-[#162035]"
                               }`}
                             >
                               <span className="text-[10px]">{isChecked ? "✓" : "+"}</span>
@@ -475,9 +475,9 @@ export default function RolesPage() {
               </div>
 
               {/* Desktop Checkbox Grid Table */}
-              <div className="hidden sm:block overflow-x-auto rounded-xl border border-stone-200 max-h-[360px] overflow-y-auto">
+              <div className="hidden sm:block overflow-x-auto rounded-xl border border-stone-200 dark:border-[#1F293D] max-h-[360px] overflow-y-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="sticky top-0 bg-stone-50 text-stone-600 font-semibold border-b border-stone-200 z-10">
+                  <thead className="sticky top-0 bg-stone-50 dark:bg-[#162035] text-stone-600 dark:text-slate-400 font-semibold border-b border-stone-200 dark:border-[#1F293D] z-10">
                     <tr>
                       <th className="py-2.5 px-3">Module</th>
                       <th className="py-2.5 px-3 text-center">View</th>
@@ -487,7 +487,7 @@ export default function RolesPage() {
                       <th className="py-2.5 px-3 text-center">All</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-stone-100 bg-white">
+                  <tbody className="divide-y divide-stone-100 dark:divide-[#1F293D] bg-white dark:bg-[#111827]">
                     {modules.map((mod) => {
                       const allSelected = isModuleAllSelected(mod);
                       const hasView = mod.actions.some((a) => a.key === "view" || a.key === "access");
@@ -501,8 +501,8 @@ export default function RolesPage() {
                       const deleteKey = `${mod.module}:delete`;
 
                       return (
-                        <tr key={mod.module} className="hover:bg-stone-50/70">
-                          <td className="py-2.5 px-3 font-semibold text-stone-900">
+                        <tr key={mod.module} className="hover:bg-stone-50 dark:bg-[#162035]/70 dark:bg-[#162035]/70">
+                          <td className="py-2.5 px-3 font-semibold text-stone-900 dark:text-white">
                             {mod.label}
                           </td>
 
@@ -513,7 +513,7 @@ export default function RolesPage() {
                                 type="checkbox"
                                 checked={selectedPermissions.includes(viewKey)}
                                 onChange={() => togglePermission(viewKey)}
-                                className="h-4 w-4 rounded border-stone-300 text-brand-600 focus:ring-brand-500 cursor-pointer"
+                                className="h-4 w-4 rounded border-stone-300 dark:border-[#1F293D] text-brand-600 focus:ring-brand-500 cursor-pointer"
                               />
                             ) : (
                               <span className="text-stone-300">—</span>
@@ -527,7 +527,7 @@ export default function RolesPage() {
                                 type="checkbox"
                                 checked={selectedPermissions.includes(createKey)}
                                 onChange={() => togglePermission(createKey)}
-                                className="h-4 w-4 rounded border-stone-300 text-brand-600 focus:ring-brand-500 cursor-pointer"
+                                className="h-4 w-4 rounded border-stone-300 dark:border-[#1F293D] text-brand-600 focus:ring-brand-500 cursor-pointer"
                               />
                             ) : (
                               <span className="text-stone-300">—</span>
@@ -541,7 +541,7 @@ export default function RolesPage() {
                                 type="checkbox"
                                 checked={selectedPermissions.includes(updateKey)}
                                 onChange={() => togglePermission(updateKey)}
-                                className="h-4 w-4 rounded border-stone-300 text-brand-600 focus:ring-brand-500 cursor-pointer"
+                                className="h-4 w-4 rounded border-stone-300 dark:border-[#1F293D] text-brand-600 focus:ring-brand-500 cursor-pointer"
                               />
                             ) : (
                               <span className="text-stone-300">—</span>
@@ -555,7 +555,7 @@ export default function RolesPage() {
                                 type="checkbox"
                                 checked={selectedPermissions.includes(deleteKey)}
                                 onChange={() => togglePermission(deleteKey)}
-                                className="h-4 w-4 rounded border-stone-300 text-brand-600 focus:ring-brand-500 cursor-pointer"
+                                className="h-4 w-4 rounded border-stone-300 dark:border-[#1F293D] text-brand-600 focus:ring-brand-500 cursor-pointer"
                               />
                             ) : (
                               <span className="text-stone-300">—</span>
@@ -568,7 +568,7 @@ export default function RolesPage() {
                               type="checkbox"
                               checked={allSelected}
                               onChange={() => toggleModuleAll(mod)}
-                              className="h-4 w-4 rounded border-stone-300 text-brand-600 focus:ring-brand-500 cursor-pointer"
+                              className="h-4 w-4 rounded border-stone-300 dark:border-[#1F293D] text-brand-600 focus:ring-brand-500 cursor-pointer"
                               title="Toggle all for this module"
                             />
                           </td>
@@ -580,11 +580,11 @@ export default function RolesPage() {
               </div>
 
               {/* Modal Actions */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-100 dark:border-[#1F293D]">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="rounded-xl border border-stone-200 px-4 py-2 text-xs font-semibold text-stone-600 hover:bg-stone-50"
+                  className="rounded-xl border border-stone-200 dark:border-[#1F293D] px-4 py-2 text-xs font-semibold text-stone-600 dark:text-slate-400 hover:bg-stone-50 dark:bg-[#162035]"
                 >
                   Cancel
                 </button>

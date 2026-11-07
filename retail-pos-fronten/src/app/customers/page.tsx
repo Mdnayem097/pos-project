@@ -81,46 +81,46 @@ export default function CustomersPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {customerList.length === 0 ? (
-          <div className="col-span-full py-16 text-center text-sm text-stone-400">
+          <div className="col-span-full py-16 text-center text-sm text-stone-400 dark:text-slate-500">
             No registered customers yet
           </div>
         ) : (
           customerList.map((c) => (
           <div key={c.id} className="card p-5">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 font-bold text-brand-700">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-500/15 font-bold text-brand-700 dark:text-brand-300">
                 {initials(c.name)}
               </div>
               <div className="min-w-0">
-                <p className="truncate font-semibold">{c.name}</p>
-                <p className="text-xs text-stone-500">Last visit {c.lastVisit}</p>
+                <p className="truncate font-semibold text-stone-900 dark:text-white">{c.name}</p>
+                <p className="text-xs text-stone-500 dark:text-slate-400">Last visit {c.lastVisit}</p>
               </div>
             </div>
 
-            <div className="mt-4 space-y-1.5 text-sm text-stone-600">
+            <div className="mt-4 space-y-1.5 text-sm text-stone-600 dark:text-slate-300">
               <p className="flex items-center gap-2">
-                <Phone size={15} className="text-stone-400" /> {c.phone}
+                <Phone size={15} className="text-stone-400 dark:text-slate-500" /> {c.phone}
               </p>
               <p className="flex items-center gap-2">
-                <Mail size={15} className="text-stone-400" /> {c.email || "No email"}
+                <Mail size={15} className="text-stone-400 dark:text-slate-500" /> {c.email || "No email"}
               </p>
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-2 border-t border-stone-100 pt-4 text-center">
+            <div className="mt-4 grid grid-cols-3 gap-2 border-t border-stone-100 dark:border-[#1F293D] pt-4 text-center">
               <div>
-                <p className="text-lg font-bold">{c.totalOrders}</p>
-                <p className="text-xs text-stone-500">Orders</p>
+                <p className="text-lg font-bold text-stone-900 dark:text-white">{c.totalOrders}</p>
+                <p className="text-xs text-stone-500 dark:text-slate-400">Orders</p>
               </div>
               <div>
-                <p className="text-lg font-bold">{formatCurrency(c.totalSpent)}</p>
-                <p className="text-xs text-stone-500">Spent</p>
+                <p className="text-lg font-bold text-stone-900 dark:text-white">{formatCurrency(c.totalSpent)}</p>
+                <p className="text-xs text-stone-500 dark:text-slate-400">Spent</p>
               </div>
               <div>
-                <p className="flex items-center justify-center gap-1 text-lg font-bold text-brand-600">
+                <p className="flex items-center justify-center gap-1 text-lg font-bold text-brand-600 dark:text-brand-400">
                   <Star size={14} className="fill-brand-500 text-brand-500" />
                   {c.loyaltyPoints}
                 </p>
-                <p className="text-xs text-stone-500">Points</p>
+                <p className="text-xs text-stone-500 dark:text-slate-400">Points</p>
               </div>
             </div>
           </div>
@@ -132,18 +132,18 @@ export default function CustomersPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm"
         >
-          <div className="card w-full max-w-md p-6">
-            <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+          <div className="card w-full max-w-md p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#1F293D] pb-4">
               <div>
-                <h3 className="text-lg font-bold text-stone-900">Add New Customer</h3>
-                <p className="text-xs text-stone-500">Register a new customer for loyalty rewards</p>
+                <h3 className="text-lg font-bold text-stone-900 dark:text-white">Add New Customer</h3>
+                <p className="text-xs text-stone-500 dark:text-slate-400">Register a new customer for loyalty rewards</p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700"
+                className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 dark:hover:bg-[#162035] hover:text-stone-700 dark:hover:text-white"
               >
                 <X size={18} />
               </button>
@@ -151,7 +151,7 @@ export default function CustomersPage() {
 
             <form onSubmit={handleAddCustomer} className="mt-4 space-y-4">
               <div>
-                <label className="mb-1 block text-xs font-semibold text-stone-700">
+                <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Customer Name *
                 </label>
                 <input
@@ -165,7 +165,7 @@ export default function CustomersPage() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-semibold text-stone-700">
+                <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Phone Number *
                 </label>
                 <input
@@ -179,7 +179,7 @@ export default function CustomersPage() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-semibold text-stone-700">
+                <label className="mb-1 block text-xs font-semibold text-stone-700 dark:text-slate-300">
                   Email Address (Optional)
                 </label>
                 <input
@@ -191,7 +191,7 @@ export default function CustomersPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 border-t border-stone-100 pt-4">
+              <div className="flex items-center justify-end gap-2 border-t border-stone-100 dark:border-[#1F293D] pt-4">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}

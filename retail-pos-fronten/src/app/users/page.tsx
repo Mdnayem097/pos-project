@@ -203,7 +203,7 @@ export default function UsersPage() {
           <button
             type="button"
             onClick={() => setNotification(null)}
-            className="text-stone-400 hover:text-stone-600"
+            className="text-stone-400 hover:text-stone-600 dark:text-slate-400"
           >
             <X size={16} />
           </button>
@@ -218,10 +218,10 @@ export default function UsersPage() {
               <Users size={20} />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-bold tracking-tight text-stone-900">
+              <h1 className="font-display text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
                 Admin Users
               </h1>
-              <p className="text-xs font-medium text-stone-500">
+              <p className="text-xs font-medium text-stone-500 dark:text-slate-400">
                 Manage staff accounts, assign roles, and issue temporary credentials
               </p>
             </div>
@@ -242,8 +242,8 @@ export default function UsersPage() {
 
       {/* Main Table */}
       {loading ? (
-        <div className="flex h-64 items-center justify-center rounded-2xl border border-stone-200 bg-white">
-          <div className="flex items-center gap-2.5 text-sm text-stone-500">
+        <div className="flex h-64 items-center justify-center rounded-2xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827]">
+          <div className="flex items-center gap-2.5 text-sm text-stone-500 dark:text-slate-400">
             <Loader2 className="h-5 w-5 animate-spin text-brand-600" />
             <span>Loading users...</span>
           </div>
@@ -262,9 +262,9 @@ export default function UsersPage() {
           </button>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-2xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827] shadow-sm">
           {/* Mobile View: Responsive User Cards (Zero Horizontal Scroll) */}
-          <div className="block sm:hidden divide-y divide-stone-100">
+          <div className="block sm:hidden divide-y divide-stone-100 dark:divide-[#1F293D]">
             {users.map((u) => {
               const initials = u.name
                 .split(" ")
@@ -276,7 +276,7 @@ export default function UsersPage() {
               const roleName = u.roleEntity?.name || u.role;
 
               return (
-                <div key={u.id} className="p-4 space-y-3 bg-white">
+                <div key={u.id} className="p-4 space-y-3 bg-white dark:bg-[#111827]">
                   {/* User info */}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3 min-w-0">
@@ -284,7 +284,7 @@ export default function UsersPage() {
                         {initials}
                       </span>
                       <div className="min-w-0">
-                        <div className="font-semibold text-stone-900 text-sm flex items-center gap-1.5 flex-wrap">
+                        <div className="font-semibold text-stone-900 dark:text-white text-sm flex items-center gap-1.5 flex-wrap">
                           <span>{u.name}</span>
                           {u.isSuperAdmin && (
                             <span className="inline-flex items-center gap-1 rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-bold text-purple-700">
@@ -293,7 +293,7 @@ export default function UsersPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-stone-500 truncate">{u.email}</p>
+                        <p className="text-xs text-stone-500 dark:text-slate-400 truncate">{u.email}</p>
                       </div>
                     </div>
 
@@ -304,7 +304,7 @@ export default function UsersPage() {
                         Active
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-2.5 py-0.5 text-[11px] font-semibold text-stone-600 shrink-0">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 dark:bg-[#162035] px-2.5 py-0.5 text-[11px] font-semibold text-stone-600 dark:text-slate-400 shrink-0">
                         <span className="h-1.5 w-1.5 rounded-full bg-stone-400" />
                         Inactive
                       </span>
@@ -313,7 +313,7 @@ export default function UsersPage() {
 
                   {/* Role & Password Details */}
                   <div className="flex items-center justify-between gap-2 text-xs">
-                    <span className="inline-block rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1 font-semibold text-stone-700 capitalize">
+                    <span className="inline-block rounded-lg border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-2.5 py-1 font-semibold text-stone-700 dark:text-slate-300 capitalize">
                       {roleName}
                     </span>
 
@@ -323,7 +323,7 @@ export default function UsersPage() {
                         Must Change Password
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-stone-500">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-stone-500 dark:text-slate-400">
                         <CheckCircle2 size={12} className="text-emerald-500" />
                         Password Set
                       </span>
@@ -331,12 +331,12 @@ export default function UsersPage() {
                   </div>
 
                   {/* Actions buttons */}
-                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-stone-100">
+                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-stone-100 dark:border-[#1F293D]">
                     {canUpdate && (
                       <button
                         type="button"
                         onClick={() => handleOpenEdit(u)}
-                        className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-100 transition"
+                        className="rounded-lg border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-3 py-1.5 text-xs font-semibold text-stone-700 dark:text-slate-300 hover:bg-stone-100 dark:bg-[#162035] transition"
                       >
                         Edit User
                       </button>
@@ -360,7 +360,7 @@ export default function UsersPage() {
           {/* Desktop Table View */}
           <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-stone-200 bg-stone-50 text-xs font-semibold text-stone-600">
+              <thead className="border-b border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] text-xs font-semibold text-stone-600 dark:text-slate-400">
                 <tr>
                   <th className="py-3 px-4">User</th>
                   <th className="py-3 px-4">Role</th>
@@ -369,7 +369,7 @@ export default function UsersPage() {
                   <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-stone-100 dark:divide-[#1F293D]">
                 {users.map((u) => {
                   const initials = u.name
                     .split(" ")
@@ -381,7 +381,7 @@ export default function UsersPage() {
                   const roleName = u.roleEntity?.name || u.role;
 
                   return (
-                    <tr key={u.id} className="hover:bg-stone-50/60 transition">
+                    <tr key={u.id} className="hover:bg-stone-50 dark:hover:bg-[#162035]/60 transition">
                       {/* User Info */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
@@ -389,7 +389,7 @@ export default function UsersPage() {
                             {initials}
                           </span>
                           <div>
-                            <div className="font-semibold text-stone-900 flex items-center gap-1.5">
+                            <div className="font-semibold text-stone-900 dark:text-white flex items-center gap-1.5">
                               <span>{u.name}</span>
                               {u.isSuperAdmin && (
                                 <span className="inline-flex items-center gap-1 rounded bg-purple-100 px-1.5 py-0.2 text-[10px] font-bold text-purple-700">
@@ -398,14 +398,14 @@ export default function UsersPage() {
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-stone-500">{u.email}</p>
+                            <p className="text-xs text-stone-500 dark:text-slate-400">{u.email}</p>
                           </div>
                         </div>
                       </td>
 
                       {/* Role */}
                       <td className="py-3.5 px-4">
-                        <span className="inline-block rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-700 capitalize">
+                        <span className="inline-block rounded-lg border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-2.5 py-1 text-xs font-semibold text-stone-700 dark:text-slate-300 capitalize">
                           {roleName}
                         </span>
                       </td>
@@ -418,7 +418,7 @@ export default function UsersPage() {
                             Active
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-600">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 dark:bg-[#162035] px-2.5 py-1 text-xs font-semibold text-stone-600 dark:text-slate-400">
                             <span className="h-1.5 w-1.5 rounded-full bg-stone-400" />
                             Inactive
                           </span>
@@ -433,7 +433,7 @@ export default function UsersPage() {
                             Must Change on 1st Login
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-stone-50 px-2.5 py-1 text-xs font-medium text-stone-600">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-stone-50 dark:bg-[#162035] px-2.5 py-1 text-xs font-medium text-stone-600 dark:text-slate-400">
                             <CheckCircle2 size={12} className="text-emerald-500" />
                             Password Set
                           </span>
@@ -447,7 +447,7 @@ export default function UsersPage() {
                             <button
                               type="button"
                               onClick={() => handleOpenEdit(u)}
-                              className="rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-700 hover:bg-white hover:border-brand-500 hover:text-brand-600 transition"
+                              className="rounded-lg border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-2.5 py-1 text-xs font-semibold text-stone-700 dark:text-slate-300 hover:bg-white hover:border-brand-500 hover:text-brand-600 transition"
                             >
                               Edit
                             </button>
@@ -486,18 +486,18 @@ export default function UsersPage() {
       {/* Add / Edit User Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-2xl border border-[#fae5d7] bg-white p-6 shadow-2xl">
+          <div className="w-full max-w-lg rounded-2xl border border-[#fae5d7] dark:border-[#1F293D] bg-white dark:bg-[#111827] p-6 shadow-2xl">
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#1F293D] pb-4">
               <div className="flex items-center gap-2.5">
                 <div className="grid h-9 w-9 place-items-center rounded-xl bg-brand-50 text-brand-600">
                   <UserPlus size={19} />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-stone-900">
+                  <h2 className="text-base font-bold text-stone-900 dark:text-white">
                     {editingUser ? `Edit User: ${editingUser.name}` : "Create New Admin User"}
                   </h2>
-                  <p className="text-xs text-stone-500">
+                  <p className="text-xs text-stone-500 dark:text-slate-400">
                     {editingUser
                       ? "Update staff profile, role, or reset password"
                       : "New staff will be required to change password on first login"}
@@ -507,7 +507,7 @@ export default function UsersPage() {
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}
-                className="text-stone-400 hover:text-stone-600"
+                className="text-stone-400 hover:text-stone-600 dark:text-slate-400"
               >
                 <X size={20} />
               </button>
@@ -516,7 +516,7 @@ export default function UsersPage() {
             <form onSubmit={handleSaveUser} className="mt-4 space-y-4">
               {/* Name */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 dark:text-slate-400 mb-1">
                   Full Name *
                 </label>
                 <input
@@ -525,13 +525,13 @@ export default function UsersPage() {
                   onChange={(e) => setFormName(e.target.value)}
                   placeholder="e.g. John Doe"
                   required
-                  className="w-full rounded-xl border border-stone-200 bg-stone-50/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
+                  className="w-full rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/50 dark:bg-[#162035]/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 dark:text-slate-400 mb-1">
                   Email Address *
                 </label>
                 <input
@@ -540,14 +540,14 @@ export default function UsersPage() {
                   onChange={(e) => setFormEmail(e.target.value)}
                   placeholder="staff@retailpos.com"
                   required
-                  className="w-full rounded-xl border border-stone-200 bg-stone-50/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
+                  className="w-full rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/50 dark:bg-[#162035]/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
                 />
               </div>
 
               {/* Temporary Password */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-stone-600">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-stone-600 dark:text-slate-400">
                     {editingUser ? "Reset Password (leave empty to keep current)" : "Temporary Password *"}
                   </label>
                   <button
@@ -565,7 +565,7 @@ export default function UsersPage() {
                   onChange={(e) => setFormPassword(e.target.value)}
                   placeholder={editingUser ? "••••••••" : "Temporary password"}
                   required={!editingUser}
-                  className="w-full rounded-xl border border-stone-200 bg-stone-50/50 px-3.5 py-2 font-mono text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
+                  className="w-full rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/50 dark:bg-[#162035]/50 px-3.5 py-2 font-mono text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
                 />
                 {!editingUser && (
                   <p className="mt-1 text-[11px] text-amber-700 bg-amber-50 rounded-lg p-2 border border-amber-200">
@@ -576,14 +576,14 @@ export default function UsersPage() {
 
               {/* Role Selection */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-stone-600 dark:text-slate-400 mb-1">
                   Assigned Role *
                 </label>
                 <select
                   value={formRoleId}
                   onChange={(e) => setFormRoleId(Number(e.target.value))}
                   disabled={editingUser?.isSuperAdmin}
-                  className="w-full rounded-xl border border-stone-200 bg-stone-50/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
+                  className="w-full rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/50 dark:bg-[#162035]/50 px-3.5 py-2 text-sm focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15"
                 >
                   {roles.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -606,20 +606,20 @@ export default function UsersPage() {
                     id="isActive"
                     checked={formIsActive}
                     onChange={(e) => setFormIsActive(e.target.checked)}
-                    className="h-4 w-4 rounded border-stone-300 text-brand-600 focus:ring-brand-500 cursor-pointer"
+                    className="h-4 w-4 rounded border-stone-300 dark:border-[#1F293D] text-brand-600 focus:ring-brand-500 cursor-pointer"
                   />
-                  <label htmlFor="isActive" className="text-xs font-medium text-stone-700 cursor-pointer">
+                  <label htmlFor="isActive" className="text-xs font-medium text-stone-700 dark:text-slate-300 cursor-pointer">
                     Account is active and allowed to login
                   </label>
                 </div>
               )}
 
               {/* Modal Actions */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-100 dark:border-[#1F293D]">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="rounded-xl border border-stone-200 px-4 py-2 text-xs font-semibold text-stone-600 hover:bg-stone-50"
+                  className="rounded-xl border border-stone-200 dark:border-[#1F293D] px-4 py-2 text-xs font-semibold text-stone-600 dark:text-slate-400 hover:bg-stone-50 dark:bg-[#162035]"
                 >
                   Cancel
                 </button>

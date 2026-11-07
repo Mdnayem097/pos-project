@@ -141,30 +141,30 @@ function ToastCard({
 
   const typeConfig = {
     success: {
-      icon: <CheckCircle2 size={18} className="text-emerald-600" />,
-      iconBg: "bg-emerald-50 border-emerald-200/60 text-emerald-600",
-      border: "border-emerald-200/70",
+      icon: <CheckCircle2 size={18} className="text-emerald-600 dark:text-emerald-400" />,
+      iconBg: "bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200/60 dark:border-emerald-800/60 text-emerald-600 dark:text-emerald-400",
+      border: "border-emerald-200/70 dark:border-emerald-800/60",
       barBg: "bg-emerald-500",
       badge: "Success",
     },
     error: {
-      icon: <AlertCircle size={18} className="text-rose-600" />,
-      iconBg: "bg-rose-50 border-rose-200/60 text-rose-600",
-      border: "border-rose-200/70",
+      icon: <AlertCircle size={18} className="text-rose-600 dark:text-rose-400" />,
+      iconBg: "bg-rose-50 dark:bg-rose-950/60 border-rose-200/60 dark:border-rose-800/60 text-rose-600 dark:text-rose-400",
+      border: "border-rose-200/70 dark:border-rose-800/60",
       barBg: "bg-rose-500",
       badge: "Error",
     },
     warning: {
-      icon: <AlertTriangle size={18} className="text-amber-600" />,
-      iconBg: "bg-amber-50 border-amber-200/60 text-amber-600",
-      border: "border-amber-200/70",
+      icon: <AlertTriangle size={18} className="text-amber-600 dark:text-amber-400" />,
+      iconBg: "bg-amber-50 dark:bg-amber-950/60 border-amber-200/60 dark:border-amber-800/60 text-amber-600 dark:text-amber-400",
+      border: "border-amber-200/70 dark:border-amber-800/60",
       barBg: "bg-amber-500",
       badge: "Notice",
     },
     info: {
-      icon: <Info size={18} className="text-brand-600" />,
-      iconBg: "bg-brand-50 border-brand-200/60 text-brand-600",
-      border: "border-brand-200/70",
+      icon: <Info size={18} className="text-brand-600 dark:text-brand-400" />,
+      iconBg: "bg-brand-50 dark:bg-brand-950/60 border-brand-200/60 dark:border-brand-800/60 text-brand-600 dark:text-brand-400",
+      border: "border-brand-200/70 dark:border-brand-800/60",
       barBg: "bg-brand-500",
       badge: "Info",
     },
@@ -175,7 +175,7 @@ function ToastCard({
       role="alert"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className={`pointer-events-auto relative overflow-hidden rounded-xl border bg-white/95 p-3.5 shadow-xl backdrop-blur-md transition-all duration-200 hover:shadow-2xl animate-in fade-in slide-in-from-bottom-3 ${typeConfig.border}`}
+      className={`pointer-events-auto relative overflow-hidden rounded-xl border bg-white/95 dark:bg-[#111827]/95 dark:border-[#1F293D] p-3.5 shadow-xl backdrop-blur-md transition-all duration-200 hover:shadow-2xl animate-in fade-in slide-in-from-bottom-3 ${typeConfig.border}`}
     >
       <div className="flex items-start gap-3">
         <span
@@ -185,11 +185,11 @@ function ToastCard({
         </span>
 
         <div className="min-w-0 flex-1 pt-0.5">
-          <p className="text-xs sm:text-sm font-bold text-stone-900 leading-tight">
+          <p className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white leading-tight">
             {item.title}
           </p>
           {item.description && (
-            <p className="mt-1 text-xs text-stone-600 leading-snug">
+            <p className="mt-1 text-xs text-stone-600 dark:text-slate-300 leading-snug">
               {item.description}
             </p>
           )}
@@ -198,7 +198,7 @@ function ToastCard({
         <button
           type="button"
           onClick={() => onDismiss(item.id)}
-          className="shrink-0 rounded-lg p-1 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700"
+          className="shrink-0 rounded-lg p-1 text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-stone-700 dark:hover:text-stone-200 transition"
           aria-label="Dismiss toast"
         >
           <X size={15} />
@@ -207,7 +207,7 @@ function ToastCard({
 
       {/* Progress countdown indicator bar */}
       {item.duration > 0 && (
-        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-stone-100">
+        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-stone-100 dark:bg-stone-800">
           <div
             className={`h-full transition-all ease-linear ${typeConfig.barBg}`}
             style={{ width: `${progress}%` }}

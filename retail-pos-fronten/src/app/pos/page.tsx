@@ -227,12 +227,13 @@ export default function PosPage() {
   useEffect(() => {
     function handleClickOutside() {
       setIsCustomerDropdownOpen(false);
+      setIsCounterDropdownOpen(false);
     }
-    if (isCustomerDropdownOpen) {
+    if (isCustomerDropdownOpen || isCounterDropdownOpen) {
       window.addEventListener("click", handleClickOutside);
       return () => window.removeEventListener("click", handleClickOutside);
     }
-  }, [isCustomerDropdownOpen]);
+  }, [isCustomerDropdownOpen, isCounterDropdownOpen]);
 
   function handleOpenNewCustomerFromSearch(initialText?: string) {
     const rawTerm = typeof initialText === "string" ? initialText : customerSearch;
@@ -505,13 +506,15 @@ export default function PosPage() {
   }
 
   return (
-    <div className="grid items-start gap-8 xl:grid-cols-[1fr_390px] print:block print:gap-0">
+    <div className="flex flex-col lg:grid lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_410px] gap-3 lg:gap-4 items-stretch h-full max-h-full min-h-0 flex-1 print:block print:gap-0">
       {/* Product catalog */}
-      <section className="min-w-0 space-y-5 print:hidden">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <section className="min-w-0 flex flex-col h-full max-h-full min-h-0 space-y-2.5 print:hidden">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between shrink-0">
           <div>
-            <h1 className="page-title">Point of sale</h1>
-            <p className="mt-1 text-sm text-stone-500">Tap a product to add it to the order.</p>
+            <h1 className="page-title text-2xl sm:text-3xl">Point of sale</h1>
+            <p className="mt-0.5 text-xs sm:text-sm text-stone-500 dark:text-slate-400">
+              Tap a product to add it to the order.
+            </p>
           </div>
           <div className="relative w-full sm:w-72">
             <Search
@@ -530,9 +533,9 @@ export default function PosPage() {
 
         {/* Banner if counter is not selected or closed */}
         {!selectedCounter && (
-          <div className="flex items-center justify-between gap-3 rounded-xl border border-amber-300 bg-amber-50/95 p-3.5 text-xs text-amber-950 shadow-2xs">
+          <div className="shrink-0 flex items-center justify-between gap-3 rounded-xl border border-amber-300 bg-amber-50/95 dark:bg-amber-950/40 dark:border-amber-600/50 p-3 text-xs text-amber-950 dark:text-amber-200 shadow-2xs">
             <div className="flex items-center gap-2.5">
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300">
                 <Store size={17} />
               </span>
               <div>
@@ -541,7 +544,7 @@ export default function PosPage() {
                     ? "Open POS Counter Not Selected"
                     : "All POS Counters are Closed"}
                 </p>
-                <p className="text-amber-800 text-[11px] mt-0.5">
+                <p className="text-amber-800 dark:text-amber-300 text-[11px] mt-0.5">
                   {counters.some((c) => c.isActive && c.isOpen)
                     ? "You must select an Open counter machine before adding products to bill."
                     : "No counter shift is open. You must open a shift/register on the Counters page before billing."}
@@ -569,7 +572,7 @@ export default function PosPage() {
           </div>
         )}
 
-        <div className="flex gap-5 sm:gap-6 overflow-x-auto no-scrollbar border-b border-stone-200 min-w-0 max-w-full" role="tablist">
+        <div className="shrink-0 flex gap-5 sm:gap-6 overflow-x-auto no-scrollbar border-b border-stone-200 dark:border-[#1F293D] min-w-0 max-w-full" role="tablist">
           {(["All", ...categoriesList] as const).map((c) => {
             const active = category === c;
             return (
@@ -580,7 +583,9 @@ export default function PosPage() {
                 aria-selected={active}
                 onClick={() => setCategory(c)}
                 className={`relative shrink-0 pb-3 text-sm font-medium transition ${
-                  active ? "text-stone-950" : "text-stone-500 hover:text-stone-800"
+                  active
+                    ? "text-stone-950 dark:text-stone-100 font-semibold"
+                    : "text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200"
                 }`}
               >
                 {c}
@@ -592,133 +597,119 @@ export default function PosPage() {
           })}
         </div>
 
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 2xl:grid-cols-4">
-          {filtered.map((p) => {
-            const out = p.stock === 0;
-            const low = p.stock <= p.reorderLevel;
-            const inCart = qtyInCart(p.id);
-            return (
-              <button
-                key={p.id}
-                type="button"
-                disabled={out}
-                onClick={() => addToCart(p)}
-                className="group flex flex-col rounded-xl border border-stone-200 bg-white p-3 text-left transition hover:border-brand-500 active:scale-[0.99] disabled:opacity-50"
-              >
-                <div className="relative grid h-24 place-items-center rounded-lg bg-brand-50 text-4xl">
-                  {p.emoji}
-                  {inCart > 0 && (
-                    <span className="absolute right-2 top-2 rounded-md bg-stone-950 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white">
-                      {inCart} in order
-                    </span>
-                  )}
-                </div>
-                <p className="mt-3 line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug">
-                  {p.name}
-                </p>
-                <div className="mt-2 flex items-end justify-between">
-                  <div>
-                    <p className="font-display text-xl font-semibold tabular-nums">
-                      {formatCurrency(p.price)}
-                    </p>
-                    <p className={`text-xs ${low ? "text-red-600" : "text-stone-500"}`}>
-                      {out ? "Out of stock" : `${p.stock} in stock`}
-                    </p>
+        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1 pb-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 2xl:grid-cols-4">
+            {filtered.map((p) => {
+              const out = p.stock === 0;
+              const low = p.stock <= p.reorderLevel;
+              const inCart = qtyInCart(p.id);
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  disabled={out}
+                  onClick={() => addToCart(p)}
+                  className="group flex flex-col rounded-xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827] p-3 text-left transition hover:border-brand-500 dark:hover:border-brand-500 active:scale-[0.99] disabled:opacity-50"
+                >
+                  <div className="relative grid h-24 place-items-center rounded-lg bg-brand-50 dark:bg-[#162035] text-4xl">
+                    {p.emoji}
+                    {inCart > 0 && (
+                      <span className="absolute right-2 top-2 rounded-md bg-stone-950 dark:bg-brand-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white">
+                        {inCart} in order
+                      </span>
+                    )}
                   </div>
-                  <span className="grid h-8 w-8 place-items-center rounded-lg bg-stone-100 text-stone-700 transition group-hover:bg-brand-500 group-hover:text-white">
-                    <Plus size={16} />
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-          {filtered.length === 0 && (
-            <p className="col-span-full py-16 text-center text-sm text-stone-500">
-              No products match. Try another name or category.
-            </p>
-          )}
+                  <p className="mt-3 line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug text-stone-900 dark:text-stone-100">
+                    {p.name}
+                  </p>
+                  <div className="mt-2 flex items-end justify-between">
+                    <div>
+                      <p className="font-display text-xl font-semibold tabular-nums text-stone-900 dark:text-stone-100">
+                        {formatCurrency(p.price)}
+                      </p>
+                      <p className={`text-xs ${low ? "text-rose-600 dark:text-rose-400" : "text-stone-500 dark:text-slate-400"}`}>
+                        {out ? "Out of stock" : `${p.stock} in stock`}
+                      </p>
+                    </div>
+                    <span className="grid h-8 w-8 place-items-center rounded-lg bg-stone-100 dark:bg-[#162035] text-stone-700 dark:text-stone-300 transition group-hover:bg-brand-500 group-hover:text-white dark:group-hover:text-white">
+                      <Plus size={16} />
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+            {filtered.length === 0 && (
+              <p className="col-span-full py-16 text-center text-sm text-stone-500 dark:text-stone-400">
+                No products match. Try another name or category.
+              </p>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* Receipt: the one bold element on this screen */}
-      <aside className="xl:sticky xl:top-20 print:hidden" aria-label="Current order">
-        <div className="drop-shadow-[0_10px_20px_rgba(12,10,9,0.08)]">
-          <div className="receipt-edge border-t-4 border-brand-500 bg-white pb-7">
-            <div className="px-5 pb-4 pt-5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-display text-xl font-semibold leading-none">Retail POS</p>
-                  <p className="mt-1 text-xs text-stone-500">Main Branch</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={clearCart}
-                  disabled={cart.length === 0}
-                  className="text-xs font-medium text-stone-500 transition hover:text-red-600 disabled:opacity-40"
-                >
-                  Clear order
-                </button>
+      {/* Receipt: Cart & Checkout Panel */}
+      <aside className="print:hidden h-full max-h-full min-h-0 flex flex-col min-w-0 lg:pt-2" aria-label="Current order">
+        <div className="flex flex-col flex-1 min-h-0 rounded-2xl border border-stone-200 dark:border-[#1F293D] border-t-4 border-t-brand-500 bg-white dark:bg-[#111827] shadow-xl text-stone-900 dark:text-slate-100 transition-colors duration-200 overflow-hidden">
+          {/* Header & Controls */}
+          <div className="px-3.5 py-2.5 sm:px-4 sm:py-3 shrink-0">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <p className="font-display text-base font-bold text-stone-900 dark:text-white leading-none">
+                  Retail POS
+                </p>
+                <span className="text-[11px] text-stone-400 dark:text-slate-500">
+                  (Main Branch)
+                </span>
               </div>
+              <button
+                type="button"
+                onClick={clearCart}
+                disabled={cart.length === 0}
+                className="text-xs font-medium text-stone-500 dark:text-slate-400 transition hover:text-red-600 dark:hover:text-red-400 disabled:opacity-40"
+              >
+                Clear order
+              </button>
+            </div>
 
+            {/* 2-Column Grid: Counter Selector + Customer Selector */}
+            <div className="grid grid-cols-2 gap-2 mt-2">
               {/* POS Machine / Counter Selector */}
-              <div className="relative mt-3.5">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
-                    POS Terminal / Machine:
-                  </span>
-                  {selectedCounter && (
-                    <button
-                      type="button"
-                      onClick={() => setShowCounterModal(true)}
-                      className="text-[10px] font-semibold text-brand-600 hover:underline"
-                    >
-                      Switch
-                    </button>
-                  )}
-                </div>
-
+              <div className="relative">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsCounterDropdownOpen((prev) => !prev);
+                    setIsCustomerDropdownOpen(false);
                   }}
-                  className={`flex w-full items-center justify-between rounded-xl border p-2 text-left text-xs font-medium transition ${
+                  className={`flex w-full items-center justify-between rounded-lg border px-2 py-1.5 text-left text-xs font-medium transition ${
                     !selectedCounter
-                      ? "border-amber-400 bg-amber-50/70 text-amber-900 ring-2 ring-amber-400/25"
-                      : "border-stone-200 bg-white hover:border-brand-400 text-stone-800"
+                      ? "border-amber-400 bg-amber-50/70 text-amber-900 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-600/50 ring-1 ring-amber-400/30"
+                      : "border-stone-200 bg-white hover:border-brand-400 text-stone-800 dark:bg-[#162035] dark:border-[#1F293D] dark:text-slate-100 dark:hover:border-brand-500/50"
                   }`}
+                  title={selectedCounter ? `Counter: ${selectedCounter.name}` : "Select Open Counter"}
                 >
-                  <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex items-center gap-1.5 min-w-0">
                     <span
-                      className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${
+                      className={`grid h-5 w-5 shrink-0 place-items-center rounded ${
                         selectedCounter?.isOpen
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-amber-100 text-amber-700"
+                          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-400"
+                          : "bg-amber-100 text-amber-700 dark:bg-amber-950/70 dark:text-amber-400"
                       }`}
                     >
-                      <Store size={14} />
+                      <Store size={12} />
                     </span>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="truncate font-bold text-stone-900">
-                          {selectedCounter ? selectedCounter.name : "Select Open Counter *"}
-                        </span>
-                        {selectedCounter?.isOpen && (
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        )}
-                      </div>
-                      <p className="text-[10px] text-stone-500 truncate leading-tight">
-                        {selectedCounter
-                          ? `Shift Open (${selectedCounter.currentSession?.cashierName || "Active"})`
-                          : "Open counter required to bill"}
-                      </p>
-                    </div>
+                    <span className="truncate font-semibold text-xs text-stone-900 dark:text-white">
+                      {selectedCounter ? selectedCounter.name : "Select Counter"}
+                    </span>
+                    {selectedCounter?.isOpen && (
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                    )}
                   </div>
                   <ChevronDown
-                    size={14}
-                    className={`text-stone-400 shrink-0 transition-transform ${
-                      isCounterDropdownOpen ? "rotate-180 text-brand-600" : ""
+                    size={13}
+                    className={`text-stone-400 shrink-0 ml-1 transition-transform ${
+                      isCounterDropdownOpen ? "rotate-180 text-brand-600 dark:text-brand-400" : ""
                     }`}
                   />
                 </button>
@@ -727,13 +718,13 @@ export default function PosPage() {
                 {isCounterDropdownOpen && (
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="absolute left-0 right-0 top-full z-40 mt-1.5 rounded-xl border border-stone-200 bg-white p-2 shadow-xl animate-in fade-in zoom-in-95 duration-150"
+                    className="absolute left-0 top-full z-50 mt-1 w-72 rounded-xl border border-stone-200 bg-white p-2 shadow-2xl animate-in fade-in zoom-in-95 duration-150 dark:bg-[#111827] dark:border-[#1F293D]"
                   >
-                    <div className="px-2 py-1.5 border-b border-stone-100 flex items-center justify-between text-xs">
-                      <span className="font-bold text-stone-700">Choose POS Machine</span>
+                    <div className="px-2 py-1.5 border-b border-stone-100 dark:border-[#1F293D] flex items-center justify-between text-xs">
+                      <span className="font-bold text-stone-700 dark:text-slate-200">Choose POS Machine</span>
                       <Link
                         href="/counters"
-                        className="text-[11px] font-semibold text-brand-600 hover:underline"
+                        className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 hover:underline"
                       >
                         Manage Counters →
                       </Link>
@@ -749,18 +740,18 @@ export default function PosPage() {
                               key={c.id}
                               className={`flex items-center justify-between rounded-lg p-2 text-xs transition ${
                                 isSelected
-                                  ? "bg-brand-50 border border-brand-200 font-semibold text-brand-900"
+                                  ? "bg-brand-50 border border-brand-200 font-semibold text-brand-900 dark:bg-brand-500/20 dark:border-brand-500/40 dark:text-brand-200"
                                   : isOpen
-                                  ? "hover:bg-stone-50 text-stone-700 border border-transparent"
-                                  : "bg-stone-50/70 text-stone-400 border border-transparent"
+                                  ? "hover:bg-stone-50 dark:hover:bg-[#162035] text-stone-700 dark:text-slate-200 border border-transparent"
+                                  : "bg-stone-50/70 dark:bg-[#162035]/40 text-stone-400 dark:text-slate-500 border border-transparent"
                               }`}
                             >
                               <div className="flex items-center gap-2 min-w-0">
                                 <span
                                   className={`grid h-6 w-6 place-items-center rounded-md text-[11px] font-bold shrink-0 ${
                                     isOpen
-                                      ? "bg-emerald-100 text-emerald-800"
-                                      : "bg-stone-200 text-stone-500"
+                                      ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300"
+                                      : "bg-stone-200 text-stone-500 dark:bg-[#1F293D] dark:text-slate-400"
                                   }`}
                                 >
                                   #{c.id}
@@ -769,22 +760,22 @@ export default function PosPage() {
                                   <div className="flex items-center gap-1.5">
                                     <p
                                       className={`font-semibold text-xs leading-tight truncate ${
-                                        isOpen ? "text-stone-900" : "text-stone-500"
+                                        isOpen ? "text-stone-900 dark:text-white" : "text-stone-500 dark:text-slate-400"
                                       }`}
                                     >
                                       {c.name}
                                     </p>
                                     {isOpen ? (
-                                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-1.5 py-0.2 text-[9px] font-bold text-emerald-700">
+                                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 px-1.5 py-0.2 text-[9px] font-bold text-emerald-700 dark:text-emerald-300">
                                         Open
                                       </span>
                                     ) : (
-                                      <span className="rounded-full bg-stone-200 px-1.5 py-0.2 text-[9px] font-medium text-stone-600">
+                                      <span className="rounded-full bg-stone-200 dark:bg-[#1F293D] px-1.5 py-0.2 text-[9px] font-medium text-stone-600 dark:text-slate-400">
                                         Closed
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-[10px] text-stone-400 truncate">
+                                  <p className="text-[10px] text-stone-400 dark:text-slate-500 truncate">
                                     {isOpen
                                       ? `Cashier: ${c.currentSession?.cashierName || "Admin"}`
                                       : "Cannot select (Shift closed)"}
@@ -798,7 +789,7 @@ export default function PosPage() {
                                   className={`rounded-md px-2.5 py-1 text-[11px] font-semibold transition ${
                                     isSelected
                                       ? "bg-brand-500 text-white"
-                                      : "bg-stone-100 text-stone-700 hover:bg-brand-500 hover:text-white"
+                                      : "bg-stone-100 dark:bg-[#162035] text-stone-700 dark:text-slate-300 hover:bg-brand-500 hover:text-white"
                                   }`}
                                 >
                                   {isSelected ? "Active" : "Select"}
@@ -806,7 +797,7 @@ export default function PosPage() {
                               ) : (
                                 <Link
                                   href="/counters"
-                                  className="rounded-md border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-800 hover:bg-amber-100 shrink-0"
+                                  className="rounded-md border border-amber-300 dark:border-amber-600/50 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 text-[10px] font-semibold text-amber-800 dark:text-amber-300 hover:bg-amber-100 shrink-0"
                                   title="Open register shift to enable this counter"
                                 >
                                   Open Shift →
@@ -816,11 +807,11 @@ export default function PosPage() {
                           );
                         })}
                       {counters.filter((c) => c.isActive).length === 0 && (
-                        <div className="py-3 text-center text-xs text-stone-500">
+                        <div className="py-3 text-center text-xs text-stone-500 dark:text-slate-400">
                           <p>No active counters found.</p>
                           <Link
                             href="/counters"
-                            className="mt-1 text-brand-600 font-semibold hover:underline block"
+                            className="mt-1 text-brand-600 dark:text-brand-400 font-semibold hover:underline block"
                           >
                             Configure Counters in Settings
                           </Link>
@@ -830,47 +821,36 @@ export default function PosPage() {
                   </div>
                 )}
               </div>
+
               {/* Customer Selector Dropdown */}
-              <div className="relative mt-4">
-                {/* Combobox Trigger (Full Width) */}
+              <div className="relative">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsCustomerDropdownOpen((prev) => !prev);
+                    setIsCounterDropdownOpen(false);
                     setCustomerSearch("");
                   }}
-                  className={`flex w-full items-center justify-between rounded-xl border bg-white px-3.5 py-2.5 text-left text-xs font-medium transition ${
+                  className={`flex w-full items-center justify-between rounded-lg border bg-white dark:bg-[#162035] px-2 py-1.5 text-left text-xs font-medium transition ${
                     isCustomerDropdownOpen
                       ? "border-brand-500 ring-2 ring-brand-500/15"
-                      : "border-stone-200 hover:border-brand-400"
+                      : "border-stone-200 dark:border-[#1F293D] hover:border-brand-400 dark:hover:border-brand-500/50"
                   }`}
+                  title={currentSelectedCustomer ? `Customer: ${currentSelectedCustomer.name}` : "Walk-in customer"}
                 >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-stone-100 text-stone-600">
-                      <User size={13} />
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-stone-100 dark:bg-[#1F293D] text-stone-600 dark:text-slate-300">
+                      <User size={12} />
                     </span>
-                    <div className="min-w-0 truncate">
-                      {currentSelectedCustomer ? (
-                        <div className="flex items-baseline gap-1.5 truncate">
-                          <span className="font-semibold text-stone-900 truncate">
-                            {currentSelectedCustomer.name}
-                          </span>
-                          {currentSelectedCustomer.phone && (
-                            <span className="text-[11px] text-stone-400 truncate">
-                              ({currentSelectedCustomer.phone})
-                            </span>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="font-medium text-stone-800">Walk in customer</span>
-                      )}
-                    </div>
+                    <span className="truncate font-semibold text-xs text-stone-900 dark:text-white">
+                      {currentSelectedCustomer ? currentSelectedCustomer.name : "Walk in customer"}
+                    </span>
                   </div>
                   <ChevronDown
-                    size={15}
-                    className={`shrink-0 text-stone-400 transition-transform ${
-                      isCustomerDropdownOpen ? "rotate-180 text-brand-600" : ""
+                    size={13}
+                    className={`shrink-0 text-stone-400 dark:text-slate-500 ml-1 transition-transform ${
+                      isCustomerDropdownOpen ? "rotate-180 text-brand-600 dark:text-brand-400" : ""
                     }`}
                   />
                 </button>
@@ -879,25 +859,25 @@ export default function PosPage() {
                 {isCustomerDropdownOpen && (
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="absolute left-0 right-0 top-full z-40 mt-1.5 rounded-2xl border border-stone-200 bg-white p-2 shadow-2xl ring-1 ring-black/5 animate-in fade-in zoom-in-95"
+                    className="absolute right-0 top-full z-50 mt-1 w-72 sm:w-80 rounded-2xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827] p-2 shadow-2xl ring-1 ring-black/5 animate-in fade-in zoom-in-95"
                   >
                     {/* Search Field */}
                     <div className="relative mb-2">
                       <Search
                         size={14}
-                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"
+                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 dark:text-slate-500"
                       />
                       <input
                         type="search"
                         autoFocus
                         value={customerSearch}
                         onChange={(e) => setCustomerSearch(e.target.value)}
-                        placeholder="Search name or phone number..."
-                        className="w-full rounded-xl border border-stone-200 bg-stone-50 py-2 pl-8 pr-3 text-xs focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/15"
+                        placeholder="Search name or phone..."
+                        className="w-full rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] py-1.5 pl-8 pr-3 text-xs focus:border-brand-500 focus:bg-white dark:focus:bg-[#162035] focus:outline-none focus:ring-2 focus:ring-brand-500/15 text-stone-900 dark:text-white dark:placeholder:text-slate-500"
                       />
                     </div>
 
-                    {/* Quick Add Button inside dropdown - detects phone vs name */}
+                    {/* Quick Add Button */}
                     {(() => {
                       const searchTrimmed = customerSearch.trim();
                       const isSearchPhone =
@@ -914,7 +894,7 @@ export default function PosPage() {
                         <button
                           type="button"
                           onClick={() => handleOpenNewCustomerFromSearch(customerSearch)}
-                          className="mb-1.5 flex w-full items-center gap-2 rounded-xl border border-dashed border-brand-300 bg-brand-50/60 px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-brand-100/70"
+                          className="mb-1.5 flex w-full items-center gap-2 rounded-xl border border-dashed border-brand-300 dark:border-brand-500/40 bg-brand-50/60 dark:bg-brand-500/10 px-3 py-1.5 text-xs font-semibold text-brand-700 dark:text-brand-300 transition hover:bg-brand-100/70 dark:hover:bg-brand-500/20"
                         >
                           <UserPlus size={14} />
                           <span className="truncate">{addBtnText}</span>
@@ -923,7 +903,7 @@ export default function PosPage() {
                     })()}
 
                     {/* Customer List */}
-                    <div className="max-h-56 overflow-y-auto space-y-0.5 divide-y divide-stone-50">
+                    <div className="max-h-52 overflow-y-auto space-y-0.5 divide-y divide-stone-50 dark:divide-[#1F293D]/50">
                       {/* Walk-in Option */}
                       <button
                         type="button"
@@ -931,20 +911,20 @@ export default function PosPage() {
                           setCustomerId("walk-in");
                           setIsCustomerDropdownOpen(false);
                         }}
-                        className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs transition ${
+                        className={`flex w-full items-center justify-between rounded-xl px-3 py-1.5 text-xs transition ${
                           customerId === "walk-in"
-                            ? "bg-brand-50 font-semibold text-brand-800"
-                            : "hover:bg-stone-50 text-stone-700"
+                            ? "bg-brand-50 dark:bg-brand-500/15 font-semibold text-brand-800 dark:text-brand-300"
+                            : "hover:bg-stone-50 dark:hover:bg-[#162035] text-stone-700 dark:text-slate-300"
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
-                          <span className="grid h-6 w-6 place-items-center rounded-full bg-stone-100 text-stone-600 text-[11px] font-bold">
+                          <span className="grid h-6 w-6 place-items-center rounded-full bg-stone-100 dark:bg-[#1F293D] text-stone-600 dark:text-slate-300 text-[11px] font-bold">
                             🚶
                           </span>
                           <span>Walk-in customer (Default)</span>
                         </div>
                         {customerId === "walk-in" && (
-                          <Check size={14} className="text-brand-600" />
+                          <Check size={14} className="text-brand-600 dark:text-brand-400" />
                         )}
                       </button>
 
@@ -965,21 +945,21 @@ export default function PosPage() {
                               setCustomerId(String(c.id));
                               setIsCustomerDropdownOpen(false);
                             }}
-                            className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs transition text-left ${
+                            className={`flex w-full items-center justify-between rounded-xl px-3 py-1.5 text-xs transition text-left ${
                               isSelected
-                                ? "bg-brand-50 font-semibold text-brand-800"
-                                : "hover:bg-stone-50 text-stone-700"
+                                ? "bg-brand-50 dark:bg-brand-500/15 font-semibold text-brand-800 dark:text-brand-300"
+                                : "hover:bg-stone-50 dark:hover:bg-[#162035] text-stone-700 dark:text-slate-300"
                             }`}
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-100 text-[10px] font-bold text-brand-800">
+                              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-100 dark:bg-brand-950/70 text-[10px] font-bold text-brand-800 dark:text-brand-300">
                                 {initials || "C"}
                               </span>
                               <div className="min-w-0">
-                                <p className="truncate font-semibold text-stone-900 leading-tight">
+                                <p className="truncate font-semibold text-stone-900 dark:text-white leading-tight">
                                   {c.name}
                                 </p>
-                                <p className="text-[11px] text-stone-400 leading-tight mt-0.5">
+                                <p className="text-[11px] text-stone-400 dark:text-slate-500 leading-tight mt-0.5">
                                   {c.phone || "No phone"}
                                 </p>
                               </div>
@@ -992,14 +972,14 @@ export default function PosPage() {
                       })}
 
                       {filteredCustomers.length === 0 && (
-                        <div className="py-4 text-center text-xs text-stone-500">
-                          <p className="text-stone-400">
+                        <div className="py-3 text-center text-xs text-stone-500 dark:text-slate-400">
+                          <p className="text-stone-400 dark:text-slate-500">
                             No customer found matching &ldquo;{customerSearch}&rdquo;
                           </p>
                           <button
                             type="button"
                             onClick={() => handleOpenNewCustomerFromSearch(customerSearch)}
-                            className="mt-2 inline-flex items-center gap-1.5 font-semibold text-brand-600 hover:text-brand-700 hover:underline"
+                            className="mt-1.5 inline-flex items-center gap-1.5 font-semibold text-brand-600 dark:text-brand-400 hover:underline"
                           >
                             <UserPlus size={13} />
                             <span>
@@ -1015,248 +995,258 @@ export default function PosPage() {
                 )}
               </div>
             </div>
+          </div>
 
-            <div className="border-t border-dashed border-stone-300 px-5">
-              {cart.length === 0 ? (
-                <div className="py-10 text-center">
-                  {!selectedCounter ? (
-                    <div className="space-y-2 py-2">
-                      <span className="mx-auto grid h-10 w-10 place-items-center rounded-xl bg-amber-100 text-amber-700">
-                        <Store size={20} />
+          {/* Cart Items List */}
+          <div className="border-t border-stone-200 dark:border-[#1F293D] px-3.5 sm:px-4 flex-1 min-h-[60px] flex flex-col overflow-hidden">
+            {cart.length === 0 ? (
+              <div className="py-4 text-center flex-1 flex flex-col justify-center items-center">
+                {!selectedCounter ? (
+                  <div className="space-y-1.5 py-1">
+                    <span className="mx-auto grid h-8 w-8 place-items-center rounded-lg bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                      <Store size={16} />
+                    </span>
+                    <p className="text-xs font-bold text-stone-800 dark:text-slate-200">
+                      {counters.some((c) => c.isActive && c.isOpen)
+                        ? "Counter Not Selected"
+                        : "No Open Counters"}
+                    </p>
+                    <p className="text-[11px] text-stone-500 dark:text-slate-400 max-w-[200px] mx-auto leading-tight">
+                      {counters.some((c) => c.isActive && c.isOpen)
+                        ? "Select an active open counter above before billing."
+                        : "All register shifts are closed."}
+                    </p>
+                    {counters.some((c) => c.isActive && c.isOpen) ? (
+                      <button
+                        type="button"
+                        onClick={() => setShowCounterModal(true)}
+                        className="btn-primary text-xs py-1 px-2.5 !bg-amber-600 hover:!bg-amber-700 font-semibold inline-flex items-center gap-1 shadow-none"
+                      >
+                        <Store size={12} />
+                        Choose Counter
+                      </button>
+                    ) : (
+                      <Link
+                        href="/counters"
+                        className="btn-primary text-xs py-1 px-2.5 !bg-amber-600 hover:!bg-amber-700 font-semibold inline-flex items-center gap-1 shadow-none"
+                      >
+                        <Store size={12} />
+                        Open Shift →
+                      </Link>
+                    )}
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-xs sm:text-sm font-medium text-stone-700 dark:text-slate-300">No items in order</p>
+                    <p className="mt-0.5 text-[11px] text-stone-500 dark:text-slate-400">
+                      Tap any product to add it here.
+                    </p>
+                  </>
+                )}
+              </div>
+            ) : (
+              <ul className="flex-1 min-h-0 divide-y divide-stone-100 dark:divide-[#1F293D] overflow-y-auto custom-scrollbar pr-1 py-1">
+                {cart.map(({ product, qty }) => (
+                  <li key={product.id} className="py-1.5">
+                    <div className="flex items-center justify-between gap-2 text-xs">
+                      <span className="font-semibold text-stone-900 dark:text-white truncate" title={product.name}>
+                        {product.name}
                       </span>
-                      <p className="text-xs font-bold text-stone-800">
-                        {counters.some((c) => c.isActive && c.isOpen)
-                          ? "Open Counter Not Selected"
-                          : "No Open Counters"}
-                      </p>
-                      <p className="text-[11px] text-stone-500 max-w-[210px] mx-auto leading-normal">
-                        {counters.some((c) => c.isActive && c.isOpen)
-                          ? "Select an active open counter above before adding products to order."
-                          : "All register shifts are closed. Open a shift on Counters page to bill."}
-                      </p>
-                      {counters.some((c) => c.isActive && c.isOpen) ? (
+                      <span className="font-bold tabular-nums text-stone-900 dark:text-white shrink-0">
+                        {formatCurrency(product.price * qty)}
+                      </span>
+                    </div>
+                    <div className="mt-1 flex items-center justify-between text-[11px] text-stone-500 dark:text-slate-400">
+                      <span className="tabular-nums">
+                        {qty} × {formatCurrency(product.price)}
+                      </span>
+                      <div className="flex items-center gap-1">
                         <button
                           type="button"
-                          onClick={() => setShowCounterModal(true)}
-                          className="btn-primary text-xs py-1.5 px-3 !bg-amber-600 hover:!bg-amber-700 font-semibold inline-flex items-center gap-1 shadow-none"
+                          aria-label={`Decrease ${product.name}`}
+                          onClick={() => changeQty(product.id, -1)}
+                          className="grid h-5 w-5 place-items-center rounded border border-stone-300 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] text-stone-700 dark:text-slate-200 hover:bg-stone-200 dark:hover:bg-slate-700 transition"
                         >
-                          <Store size={13} />
-                          Choose Open Counter
+                          <Minus size={11} />
                         </button>
-                      ) : (
-                        <Link
-                          href="/counters"
-                          className="btn-primary text-xs py-1.5 px-3 !bg-amber-600 hover:!bg-amber-700 font-semibold inline-flex items-center gap-1 shadow-none"
+                        <span className="w-5 text-center text-xs font-bold tabular-nums text-stone-900 dark:text-white">
+                          {qty}
+                        </span>
+                        <button
+                          type="button"
+                          aria-label={`Increase ${product.name}`}
+                          onClick={() => changeQty(product.id, 1)}
+                          className="grid h-5 w-5 place-items-center rounded border border-stone-300 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] text-stone-700 dark:text-slate-200 hover:bg-stone-200 dark:hover:bg-slate-700 transition"
                         >
-                          <Store size={13} />
-                          Open Register →
-                        </Link>
-                      )}
+                          <Plus size={11} />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${product.name}`}
+                          onClick={() => removeItem(product.id)}
+                          className="ml-1 text-stone-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
                     </div>
-                  ) : (
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Totals Breakdown */}
+          <div className="space-y-1 border-t border-stone-200 dark:border-[#1F293D] px-3.5 sm:px-4 py-2 text-xs shrink-0 bg-stone-50/50 dark:bg-[#162035]/30">
+            <div className="flex items-center justify-between text-stone-600 dark:text-slate-400">
+              <span>Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"})</span>
+              <span className="font-semibold tabular-nums text-stone-900 dark:text-slate-200">{formatCurrency(subtotal)}</span>
+            </div>
+            <div className="flex items-center justify-between text-stone-600 dark:text-slate-400">
+              <label htmlFor="discount" className="flex items-center gap-1 text-xs cursor-pointer">
+                <span>Discount</span>
+                <input
+                  id="discount"
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={discount}
+                  onChange={(e) =>
+                    setDiscount(Math.min(100, Math.max(0, Number(e.target.value) || 0)))
+                  }
+                  className="w-10 rounded border border-stone-300 dark:border-[#1F293D] bg-white dark:bg-[#162035] px-1 py-0.2 text-right text-xs tabular-nums text-stone-900 dark:text-white"
+                />
+                <span>%</span>
+              </label>
+              <span className="font-medium tabular-nums text-stone-900 dark:text-slate-200">
+                -{formatCurrency(discountAmount)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-stone-600 dark:text-slate-400">
+              <span>VAT 5%</span>
+              <span className="font-medium tabular-nums text-stone-900 dark:text-slate-200">{formatCurrency(vat)}</span>
+            </div>
+            <div className="flex items-baseline justify-between border-t border-stone-200 dark:border-[#1F293D] pt-1.5">
+              <span className="text-xs font-bold uppercase tracking-wider text-stone-900 dark:text-white">Total</span>
+              <span className="font-display text-xl sm:text-2xl font-bold tabular-nums tracking-tight text-brand-600 dark:text-brand-400">
+                {formatCurrency(total)}
+              </span>
+            </div>
+          </div>
+
+          {/* Payment & Checkout Section */}
+          <div className="space-y-1.5 px-3.5 sm:px-4 pb-2.5 shrink-0 bg-stone-50/50 dark:bg-[#162035]/30">
+            {/* Payment Methods */}
+            <div className="grid grid-cols-4 gap-1.5" role="radiogroup" aria-label="Payment method">
+              {paymentMethods.map(({ id, icon: Icon }) => {
+                const active = payment === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => setPayment(id)}
+                    className={`flex items-center justify-center gap-1 rounded-md border py-1.5 px-1 text-xs font-semibold transition ${
+                      active
+                        ? "border-brand-500 bg-brand-50 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 shadow-2xs"
+                        : "border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#162035] text-stone-600 dark:text-slate-400 hover:border-stone-300 dark:hover:border-slate-600 hover:text-stone-900 dark:hover:text-white"
+                    }`}
+                  >
+                    <Icon size={13} className="shrink-0" />
+                    <span className="text-[11px] truncate">{id}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Customer Paid & Change Box */}
+            <div className="rounded-lg border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827] px-2.5 py-1.5 text-xs space-y-1">
+              <div className="flex items-center justify-between gap-2">
+                <label htmlFor="customer-paid" className="font-medium text-stone-700 dark:text-slate-300 text-xs shrink-0">
+                  Customer Paid:
+                </label>
+                <div className="relative w-24">
+                  <span className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 font-bold text-stone-400 dark:text-slate-500 text-xs">
+                    ৳
+                  </span>
+                  <input
+                    id="customer-paid"
+                    type="number"
+                    min={0}
+                    step="any"
+                    placeholder={total > 0 ? String(Math.ceil(total)) : "0"}
+                    value={paidAmount}
+                    onChange={(e) => setPaidAmount(e.target.value)}
+                    className="w-full rounded border border-stone-300 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] py-0.5 pl-4 pr-1 text-right font-bold tabular-nums text-xs text-stone-900 dark:text-white focus:border-brand-500 focus:bg-white dark:focus:bg-[#162035] focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-2 border-t border-stone-100 dark:border-[#1F293D] pt-1">
+                <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                  {total > 0 && (
                     <>
-                      <p className="text-sm font-medium text-stone-700">No items yet</p>
-                      <p className="mt-1 text-xs text-stone-500">
-                        Products you add will be listed here.
-                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setPaidAmount(String(total))}
+                        className={`rounded px-1.5 py-0.2 text-[10px] font-semibold transition ${
+                          paidAmount === String(total) || (paidAmount === "" && effectivePaid === total)
+                            ? "bg-brand-500 text-white font-bold"
+                            : "bg-stone-100 dark:bg-[#162035] text-stone-600 dark:text-slate-300 hover:bg-stone-200"
+                        }`}
+                      >
+                        Exact
+                      </button>
+                      {suggestedNotes.slice(0, 3).map((note) => (
+                        <button
+                          key={note}
+                          type="button"
+                          onClick={() => setPaidAmount(String(note))}
+                          className={`rounded px-1.5 py-0.2 text-[10px] font-semibold transition ${
+                            paidAmount === String(note)
+                              ? "bg-brand-500 text-white font-bold"
+                              : "bg-stone-100 dark:bg-[#162035] text-stone-600 dark:text-slate-300 hover:bg-stone-200"
+                          }`}
+                        >
+                          ৳{note}
+                        </button>
+                      ))}
                     </>
                   )}
                 </div>
-              ) : (
-                <ul className="max-h-[300px] divide-y divide-stone-100 overflow-y-auto">
-                  {cart.map(({ product, qty }) => (
-                    <li key={product.id} className="py-3">
-                      <div className="flex items-baseline gap-2 text-sm">
-                        <span className="font-medium">{product.name}</span>
-                        <span
-                          aria-hidden
-                          className="min-w-4 flex-1 border-b border-dotted border-stone-300"
-                        />
-                        <span className="font-semibold tabular-nums">
-                          {formatCurrency(product.price * qty)}
-                        </span>
-                      </div>
-                      <div className="mt-2 flex items-center justify-between text-xs text-stone-500">
-                        <span className="tabular-nums">
-                          {qty} × {formatCurrency(product.price)}
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <button
-                            type="button"
-                            aria-label={`Decrease ${product.name}`}
-                            onClick={() => changeQty(product.id, -1)}
-                            className="grid h-6 w-6 place-items-center rounded-md border border-stone-300 text-stone-700 hover:bg-stone-100"
-                          >
-                            <Minus size={12} />
-                          </button>
-                          <span className="w-6 text-center text-sm font-semibold tabular-nums text-stone-900">
-                            {qty}
-                          </span>
-                          <button
-                            type="button"
-                            aria-label={`Increase ${product.name}`}
-                            onClick={() => changeQty(product.id, 1)}
-                            className="grid h-6 w-6 place-items-center rounded-md border border-stone-300 text-stone-700 hover:bg-stone-100"
-                          >
-                            <Plus size={12} />
-                          </button>
-                          <button
-                            type="button"
-                            aria-label={`Remove ${product.name}`}
-                            onClick={() => removeItem(product.id)}
-                            className="ml-1 text-stone-400 hover:text-red-600"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            <div className="space-y-2 border-t border-dashed border-stone-300 px-5 py-4 text-sm">
-              <Line label={`Subtotal (${itemCount} items)`} value={formatCurrency(subtotal)} />
-              <div className="flex items-center justify-between text-stone-600">
-                <label htmlFor="discount" className="flex items-center gap-2">
-                  Discount
-                  <input
-                    id="discount"
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={discount}
-                    onChange={(e) =>
-                      setDiscount(Math.min(100, Math.max(0, Number(e.target.value) || 0)))
-                    }
-                    className="w-14 rounded-md border border-stone-300 px-2 py-1 text-right text-sm tabular-nums text-stone-900"
-                  />
-                  <span>%</span>
-                </label>
-                <span className="font-medium tabular-nums text-stone-900">
-                  -{formatCurrency(discountAmount)}
-                </span>
-              </div>
-              <Line label="VAT 5%" value={formatCurrency(vat)} />
-              <div className="flex items-end justify-between border-t border-stone-900 pt-3">
-                <span className="text-sm font-semibold">Total</span>
-                <span className="font-display text-3xl font-semibold tabular-nums tracking-tight">
-                  {formatCurrency(total)}
-                </span>
-              </div>
-            </div>
-
-            <div className="space-y-3 px-5">
-              <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Payment method">
-                {paymentMethods.map(({ id, icon: Icon }) => {
-                  const active = payment === id;
-                  return (
-                    <button
-                      key={id}
-                      type="button"
-                      role="radio"
-                      aria-checked={active}
-                      onClick={() => setPayment(id)}
-                      className={`flex flex-col items-center gap-1 rounded-lg border px-1 py-2.5 text-xs font-medium transition ${
-                        active
-                          ? "border-brand-500 bg-brand-50 text-brand-700"
-                          : "border-stone-300 text-stone-600 hover:bg-stone-50"
-                      }`}
-                    >
-                      <Icon size={17} />
-                      {id}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Customer Paid & Change Calculation Box */}
-              <div className="space-y-2 rounded-xl border border-stone-200 bg-stone-50/80 p-3 text-xs">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="customer-paid" className="font-semibold text-stone-700">
-                    Customer Paid:
-                  </label>
-                  <div className="relative w-32">
-                    <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 font-bold text-stone-400">
-                      ৳
-                    </span>
-                    <input
-                      id="customer-paid"
-                      type="number"
-                      min={0}
-                      step="any"
-                      placeholder={total > 0 ? String(Math.ceil(total)) : "0"}
-                      value={paidAmount}
-                      onChange={(e) => setPaidAmount(e.target.value)}
-                      className="w-full rounded-lg border border-stone-300 bg-white py-1.5 pl-6 pr-2.5 text-right font-bold tabular-nums text-stone-900 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-                    />
-                  </div>
-                </div>
-
-                {/* Quick note buttons */}
-                {total > 0 && (
-                  <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                    <button
-                      type="button"
-                      onClick={() => setPaidAmount(String(total))}
-                      className={`rounded-md border px-2 py-0.5 text-[11px] font-semibold transition ${
-                        paidAmount === String(total) || (paidAmount === "" && effectivePaid === total)
-                          ? "border-brand-500 bg-brand-50 text-brand-700 font-bold"
-                          : "border-stone-200 bg-white text-stone-600 hover:bg-stone-100"
-                      }`}
-                    >
-                      Exact
-                    </button>
-                    {suggestedNotes.map((note) => (
-                      <button
-                        key={note}
-                        type="button"
-                        onClick={() => setPaidAmount(String(note))}
-                        className={`rounded-md border px-2 py-0.5 text-[11px] font-semibold transition ${
-                          paidAmount === String(note)
-                            ? "border-brand-500 bg-brand-50 text-brand-700 font-bold"
-                            : "border-stone-200 bg-white text-stone-600 hover:bg-stone-100"
-                        }`}
-                      >
-                        ৳{note}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Change amount line */}
-                <div className="flex items-center justify-between border-t border-stone-200/90 pt-2 font-medium">
-                  <span className="font-semibold text-stone-700">Change (ফেরত):</span>
+                <div className="flex items-baseline gap-1 shrink-0">
+                  <span className="text-[11px] font-medium text-stone-500 dark:text-slate-400">Change:</span>
                   <span
-                    className={`font-display text-base font-bold tabular-nums ${
-                      changeAmount > 0 ? "text-emerald-600" : "text-stone-900"
+                    className={`font-display text-xs font-bold tabular-nums ${
+                      changeAmount > 0 ? "text-emerald-600 dark:text-emerald-400" : "text-stone-900 dark:text-white"
                     }`}
                   >
                     {formatCurrency(changeAmount)}
                   </span>
                 </div>
               </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (!selectedCounter) {
-                    setShowCounterModal(true);
-                    return;
-                  }
-                  setShowConfirmModal(true);
-                }}
-                disabled={!selectedCounter || cart.length === 0 || isSubmitting}
-                className="btn-primary w-full py-3.5 text-base disabled:opacity-40"
-              >
-                {!selectedCounter
-                  ? "Select Open Counter to Charge"
-                  : isSubmitting
-                  ? "Processing..."
-                  : `Charge ${formatCurrency(total)}`}
-              </button>
             </div>
+
+            {/* Charge Button */}
+            <button
+              type="button"
+              onClick={() => {
+                if (!selectedCounter) {
+                  setShowCounterModal(true);
+                  return;
+                }
+                setShowConfirmModal(true);
+              }}
+              disabled={!selectedCounter || cart.length === 0 || isSubmitting}
+              className="btn-primary w-full py-2 text-sm font-bold shadow-md shadow-brand-500/20 disabled:opacity-40"
+            >
+              {!selectedCounter
+                ? "Select Open Counter"
+                : isSubmitting
+                ? "Processing..."
+                : `Charge ${formatCurrency(total)}`}
+            </button>
           </div>
         </div>
       </aside>
@@ -1269,24 +1259,24 @@ export default function PosPage() {
           aria-label="Confirm Sale"
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm animate-in fade-in duration-200"
         >
-          <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl transition-all">
+          <div className="relative w-full max-w-sm rounded-2xl border border-transparent dark:border-[#1F293D] bg-white dark:bg-[#111827] p-6 shadow-2xl transition-all">
             <button
               type="button"
               aria-label="Close"
               disabled={isSubmitting}
               onClick={() => setShowConfirmModal(false)}
-              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-lg border border-stone-200 text-stone-400 hover:bg-stone-50 hover:text-stone-700 transition"
+              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-lg border border-stone-200 dark:border-[#1F293D] text-stone-400 hover:bg-stone-50 dark:hover:bg-[#162035] hover:text-stone-700 dark:hover:text-white transition"
             >
               <X size={16} />
             </button>
 
             {/* Icon & Title */}
             <div className="flex items-center gap-3.5">
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600 shadow-sm border border-brand-100">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-50 dark:bg-brand-500/15 text-brand-600 dark:text-brand-400 shadow-sm border border-brand-100 dark:border-brand-500/30">
                 <Store size={22} strokeWidth={2.4} />
               </span>
               <div>
-                <h3 className="font-display text-lg font-bold text-stone-900 leading-tight">
+                <h3 className="font-display text-lg font-bold text-stone-900 dark:text-white leading-tight">
                   Confirm Sale
                 </h3>
                 <p className="text-xs text-stone-500 mt-0.5">
@@ -1296,7 +1286,7 @@ export default function PosPage() {
             </div>
 
             {/* Order Overview Summary */}
-            <div className="mt-5 rounded-xl border border-stone-200 bg-stone-50/70 p-3.5 space-y-2.5 text-xs">
+            <div className="mt-5 rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50/70 dark:bg-[#162035]/70 p-3.5 space-y-2.5 text-xs">
               <div className="flex items-center justify-between text-stone-600">
                 <span>POS Counter</span>
                 <span className="font-bold text-stone-900">
@@ -1352,7 +1342,7 @@ export default function PosPage() {
                 type="button"
                 disabled={isSubmitting}
                 onClick={() => setShowConfirmModal(false)}
-                className="flex-1 rounded-lg border border-stone-300 bg-white py-2.5 text-sm font-semibold text-stone-700 hover:bg-stone-50 transition active:translate-y-px disabled:opacity-50"
+                className="flex-1 rounded-lg border border-stone-300 dark:border-[#1F293D] bg-white dark:bg-[#162035] py-2.5 text-sm font-semibold text-stone-700 dark:text-slate-200 hover:bg-stone-50 dark:hover:bg-[#1E293B] transition active:translate-y-px disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -1384,15 +1374,15 @@ export default function PosPage() {
           aria-label="Sale Completed - Receipt preview"
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm animate-in fade-in duration-200 print:static print:inset-auto print:z-auto print:block print:bg-transparent print:p-0 print:m-0 print:backdrop-filter-none print:transform-none"
         >
-          <div className="relative flex max-h-[92vh] w-full max-w-[420px] flex-col rounded-2xl bg-white shadow-2xl overflow-hidden print:static print:max-h-none print:w-[80mm] print:max-w-[80mm] print:mx-auto print:overflow-visible print:border-none print:shadow-none print:p-0 print:bg-white">
+          <div className="relative flex max-h-[92vh] w-full max-w-[420px] flex-col rounded-2xl border border-transparent dark:border-[#1F293D] bg-white dark:bg-[#111827] shadow-2xl overflow-hidden print:static print:max-h-none print:w-[80mm] print:max-w-[80mm] print:mx-auto print:overflow-visible print:border-none print:shadow-none print:p-0 print:bg-white">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-stone-100 p-4 bg-white print:hidden">
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#1F293D] p-4 bg-white dark:bg-[#111827] print:hidden">
               <div className="flex items-center gap-3">
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100">
                   <Check className="h-5 w-5 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h3 className="font-display text-base font-bold text-stone-900 leading-tight">Sale Completed</h3>
+                  <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">Sale Completed</h3>
                   <p className="text-xs text-stone-400 font-medium">Receipt preview & print</p>
                 </div>
               </div>
@@ -1400,17 +1390,17 @@ export default function PosPage() {
                 type="button"
                 aria-label="Close"
                 onClick={() => setReceipt(null)}
-                className="grid h-8 w-8 place-items-center rounded-lg border border-stone-200 text-stone-400 hover:text-stone-700 hover:bg-stone-50 transition"
+                className="grid h-8 w-8 place-items-center rounded-lg border border-stone-200 dark:border-[#1F293D] text-stone-400 hover:text-stone-700 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-[#162035] transition"
               >
                 <X size={16} />
               </button>
             </div>
 
             {/* Scrollable Receipt Body */}
-            <div className="flex-1 overflow-y-auto p-4 bg-stone-100/60 print:overflow-visible print:p-0 print:bg-transparent">
+            <div className="flex-1 overflow-y-auto p-4 bg-stone-100/60 dark:bg-[#0B0F19]/60 print:overflow-visible print:p-0 print:bg-transparent">
               <div
                 id="printable-receipt"
-                className="rounded-xl border border-stone-200 bg-white p-5 font-sans text-stone-900 shadow-sm print:rounded-none print:border-none print:shadow-none print:p-2 print:w-full print:max-w-none"
+                className="rounded-xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#162035] p-5 font-sans text-stone-900 dark:text-slate-100 shadow-sm print:rounded-none print:border-none print:shadow-none print:p-2 print:w-full print:max-w-none"
               >
                 {/* Project Branding Header */}
                 <div className="flex flex-col items-center justify-center text-center">
@@ -1457,7 +1447,7 @@ export default function PosPage() {
                     <span>Amount</span>
                   </div>
 
-                  <div className="divide-y divide-dashed divide-stone-200 py-1">
+                  <div className="divide-y divide-dashed divide-stone-200 dark:divide-[#1F293D] py-1">
                     {receipt.items.map((item, idx) => (
                       <div key={idx} className="py-2.5 text-xs">
                         <div className="flex items-start justify-between gap-3">
@@ -1627,7 +1617,7 @@ export default function PosPage() {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center gap-3 border-t border-stone-100 bg-white p-4 print:hidden">
+            <div className="flex items-center gap-3 border-t border-stone-100 dark:border-[#1F293D] bg-white dark:bg-[#111827] p-4 print:hidden">
               <button
                 type="button"
                 onClick={() => setReceipt(null)}
@@ -1654,7 +1644,7 @@ export default function PosPage() {
       {isNewCustomerModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in">
           <div className="w-full max-w-md rounded-2xl border border-[#fae5d7] bg-white p-6 shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-stone-100 pb-3.5">
+            <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#1F293D] pb-3.5">
               <div className="flex items-center gap-2.5">
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-brand-50 text-brand-600">
                   <UserPlus size={20} />
@@ -1667,7 +1657,7 @@ export default function PosPage() {
               <button
                 type="button"
                 onClick={() => setIsNewCustomerModalOpen(false)}
-                className="rounded-lg p-1 text-stone-400 hover:bg-stone-100 hover:text-stone-700"
+                className="rounded-lg p-1 text-stone-400 hover:bg-stone-100 dark:hover:bg-[#162035] hover:text-stone-700 dark:hover:text-white"
               >
                 <X size={18} />
               </button>
@@ -1724,7 +1714,7 @@ export default function PosPage() {
                 />
               </div>
 
-              <div className="mt-5 flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100">
+              <div className="mt-5 flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100 dark:border-[#1F293D]">
                 <button
                   type="button"
                   onClick={() => setIsNewCustomerModalOpen(false)}
@@ -1763,13 +1753,13 @@ export default function PosPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm animate-in fade-in duration-200"
         >
           <div className="card w-full max-w-md p-6 shadow-2xl animate-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3.5 border-b border-stone-100">
+            <div className="flex items-center justify-between pb-3.5 border-b border-stone-100 dark:border-[#1F293D]">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-50 text-brand-600">
                   <Store size={20} strokeWidth={2.4} />
                 </span>
                 <div>
-                  <h3 className="font-display text-base font-bold text-stone-900 leading-tight">
+                  <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
                     Select POS Machine / Counter
                   </h3>
                   <p className="text-xs text-stone-500">

@@ -273,7 +273,7 @@ export default function CountersPage() {
               {totalCounters} {totalCounters === 1 ? "Register" : "Registers"}
             </span>
           </div>
-          <p className="mt-1 text-sm text-stone-500">
+          <p className="mt-1 text-sm text-stone-500 dark:text-slate-400">
             Manage store counters, opening float cash, active shifts & daily closing balances.
           </p>
         </div>
@@ -302,16 +302,16 @@ export default function CountersPage() {
       {/* KPI Overview Cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <div className="card p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+          <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-slate-400">
             <span>Total Counters</span>
             <Store size={17} className="text-stone-400" />
           </div>
-          <p className="font-display text-2xl font-bold text-stone-900">{totalCounters}</p>
-          <p className="text-xs text-stone-500">Configured in store</p>
+          <p className="font-display text-2xl font-bold text-stone-900 dark:text-white">{totalCounters}</p>
+          <p className="text-xs text-stone-500 dark:text-slate-400">Configured in store</p>
         </div>
 
         <div className="card p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+          <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-slate-400">
             <span>Active Shifts</span>
             <span className="relative flex h-2 w-2">
               {openCounters > 0 && (
@@ -324,30 +324,30 @@ export default function CountersPage() {
               />
             </span>
           </div>
-          <p className="font-display text-2xl font-bold text-stone-900">{openCounters}</p>
-          <p className="text-xs text-stone-500">Currently open registers</p>
+          <p className="font-display text-2xl font-bold text-stone-900 dark:text-white">{openCounters}</p>
+          <p className="text-xs text-stone-500 dark:text-slate-400">Currently open registers</p>
         </div>
 
         <div className="card p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+          <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-slate-400">
             <span>Shift Float Cash</span>
             <Banknote size={17} className="text-emerald-600" />
           </div>
-          <p className="font-display text-2xl font-bold text-stone-900 tabular-nums">
+          <p className="font-display text-2xl font-bold text-stone-900 dark:text-white tabular-nums">
             {formatCurrency(currentOpeningCash)}
           </p>
-          <p className="text-xs text-stone-500">Drawer starting amount</p>
+          <p className="text-xs text-stone-500 dark:text-slate-400">Drawer starting amount</p>
         </div>
 
         <div className="card p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+          <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-slate-400">
             <span>Current Shift Sales</span>
             <ShoppingBag size={17} className="text-brand-500" />
           </div>
           <p className="font-display text-2xl font-bold text-brand-600 tabular-nums">
             {formatCurrency(currentTotalSales)}
           </p>
-          <p className="text-xs text-stone-500">{currentStatus?.totalOrders || 0} orders processed</p>
+          <p className="text-xs text-stone-500 dark:text-slate-400">{currentStatus?.totalOrders || 0} orders processed</p>
         </div>
       </div>
 
@@ -365,20 +365,20 @@ export default function CountersPage() {
                   Active POS Shift Open
                 </span>
                 <span className="text-xs text-stone-400">•</span>
-                <span className="text-xs font-semibold text-stone-800">
+                <span className="text-xs font-semibold text-stone-800 dark:text-slate-200">
                   {activeSession.counter?.name || "Counter 1"}
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-xs text-stone-600">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-xs text-stone-600 dark:text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <User size={13} className="text-stone-400" />
-                  Cashier: <strong className="text-stone-900">{activeSession.cashierName}</strong>
+                  Cashier: <strong className="text-stone-900 dark:text-white">{activeSession.cashierName}</strong>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock size={13} className="text-stone-400" />
                   Opened:{" "}
-                  <strong className="text-stone-900">
+                  <strong className="text-stone-900 dark:text-white">
                     {new Date(activeSession.openedAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -388,7 +388,7 @@ export default function CountersPage() {
                 <span className="flex items-center gap-1.5">
                   <Banknote size={13} className="text-emerald-600" />
                   Opening Cash:{" "}
-                  <strong className="text-stone-900">{formatCurrency(activeSession.openingCash)}</strong>
+                  <strong className="text-stone-900 dark:text-white">{formatCurrency(activeSession.openingCash)}</strong>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <ShoppingBag size={13} className="text-brand-600" />
@@ -433,7 +433,7 @@ export default function CountersPage() {
               key={c.id}
               className={`card flex flex-col justify-between p-5 transition hover:shadow-md ${
                 c.isOpen ? "border-emerald-300 ring-1 ring-emerald-500/20" : ""
-              } ${!c.isActive ? "opacity-60 bg-stone-50" : ""}`}
+              } ${!c.isActive ? "opacity-60 bg-stone-50 dark:bg-[#162035]" : ""}`}
             >
               <div>
                 {/* Header row */}
@@ -445,16 +445,16 @@ export default function CountersPage() {
                           ? "bg-emerald-500 text-white"
                           : c.isActive
                           ? "bg-brand-500 text-white"
-                          : "bg-stone-200 text-stone-500"
+                          : "bg-stone-200 text-stone-500 dark:text-slate-400"
                       }`}
                     >
                       <Store size={20} strokeWidth={2.2} />
                     </span>
                     <div>
-                      <h3 className="font-display text-base font-bold text-stone-900 leading-tight">
+                      <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
                         {c.name}
                       </h3>
-                      <p className="text-xs text-stone-500">ID #{c.id}</p>
+                      <p className="text-xs text-stone-500 dark:text-slate-400">ID #{c.id}</p>
                     </div>
                   </div>
 
@@ -466,7 +466,7 @@ export default function CountersPage() {
                         Open Shift
                       </span>
                     ) : c.isActive ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 border border-stone-200 px-2.5 py-1 text-xs font-semibold text-stone-600">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100 dark:bg-[#162035] border border-stone-200 dark:border-[#1F293D] px-2.5 py-1 text-xs font-semibold text-stone-600 dark:text-slate-400">
                         <span className="h-2 w-2 rounded-full bg-stone-400" />
                         Closed
                       </span>
@@ -486,22 +486,22 @@ export default function CountersPage() {
                 </div>
 
                 {/* Counter Details Box */}
-                <div className="mt-4 rounded-xl border border-stone-200/80 bg-stone-50/70 p-3 text-xs space-y-2">
-                  <div className="flex items-center justify-between text-stone-600">
+                <div className="mt-4 rounded-xl border border-stone-200 dark:border-[#1F293D]/80 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/70 dark:bg-[#162035]/70 p-3 text-xs space-y-2">
+                  <div className="flex items-center justify-between text-stone-600 dark:text-slate-400">
                     <span>Active Cashier:</span>
-                    <span className="font-semibold text-stone-900">
+                    <span className="font-semibold text-stone-900 dark:text-white">
                       {session?.cashierName || (c.isOpen ? "Admin" : "None")}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-stone-600">
+                  <div className="flex items-center justify-between text-stone-600 dark:text-slate-400">
                     <span>Opening Float:</span>
-                    <span className="font-semibold text-stone-900 tabular-nums">
+                    <span className="font-semibold text-stone-900 dark:text-white tabular-nums">
                       {session ? formatCurrency(session.openingCash) : "—"}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-stone-600">
+                  <div className="flex items-center justify-between text-stone-600 dark:text-slate-400">
                     <span>Shift Started:</span>
-                    <span className="font-medium text-stone-800">
+                    <span className="font-medium text-stone-800 dark:text-slate-200">
                       {session
                         ? new Date(session.openedAt).toLocaleTimeString([], {
                             hour: "2-digit",
@@ -510,9 +510,9 @@ export default function CountersPage() {
                         : "No active shift"}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-stone-600 border-t border-stone-200/80 pt-1.5">
+                  <div className="flex items-center justify-between text-stone-600 dark:text-slate-400 border-t border-stone-200 dark:border-[#1F293D]/80 dark:border-[#1F293D] pt-1.5">
                     <span>Total Shifts Completed:</span>
-                    <span className="font-bold text-stone-900 tabular-nums">
+                    <span className="font-bold text-stone-900 dark:text-white tabular-nums">
                       {c.totalSessions} {c.totalSessions === 1 ? "shift" : "shifts"}
                     </span>
                   </div>
@@ -520,7 +520,7 @@ export default function CountersPage() {
               </div>
 
               {/* Action buttons footer */}
-              <div className="mt-5 space-y-2 border-t border-stone-100 pt-4">
+              <div className="mt-5 space-y-2 border-t border-stone-100 dark:border-[#1F293D] pt-4">
                 <div className="flex items-center gap-2">
                   {c.isOpen ? (
                     <button
@@ -578,7 +578,7 @@ export default function CountersPage() {
                       setEditName(c.name);
                       setEditIsActive(c.isActive);
                     }}
-                    className="inline-flex items-center gap-1 text-xs text-stone-500 hover:text-stone-900 transition"
+                    className="inline-flex items-center gap-1 text-xs text-stone-500 dark:text-slate-400 hover:text-stone-900 dark:text-white transition"
                   >
                     <Pencil size={12} />
                     Edit
@@ -614,8 +614,8 @@ export default function CountersPage() {
         {counters.length === 0 && !isLoading && (
           <div className="col-span-full card p-12 text-center space-y-3">
             <Store size={36} className="mx-auto text-stone-300" />
-            <h3 className="font-semibold text-stone-800">No Counters Configured</h3>
-            <p className="text-sm text-stone-500 max-w-sm mx-auto">
+            <h3 className="font-semibold text-stone-800 dark:text-slate-200">No Counters Configured</h3>
+            <p className="text-sm text-stone-500 dark:text-slate-400 max-w-sm mx-auto">
               Add your first store counter register to start opening shifts and tracking drawer cash.
             </p>
             <button
@@ -640,12 +640,12 @@ export default function CountersPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm"
         >
           <div className="card w-full max-w-md p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-              <h3 className="font-display text-lg font-bold text-stone-900">Add New POS Counter</h3>
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-[#1F293D]">
+              <h3 className="font-display text-lg font-bold text-stone-900 dark:text-white">Add New POS Counter</h3>
               <button
                 type="button"
                 onClick={() => setShowCreateModal(false)}
-                className="text-stone-400 hover:text-stone-700"
+                className="text-stone-400 hover:text-stone-700 dark:text-slate-300"
               >
                 <X size={18} />
               </button>
@@ -653,7 +653,7 @@ export default function CountersPage() {
 
             <form onSubmit={handleCreateCounter} className="mt-4 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300 mb-1">
                   Counter Name / Title
                 </label>
                 <input
@@ -667,7 +667,7 @@ export default function CountersPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100 dark:border-[#1F293D]">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
@@ -692,12 +692,12 @@ export default function CountersPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm"
         >
           <div className="card w-full max-w-md p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-              <h3 className="font-display text-lg font-bold text-stone-900">Edit Counter</h3>
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-[#1F293D]">
+              <h3 className="font-display text-lg font-bold text-stone-900 dark:text-white">Edit Counter</h3>
               <button
                 type="button"
                 onClick={() => setEditingCounter(null)}
-                className="text-stone-400 hover:text-stone-700"
+                className="text-stone-400 hover:text-stone-700 dark:text-slate-300"
               >
                 <X size={18} />
               </button>
@@ -705,7 +705,7 @@ export default function CountersPage() {
 
             <form onSubmit={handleUpdateCounter} className="mt-4 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300 mb-1">
                   Counter Name
                 </label>
                 <input
@@ -723,14 +723,14 @@ export default function CountersPage() {
                   type="checkbox"
                   checked={editIsActive}
                   onChange={(e) => setEditIsActive(e.target.checked)}
-                  className="h-4 w-4 rounded border-stone-300 text-brand-600 focus:ring-brand-500"
+                  className="h-4 w-4 rounded border-stone-300 dark:border-[#1F293D] text-brand-600 focus:ring-brand-500"
                 />
-                <label htmlFor="active-checkbox" className="text-xs font-medium text-stone-700">
+                <label htmlFor="active-checkbox" className="text-xs font-medium text-stone-700 dark:text-slate-300">
                   Active (Allow opening shifts on this register)
                 </label>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100 dark:border-[#1F293D]">
                 <button
                   type="button"
                   onClick={() => setEditingCounter(null)}
@@ -755,22 +755,22 @@ export default function CountersPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm"
         >
           <div className="card w-full max-w-md p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-[#1F293D]">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand-600">
                   <Unlock size={18} />
                 </span>
                 <div>
-                  <h3 className="font-display text-base font-bold text-stone-900 leading-tight">
+                  <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
                     Open Register Shift
                   </h3>
-                  <p className="text-xs text-stone-500">{openingCounter.name}</p>
+                  <p className="text-xs text-stone-500 dark:text-slate-400">{openingCounter.name}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setOpeningCounter(null)}
-                className="text-stone-400 hover:text-stone-700"
+                className="text-stone-400 hover:text-stone-700 dark:text-slate-300"
               >
                 <X size={18} />
               </button>
@@ -778,7 +778,7 @@ export default function CountersPage() {
 
             <form onSubmit={handleOpenShift} className="mt-4 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300 mb-1">
                   Cashier Name
                 </label>
                 <input
@@ -791,7 +791,7 @@ export default function CountersPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300 mb-1">
                   Opening Cash Float in Drawer (শুরুর ক্যাশ)
                 </label>
                 <div className="relative">
@@ -805,7 +805,7 @@ export default function CountersPage() {
                     required
                     value={openingCashInput}
                     onChange={(e) => setOpeningCashInput(e.target.value)}
-                    className="input pl-8 font-bold text-stone-900 text-base tabular-nums"
+                    className="input pl-8 font-bold text-stone-900 dark:text-white text-base tabular-nums"
                   />
                 </div>
 
@@ -816,7 +816,7 @@ export default function CountersPage() {
                       key={val}
                       type="button"
                       onClick={() => setOpeningCashInput(String(val))}
-                      className="rounded border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-700 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-700 transition"
+                      className="rounded border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-2.5 py-1 text-xs font-semibold text-stone-700 dark:text-slate-300 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-700 transition"
                     >
                       ৳{val}
                     </button>
@@ -831,7 +831,7 @@ export default function CountersPage() {
                 </span>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100 dark:border-[#1F293D]">
                 <button
                   type="button"
                   onClick={() => setOpeningCounter(null)}
@@ -860,22 +860,22 @@ export default function CountersPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm"
         >
           <div className="card w-full max-w-md p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-[#1F293D]">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-50 text-emerald-600">
                   <Lock size={18} />
                 </span>
                 <div>
-                  <h3 className="font-display text-base font-bold text-stone-900 leading-tight">
+                  <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
                     Close Register Shift
                   </h3>
-                  <p className="text-xs text-stone-500">{closingCounter.name}</p>
+                  <p className="text-xs text-stone-500 dark:text-slate-400">{closingCounter.name}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setClosingCounter(null)}
-                className="text-stone-400 hover:text-stone-700"
+                className="text-stone-400 hover:text-stone-700 dark:text-slate-300"
               >
                 <X size={18} />
               </button>
@@ -883,20 +883,20 @@ export default function CountersPage() {
 
             <form onSubmit={handleCloseShift} className="mt-4 space-y-4">
               {/* Shift Sales Live Summary */}
-              <div className="rounded-xl border border-stone-200 bg-stone-50/80 p-3.5 space-y-2 text-xs">
-                <div className="flex justify-between text-stone-600">
+              <div className="rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/80 dark:bg-[#162035]/80 p-3.5 space-y-2 text-xs">
+                <div className="flex justify-between text-stone-600 dark:text-slate-400">
                   <span>Opening Float:</span>
-                  <span className="font-semibold text-stone-900 tabular-nums">
+                  <span className="font-semibold text-stone-900 dark:text-white tabular-nums">
                     {formatCurrency(currentStatus?.session?.openingCash || 0)}
                   </span>
                 </div>
-                <div className="flex justify-between text-stone-600">
+                <div className="flex justify-between text-stone-600 dark:text-slate-400">
                   <span>Shift Cash Sales:</span>
-                  <span className="font-semibold text-stone-900 tabular-nums">
+                  <span className="font-semibold text-stone-900 dark:text-white tabular-nums">
                     {formatCurrency(currentStatus?.currentCashSales || 0)}
                   </span>
                 </div>
-                <div className="flex justify-between border-t border-stone-200 pt-2 font-bold text-stone-900 text-sm">
+                <div className="flex justify-between border-t border-stone-200 dark:border-[#1F293D] pt-2 font-bold text-stone-900 dark:text-white text-sm">
                   <span>Expected in Drawer:</span>
                   <span className="text-brand-600 tabular-nums">
                     {formatCurrency(currentStatus?.expectedCash || 0)}
@@ -905,7 +905,7 @@ export default function CountersPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300 mb-1">
                   Actual Counted Cash in Drawer (গণনাকৃত সমাপনী ক্যাশ)
                 </label>
                 <div className="relative">
@@ -920,7 +920,7 @@ export default function CountersPage() {
                     placeholder="Enter physical cash amount"
                     value={closingCashInput}
                     onChange={(e) => setClosingCashInput(e.target.value)}
-                    className="input pl-8 font-bold text-stone-900 text-base tabular-nums"
+                    className="input pl-8 font-bold text-stone-900 dark:text-white text-base tabular-nums"
                   />
                 </div>
 
@@ -931,7 +931,7 @@ export default function CountersPage() {
                     onClick={() =>
                       setClosingCashInput(String(currentStatus?.expectedCash || 0))
                     }
-                    className="rounded border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-700 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-700 transition"
+                    className="rounded border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-2.5 py-1 text-xs font-semibold text-stone-700 dark:text-slate-300 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-700 transition"
                   >
                     Match Expected ({formatCurrency(currentStatus?.expectedCash || 0)})
                   </button>
@@ -963,7 +963,7 @@ export default function CountersPage() {
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300 mb-1">
                   Closing Notes (Optional)
                 </label>
                 <textarea
@@ -975,7 +975,7 @@ export default function CountersPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100 dark:border-[#1F293D]">
                 <button
                   type="button"
                   onClick={() => setClosingCounter(null)}
@@ -1008,48 +1008,48 @@ export default function CountersPage() {
               <span className="grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-600 mx-auto border border-emerald-100">
                 <CheckCircle2 size={28} />
               </span>
-              <h3 className="font-display text-xl font-bold text-stone-900 mt-3">
+              <h3 className="font-display text-xl font-bold text-stone-900 dark:text-white mt-3">
                 Shift Closed Successfully
               </h3>
-              <p className="text-xs text-stone-500">
+              <p className="text-xs text-stone-500 dark:text-slate-400">
                 {shiftCloseResult.counter.name} • {shiftCloseResult.session.cashierName}
               </p>
             </div>
 
-            <div className="mt-5 rounded-xl border border-stone-200 bg-stone-50 p-4 space-y-2 text-xs">
-              <div className="flex justify-between text-stone-600">
+            <div className="mt-5 rounded-xl border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] p-4 space-y-2 text-xs">
+              <div className="flex justify-between text-stone-600 dark:text-slate-400">
                 <span>Opening Cash Float:</span>
-                <span className="font-semibold text-stone-900 tabular-nums">
+                <span className="font-semibold text-stone-900 dark:text-white tabular-nums">
                   {formatCurrency(shiftCloseResult.openingCash)}
                 </span>
               </div>
-              <div className="flex justify-between text-stone-600">
+              <div className="flex justify-between text-stone-600 dark:text-slate-400">
                 <span>Shift Cash Sales:</span>
-                <span className="font-semibold text-stone-900 tabular-nums">
+                <span className="font-semibold text-stone-900 dark:text-white tabular-nums">
                   {formatCurrency(shiftCloseResult.cashSales)}
                 </span>
               </div>
-              <div className="flex justify-between text-stone-600">
+              <div className="flex justify-between text-stone-600 dark:text-slate-400">
                 <span>Total Shift Revenue:</span>
-                <span className="font-semibold text-stone-900 tabular-nums">
+                <span className="font-semibold text-stone-900 dark:text-white tabular-nums">
                   {formatCurrency(shiftCloseResult.totalSales)}
                 </span>
               </div>
-              <div className="flex justify-between text-stone-600">
+              <div className="flex justify-between text-stone-600 dark:text-slate-400">
                 <span>Total Orders Handled:</span>
-                <span className="font-semibold text-stone-900 tabular-nums">
+                <span className="font-semibold text-stone-900 dark:text-white tabular-nums">
                   {shiftCloseResult.totalOrders}
                 </span>
               </div>
-              <div className="border-t border-stone-200 pt-2 flex justify-between font-semibold text-stone-800">
+              <div className="border-t border-stone-200 dark:border-[#1F293D] pt-2 flex justify-between font-semibold text-stone-800 dark:text-slate-200">
                 <span>Expected Drawer Total:</span>
                 <span className="tabular-nums">{formatCurrency(shiftCloseResult.expectedCash)}</span>
               </div>
-              <div className="flex justify-between font-semibold text-stone-800">
+              <div className="flex justify-between font-semibold text-stone-800 dark:text-slate-200">
                 <span>Physical Cash Counted:</span>
                 <span className="tabular-nums">{formatCurrency(shiftCloseResult.closingCash)}</span>
               </div>
-              <div className="border-t border-stone-300 pt-2 flex justify-between items-center text-sm font-bold">
+              <div className="border-t border-stone-300 dark:border-[#1F293D] pt-2 flex justify-between items-center text-sm font-bold">
                 <span>Discrepancy (পার্থক্য):</span>
                 <span
                   className={`tabular-nums font-display ${
@@ -1090,22 +1090,22 @@ export default function CountersPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm"
         >
           <div className="card w-full max-w-3xl max-h-[85vh] flex flex-col p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-[#1F293D]">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand-600">
                   <History size={18} />
                 </span>
                 <div>
-                  <h3 className="font-display text-base font-bold text-stone-900 leading-tight">
+                  <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
                     Shift History & Register Reports
                   </h3>
-                  <p className="text-xs text-stone-500">{historyCounter.name}</p>
+                  <p className="text-xs text-stone-500 dark:text-slate-400">{historyCounter.name}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setHistoryCounter(null)}
-                className="text-stone-400 hover:text-stone-700"
+                className="text-stone-400 hover:text-stone-700 dark:text-slate-300"
               >
                 <X size={18} />
               </button>
@@ -1115,23 +1115,23 @@ export default function CountersPage() {
               {isLoadingHistory ? (
                 <div className="py-12 text-center text-xs text-stone-400">Loading history...</div>
               ) : sessionsHistory.length === 0 ? (
-                <div className="py-12 text-center text-xs text-stone-500">
+                <div className="py-12 text-center text-xs text-stone-500 dark:text-slate-400">
                   No shift history found for this counter yet.
                 </div>
               ) : (
                 <>
                   {/* Mobile View: Responsive Shift Cards (Zero Horizontal Scroll) */}
-                  <div className="block sm:hidden divide-y divide-stone-100 rounded-xl border border-stone-200 overflow-hidden text-xs">
+                  <div className="block sm:hidden divide-y divide-stone-100 dark:divide-[#1F293D] rounded-xl border border-stone-200 dark:border-[#1F293D] overflow-hidden text-xs">
                     {sessionsHistory.map((s) => {
                       const diff = Number(s.difference) || 0;
                       return (
-                        <div key={s.id} className="p-3.5 space-y-2.5 bg-white">
+                        <div key={s.id} className="p-3.5 space-y-2.5 bg-white dark:bg-[#111827]">
                           <div className="flex items-center justify-between">
-                            <span className="font-semibold text-stone-900">
+                            <span className="font-semibold text-stone-900 dark:text-white">
                               {new Date(s.openedAt).toLocaleDateString()}
                             </span>
                             {s.closedAt ? (
-                              <span className="rounded bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-600">
+                              <span className="rounded bg-stone-100 dark:bg-[#162035] px-2 py-0.5 text-[11px] font-medium text-stone-600 dark:text-slate-400">
                                 Closed {new Date(s.closedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                               </span>
                             ) : (
@@ -1141,23 +1141,23 @@ export default function CountersPage() {
                             )}
                           </div>
 
-                          <div className="rounded-lg bg-stone-50 p-2.5 space-y-1.5 border border-stone-100">
+                          <div className="rounded-lg bg-stone-50 dark:bg-[#162035] p-2.5 space-y-1.5 border border-stone-100 dark:border-[#1F293D]">
                             <div className="flex justify-between">
-                              <span className="text-stone-500">Cashier:</span>
-                              <span className="font-medium text-stone-800">{s.cashierName}</span>
+                              <span className="text-stone-500 dark:text-slate-400">Cashier:</span>
+                              <span className="font-medium text-stone-800 dark:text-slate-200">{s.cashierName}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-stone-500">Opening Float:</span>
-                              <span className="font-semibold tabular-nums text-stone-800">{formatCurrency(s.openingCash)}</span>
+                              <span className="text-stone-500 dark:text-slate-400">Opening Float:</span>
+                              <span className="font-semibold tabular-nums text-stone-800 dark:text-slate-200">{formatCurrency(s.openingCash)}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-stone-500">Closing Cash:</span>
-                              <span className="font-semibold tabular-nums text-stone-800">
+                              <span className="text-stone-500 dark:text-slate-400">Closing Cash:</span>
+                              <span className="font-semibold tabular-nums text-stone-800 dark:text-slate-200">
                                 {s.closingCash !== null ? formatCurrency(s.closingCash) : "—"}
                               </span>
                             </div>
-                            <div className="flex justify-between border-t border-stone-200/80 pt-1 font-semibold">
-                              <span className="text-stone-600">Difference:</span>
+                            <div className="flex justify-between border-t border-stone-200 dark:border-[#1F293D]/80 dark:border-[#1F293D] pt-1 font-semibold">
+                              <span className="text-stone-600 dark:text-slate-400">Difference:</span>
                               <span
                                 className={`tabular-nums ${
                                   diff === 0
@@ -1178,8 +1178,8 @@ export default function CountersPage() {
                   </div>
 
                   {/* Desktop Grid Table */}
-                  <div className="hidden sm:block divide-y divide-stone-100 border rounded-xl overflow-x-auto no-scrollbar text-xs">
-                    <div className="grid grid-cols-6 gap-2 bg-stone-50 p-3 font-semibold text-stone-700 min-w-[550px]">
+                  <div className="hidden sm:block divide-y divide-stone-100 dark:divide-[#1F293D] border border-stone-200 dark:border-[#1F293D] rounded-xl overflow-x-auto no-scrollbar text-xs">
+                    <div className="grid grid-cols-6 gap-2 bg-stone-50 dark:bg-[#162035] p-3 font-semibold text-stone-700 dark:text-slate-300 min-w-[550px]">
                       <span>Opened</span>
                       <span>Closed</span>
                       <span>Cashier</span>
@@ -1192,10 +1192,10 @@ export default function CountersPage() {
                       return (
                         <div
                           key={s.id}
-                          className="grid grid-cols-6 gap-2 p-3 items-center hover:bg-stone-50/50 min-w-[550px]"
+                          className="grid grid-cols-6 gap-2 p-3 items-center hover:bg-stone-50 dark:bg-[#162035]/50 dark:bg-[#162035]/50 min-w-[550px]"
                         >
                           <div>
-                            <p className="font-semibold text-stone-900">
+                            <p className="font-semibold text-stone-900 dark:text-white">
                               {new Date(s.openedAt).toLocaleDateString()}
                             </p>
                             <p className="text-[11px] text-stone-400">
@@ -1208,7 +1208,7 @@ export default function CountersPage() {
                           <div>
                             {s.closedAt ? (
                               <>
-                                <p className="font-semibold text-stone-900">
+                                <p className="font-semibold text-stone-900 dark:text-white">
                                   {new Date(s.closedAt).toLocaleDateString()}
                                 </p>
                                 <p className="text-[11px] text-stone-400">
@@ -1224,11 +1224,11 @@ export default function CountersPage() {
                               </span>
                             )}
                           </div>
-                          <div className="font-medium text-stone-800">{s.cashierName}</div>
-                          <div className="text-right font-medium tabular-nums text-stone-800">
+                          <div className="font-medium text-stone-800 dark:text-slate-200">{s.cashierName}</div>
+                          <div className="text-right font-medium tabular-nums text-stone-800 dark:text-slate-200">
                             {formatCurrency(s.openingCash)}
                           </div>
-                          <div className="text-right font-medium tabular-nums text-stone-800">
+                          <div className="text-right font-medium tabular-nums text-stone-800 dark:text-slate-200">
                             {s.closingCash !== null ? formatCurrency(s.closingCash) : "—"}
                           </div>
                           <div className="text-right font-bold tabular-nums">
@@ -1257,7 +1257,7 @@ export default function CountersPage() {
               )}
             </div>
 
-            <div className="mt-4 pt-3 border-t border-stone-100 flex justify-end">
+            <div className="mt-4 pt-3 border-t border-stone-100 dark:border-[#1F293D] flex justify-end">
               <button
                 type="button"
                 onClick={() => setHistoryCounter(null)}

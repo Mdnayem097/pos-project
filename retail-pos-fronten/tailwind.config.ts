@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
@@ -17,6 +18,16 @@ const config: Config = {
           700: "#C24800",
           800: "#9A3A00",
           900: "#7A2E00",
+        },
+        // Premium Obsidian / Slate Dark Theme Tokens
+        dark: {
+          bg: "#0B0F19",
+          card: "#111827",
+          cardHover: "#162035",
+          border: "#1F293D",
+          borderLight: "#2D3B55",
+          muted: "#94A3B8",
+          subtle: "#64748B",
         },
       },
       fontFamily: {

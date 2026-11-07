@@ -118,15 +118,15 @@ export default function OrdersPage() {
     <div className="space-y-4">
       {/* Breadcrumb & Title */}
       <div>
-        <p className="text-xs font-medium text-stone-500">Orders</p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-stone-900">Orders</h1>
+        <p className="text-xs font-medium text-stone-500 dark:text-slate-400">Orders</p>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Orders</h1>
       </div>
 
       {/* Main Table Card */}
-      <div className="card overflow-hidden bg-white p-5 shadow-sm">
+      <div className="card overflow-hidden bg-white dark:bg-[#111827] p-5 shadow-sm">
         {/* Controls: Show Entries & Search */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pb-4">
-          <div className="flex items-center gap-2 text-sm text-stone-600">
+          <div className="flex items-center gap-2 text-sm text-stone-600 dark:text-slate-400">
             <span>Show</span>
             <select
               value={limit}
@@ -134,7 +134,7 @@ export default function OrdersPage() {
                 setLimit(Number(e.target.value));
                 setPage(1);
               }}
-              className="rounded-md border border-stone-300 bg-white px-2.5 py-1 text-sm font-medium text-stone-800 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="rounded-md border border-stone-300 dark:border-[#1F293D] bg-white dark:bg-[#162035] px-2.5 py-1 text-sm font-medium text-stone-800 dark:text-slate-100 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             >
               <option value={10}>10</option>
               <option value={25}>25</option>
@@ -143,7 +143,7 @@ export default function OrdersPage() {
             </select>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-stone-600 w-full sm:w-auto">
+          <div className="flex items-center gap-2 text-sm text-stone-600 dark:text-slate-400 w-full sm:w-auto">
             <span className="font-medium shrink-0">Search:</span>
             <div className="relative flex-1 sm:w-60">
               <input
@@ -154,18 +154,18 @@ export default function OrdersPage() {
                   setPage(1);
                 }}
                 placeholder="Search orders..."
-                className="w-full rounded-md border border-stone-300 bg-white px-3 py-1.5 text-sm text-stone-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                className="w-full rounded-md border border-stone-300 dark:border-[#1F293D] bg-white dark:bg-[#162035] px-3 py-1.5 text-sm text-stone-900 dark:text-white dark:placeholder:text-slate-500 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
           </div>
         </div>
 
         {/* Mobile View: Clean Responsive Cards (Zero Horizontal Scroll) */}
-        <div className="block sm:hidden divide-y divide-stone-100 border-t border-stone-200">
+        <div className="block sm:hidden divide-y divide-stone-100 dark:divide-[#1F293D] border-t border-stone-200 dark:border-[#1F293D]">
           {loading ? (
-            <div className="py-12 text-center text-sm text-stone-500">Loading orders...</div>
+            <div className="py-12 text-center text-sm text-stone-500 dark:text-slate-400">Loading orders...</div>
           ) : orders.length === 0 ? (
-            <div className="py-12 text-center text-sm text-stone-500">No orders found</div>
+            <div className="py-12 text-center text-sm text-stone-500 dark:text-slate-400">No orders found</div>
           ) : (
             orders.map((o) => {
               const isDelivered = o.status === "Delivered";
@@ -174,18 +174,18 @@ export default function OrdersPage() {
               const isCancelled = o.status === "Cancelled" || o.status === "Refunded";
 
               return (
-                <div key={o.id} className="p-4 space-y-3 bg-white hover:bg-stone-50/70 transition">
+                <div key={o.id} className="p-4 space-y-3 bg-white dark:bg-[#111827] hover:bg-stone-50 dark:bg-[#162035]/70 dark:hover:bg-[#162035] transition">
                   {/* Top: Order #, Source & Status */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-stone-900 text-sm tabular-nums">
+                      <span className="font-bold text-stone-900 dark:text-white text-sm tabular-nums">
                         #{o.orderId}
                       </span>
                       <span
                         className={`rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
                           o.source === "Website"
-                            ? "bg-sky-100 text-sky-800"
-                            : "bg-emerald-100 text-emerald-800"
+                            ? "bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300"
+                            : "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300"
                         }`}
                       >
                         {o.source}
@@ -195,14 +195,14 @@ export default function OrdersPage() {
                     <span
                       className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                         isDelivered
-                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60"
                           : isNew
-                          ? "bg-sky-50 text-sky-700 border border-sky-200"
+                          ? "bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800/60"
                           : isPending
-                          ? "bg-amber-50 text-amber-700 border border-amber-200"
+                          ? "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60"
                           : isCancelled
-                          ? "bg-rose-50 text-rose-700 border border-rose-200"
-                          : "bg-stone-100 text-stone-700"
+                          ? "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60"
+                          : "bg-stone-100 dark:bg-[#162035] text-stone-700 dark:text-slate-300"
                       }`}
                     >
                       {o.status}
@@ -210,25 +210,25 @@ export default function OrdersPage() {
                   </div>
 
                   {/* Customer info & Method */}
-                  <div className="text-xs space-y-0.5 text-stone-600">
-                    <p className="font-semibold text-stone-900">{o.name}</p>
-                    <p className="text-stone-500 text-[11px] truncate">{o.email}</p>
+                  <div className="text-xs space-y-0.5 text-stone-600 dark:text-slate-300">
+                    <p className="font-semibold text-stone-900 dark:text-white">{o.name}</p>
+                    <p className="text-stone-500 dark:text-slate-400 text-[11px] truncate">{o.email}</p>
                     <div className="flex items-center justify-between pt-1">
-                      <span className="text-stone-500">Payment: <strong className="text-stone-700">{o.method}</strong></span>
-                      <span className="text-sm font-bold text-stone-900 tabular-nums">
+                      <span className="text-stone-500 dark:text-slate-400">Payment: <strong className="text-stone-700 dark:text-slate-200">{o.method}</strong></span>
+                      <span className="text-sm font-bold text-stone-900 dark:text-white tabular-nums">
                         {formatCurrency(o.total)}
                       </span>
                     </div>
                   </div>
 
                   {/* Action buttons row */}
-                  <div className="flex items-center gap-2 pt-1 border-t border-stone-100">
+                  <div className="flex items-center gap-2 pt-1 border-t border-stone-100 dark:border-[#1F293D]">
                     <button
                       type="button"
                       onClick={() => setSelectedOrder(o)}
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-100 transition"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] px-3 py-1.5 text-xs font-semibold text-stone-700 dark:text-slate-200 hover:bg-stone-100 dark:hover:bg-[#1E293B] transition"
                     >
-                      <FileText size={13} className="text-brand-600" />
+                      <FileText size={13} className="text-brand-600 dark:text-brand-400" />
                       <span>Invoice</span>
                     </button>
 
@@ -248,7 +248,7 @@ export default function OrdersPage() {
                       type="button"
                       disabled={actionLoading === o.id}
                       onClick={() => handleDeleteOrCancel(o)}
-                      className="inline-flex items-center justify-center rounded-lg border border-rose-200 bg-rose-50 p-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-100 transition"
+                      className="inline-flex items-center justify-center rounded-lg border border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/50 p-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition"
                       title={isCancelled ? "Delete" : "Cancel"}
                     >
                       <X size={15} />
@@ -261,9 +261,9 @@ export default function OrdersPage() {
         </div>
 
         {/* Desktop Table View */}
-        <div className="hidden sm:block overflow-x-auto border-t border-stone-200">
+        <div className="hidden sm:block overflow-x-auto border-t border-stone-200 dark:border-[#1F293D]">
           <table className="w-full text-left text-sm">
-            <thead className="bg-[#f0f9f4] text-xs font-semibold text-stone-700">
+            <thead className="bg-[#f0f9f4] dark:bg-[#162035] text-xs font-semibold text-stone-700 dark:text-slate-300">
               <tr>
                 <th
                   onClick={() => setSortOrder((prev) => (prev === "DESC" ? "ASC" : "DESC"))}
@@ -287,16 +287,16 @@ export default function OrdersPage() {
                 <th className="px-4 py-3.5 text-center font-bold">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100">
+            <tbody className="divide-y divide-stone-100 dark:divide-[#1F293D]">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-sm text-stone-500">
+                  <td colSpan={8} className="py-12 text-center text-sm text-stone-500 dark:text-slate-400">
                     Loading orders...
                   </td>
                 </tr>
               ) : orders.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-sm text-stone-500">
+                  <td colSpan={8} className="py-12 text-center text-sm text-stone-500 dark:text-slate-400">
                     No orders found
                   </td>
                 </tr>
@@ -308,19 +308,19 @@ export default function OrdersPage() {
                   const isCancelled = o.status === "Cancelled" || o.status === "Refunded";
 
                   return (
-                    <tr key={o.id} className="hover:bg-stone-50/80 transition-colors">
+                    <tr key={o.id} className="hover:bg-stone-50 dark:bg-[#162035]/80 dark:bg-[#162035]/80 transition-colors">
                       {/* Order ID */}
-                      <td className="px-4 py-3.5 text-center font-semibold text-stone-700 tabular-nums">
+                      <td className="px-4 py-3.5 text-center font-semibold text-stone-700 dark:text-slate-300 tabular-nums">
                         {o.orderId}
                       </td>
 
                       {/* Name */}
-                      <td className="px-4 py-3.5 font-medium text-stone-800">
+                      <td className="px-4 py-3.5 font-medium text-stone-800 dark:text-slate-200">
                         {o.name}
                       </td>
 
                       {/* Email */}
-                      <td className="px-4 py-3.5 text-stone-600">
+                      <td className="px-4 py-3.5 text-stone-600 dark:text-slate-400">
                         {o.email}
                       </td>
 
@@ -338,12 +338,12 @@ export default function OrdersPage() {
                       </td>
 
                       {/* Method */}
-                      <td className="px-4 py-3.5 font-medium text-stone-700">
+                      <td className="px-4 py-3.5 font-medium text-stone-700 dark:text-slate-300">
                         {o.method}
                       </td>
 
                       {/* Total */}
-                      <td className="px-4 py-3.5 text-right font-semibold text-stone-900 tabular-nums">
+                      <td className="px-4 py-3.5 text-right font-semibold text-stone-900 dark:text-white tabular-nums">
                         {o.total.toLocaleString("en-US")}
                       </td>
 
@@ -359,7 +359,7 @@ export default function OrdersPage() {
                               ? "text-amber-600 font-semibold"
                               : isCancelled
                               ? "text-rose-600"
-                              : "text-stone-700"
+                              : "text-stone-700 dark:text-slate-300"
                           }`}
                         >
                           {o.status}
@@ -375,7 +375,7 @@ export default function OrdersPage() {
                               e.stopPropagation();
                               setOpenDropdownId((prev) => (prev === o.id ? null : o.id));
                             }}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 bg-white px-3 py-1.5 text-xs font-semibold text-stone-700 shadow-sm transition hover:bg-stone-50 hover:text-stone-900 focus:outline-none"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 dark:border-[#1F293D] bg-white px-3 py-1.5 text-xs font-semibold text-stone-700 dark:text-slate-300 shadow-sm transition hover:bg-stone-50 dark:bg-[#162035] hover:text-stone-900 dark:text-white focus:outline-none"
                           >
                             <span>Action</span>
                             <ChevronDown
@@ -389,7 +389,7 @@ export default function OrdersPage() {
                           {openDropdownId === o.id && (
                             <div
                               onClick={(e) => e.stopPropagation()}
-                              className={`absolute right-0 z-30 w-44 rounded-lg border border-stone-200 bg-white py-1 shadow-xl ring-1 ring-black/5 divide-y divide-stone-100 ${
+                              className={`absolute right-0 z-30 w-44 rounded-lg border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#111827] py-1 shadow-xl ring-1 ring-black/5 divide-y divide-stone-100 dark:divide-[#1F293D] ${
                                 idx >= orders.length - 2 && orders.length > 2
                                   ? "bottom-full mb-1"
                                   : "top-full mt-1"
@@ -402,7 +402,7 @@ export default function OrdersPage() {
                                     setSelectedOrder(o);
                                     setOpenDropdownId(null);
                                   }}
-                                  className="flex w-full items-center gap-2 px-3 py-2 text-xs font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-900 transition text-left"
+                                  className="flex w-full items-center gap-2 px-3 py-2 text-xs font-medium text-stone-700 dark:text-slate-300 hover:bg-amber-50 hover:text-amber-900 transition text-left"
                                 >
                                   <span className="grid h-5 w-5 place-items-center rounded bg-amber-100 text-amber-700">
                                     <FileText size={12} />
@@ -417,7 +417,7 @@ export default function OrdersPage() {
                                     handleMarkDelivered(o);
                                     setOpenDropdownId(null);
                                   }}
-                                  className="flex w-full items-center gap-2 px-3 py-2 text-xs font-medium text-stone-700 hover:bg-emerald-50 hover:text-emerald-900 transition disabled:opacity-40 disabled:pointer-events-none text-left"
+                                  className="flex w-full items-center gap-2 px-3 py-2 text-xs font-medium text-stone-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-900 transition disabled:opacity-40 disabled:pointer-events-none text-left"
                                 >
                                   <span className="grid h-5 w-5 place-items-center rounded bg-emerald-100 text-emerald-700">
                                     <Check size={12} strokeWidth={2.5} />
@@ -455,8 +455,8 @@ export default function OrdersPage() {
         </div>
 
         {/* Footer / Pagination */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-stone-200 p-4">
-          <p className="text-xs text-stone-500 text-center sm:text-left">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-stone-200 dark:border-[#1F293D] p-4">
+          <p className="text-xs text-stone-500 dark:text-slate-400 text-center sm:text-left">
             {total > 0
               ? `${startItem} to ${endItem} of ${total}`
               : "0 to 0 of 0"}
@@ -468,7 +468,7 @@ export default function OrdersPage() {
               type="button"
               disabled={page <= 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="grid h-8 w-8 place-items-center rounded border border-stone-300 bg-white text-stone-600 transition hover:bg-stone-50 disabled:opacity-30 disabled:pointer-events-none"
+              className="grid h-8 w-8 place-items-center rounded border border-stone-300 dark:border-[#1F293D] bg-white text-stone-600 dark:text-slate-400 transition hover:bg-stone-50 dark:bg-[#162035] disabled:opacity-30 disabled:pointer-events-none"
             >
               <ChevronLeft size={15} />
             </button>
@@ -484,7 +484,7 @@ export default function OrdersPage() {
                   className={`grid h-8 w-8 place-items-center rounded text-xs font-semibold transition ${
                     active
                       ? "bg-[#10b981] text-white shadow-sm"
-                      : "border border-stone-300 bg-white text-stone-700 hover:bg-stone-50"
+                      : "border border-stone-300 dark:border-[#1F293D] bg-white text-stone-700 dark:text-slate-300 hover:bg-stone-50 dark:bg-[#162035]"
                   }`}
                 >
                   {p}
@@ -497,7 +497,7 @@ export default function OrdersPage() {
               type="button"
               disabled={page >= totalPages}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              className="grid h-8 w-8 place-items-center rounded border border-stone-300 bg-white text-stone-600 transition hover:bg-stone-50 disabled:opacity-30 disabled:pointer-events-none"
+              className="grid h-8 w-8 place-items-center rounded border border-stone-300 dark:border-[#1F293D] bg-white text-stone-600 dark:text-slate-400 transition hover:bg-stone-50 dark:bg-[#162035] disabled:opacity-30 disabled:pointer-events-none"
             >
               <ChevronRight size={15} />
             </button>
@@ -517,37 +517,37 @@ export default function OrdersPage() {
             className="card w-full max-w-lg p-6 shadow-2xl max-h-[90vh] overflow-y-auto print:static print:max-h-none print:w-full print:max-w-[120mm] print:mx-auto print:overflow-visible print:border-none print:shadow-none print:p-2 print:bg-white"
           >
             {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-stone-100 pb-4">
+            <div className="flex items-start justify-between border-b border-stone-100 dark:border-[#1F293D] pb-4">
               <div>
                 <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
                   Order Details
                 </span>
-                <h3 className="text-xl font-bold text-stone-900 mt-0.5">
+                <h3 className="text-xl font-bold text-stone-900 dark:text-white mt-0.5">
                   Invoice {selectedOrder.invoiceNo} ({selectedOrder.orderId})
                 </h3>
-                <p className="text-xs text-stone-500 mt-1">
+                <p className="text-xs text-stone-500 dark:text-slate-400 mt-1">
                   Placed on {selectedOrder.createdAt ? new Date(selectedOrder.createdAt).toLocaleString() : "N/A"}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedOrder(null)}
-                className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700 print:hidden"
+                className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 dark:bg-[#162035] hover:text-stone-700 dark:text-slate-300 print:hidden"
               >
                 <X size={18} />
               </button>
             </div>
 
             {/* Customer & Order Metadata */}
-            <div className="mt-4 grid grid-cols-2 gap-3 text-xs bg-stone-50 p-3 rounded-lg border border-stone-200/60">
+            <div className="mt-4 grid grid-cols-2 gap-3 text-xs bg-stone-50 dark:bg-[#162035] p-3 rounded-lg border border-stone-200 dark:border-[#1F293D]/60">
               <div>
-                <p className="text-stone-500">Customer</p>
-                <p className="font-semibold text-stone-900 mt-0.5">{selectedOrder.name}</p>
-                <p className="text-stone-600 truncate">{selectedOrder.email}</p>
+                <p className="text-stone-500 dark:text-slate-400">Customer</p>
+                <p className="font-semibold text-stone-900 dark:text-white mt-0.5">{selectedOrder.name}</p>
+                <p className="text-stone-600 dark:text-slate-400 truncate">{selectedOrder.email}</p>
               </div>
               <div>
-                <p className="text-stone-500">Payment & Source</p>
-                <p className="font-semibold text-stone-900 mt-0.5">
+                <p className="text-stone-500 dark:text-slate-400">Payment & Source</p>
+                <p className="font-semibold text-stone-900 dark:text-white mt-0.5">
                   {selectedOrder.method} · {selectedOrder.source}
                 </p>
                 <p className="mt-0.5">
@@ -559,12 +559,12 @@ export default function OrdersPage() {
 
             {/* Items List */}
             <div className="mt-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 mb-2">
+              <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400 mb-2">
                 Order Items ({selectedOrder.items?.length || 0})
               </p>
-              <div className="rounded-lg border border-stone-200 overflow-hidden">
+              <div className="rounded-lg border border-stone-200 dark:border-[#1F293D] overflow-hidden">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-stone-50 text-stone-600 font-semibold border-b border-stone-200">
+                  <thead className="bg-stone-50 dark:bg-[#162035]/80 text-stone-600 dark:text-slate-300 font-semibold border-b border-stone-200 dark:border-[#1F293D]">
                     <tr>
                       <th className="px-3 py-2">Item</th>
                       <th className="px-3 py-2 text-center">Qty</th>
@@ -572,21 +572,21 @@ export default function OrdersPage() {
                       <th className="px-3 py-2 text-right">Total</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-stone-100">
+                  <tbody className="divide-y divide-stone-100 dark:divide-[#1F293D]">
                     {selectedOrder.items && selectedOrder.items.length > 0 ? (
                       selectedOrder.items.map((item, idx) => (
                         <tr key={item.id || idx}>
                           <td className="px-3 py-2">
                             <span className="mr-1.5">{item.emoji || "📦"}</span>
-                            <span className="font-medium text-stone-800">{item.name}</span>
+                            <span className="font-medium text-stone-800 dark:text-slate-200">{item.name}</span>
                           </td>
                           <td className="px-3 py-2 text-center font-semibold tabular-nums">
                             {item.qty}
                           </td>
-                          <td className="px-3 py-2 text-right text-stone-600 tabular-nums">
+                          <td className="px-3 py-2 text-right text-stone-600 dark:text-slate-400 tabular-nums">
                             {formatCurrency(item.unitPrice)}
                           </td>
-                          <td className="px-3 py-2 text-right font-semibold text-stone-900 tabular-nums">
+                          <td className="px-3 py-2 text-right font-semibold text-stone-900 dark:text-white tabular-nums">
                             {formatCurrency(item.total)}
                           </td>
                         </tr>
@@ -604,24 +604,24 @@ export default function OrdersPage() {
             </div>
 
             {/* Calculation Breakdown */}
-            <div className="mt-4 space-y-1.5 border-t border-stone-100 pt-3 text-xs">
-              <div className="flex justify-between text-stone-600">
+            <div className="mt-4 space-y-1.5 border-t border-stone-100 dark:border-[#1F293D] pt-3 text-xs">
+              <div className="flex justify-between text-stone-600 dark:text-slate-400">
                 <span>Subtotal</span>
                 <span className="font-semibold tabular-nums">{formatCurrency(selectedOrder.subtotal)}</span>
               </div>
               {selectedOrder.discount > 0 && (
-                <div className="flex justify-between text-stone-600">
+                <div className="flex justify-between text-stone-600 dark:text-slate-400">
                   <span>Discount</span>
                   <span className="font-semibold text-rose-600 tabular-nums">
                     -{formatCurrency(selectedOrder.discount)}
                   </span>
                 </div>
               )}
-              <div className="flex justify-between text-stone-600">
+              <div className="flex justify-between text-stone-600 dark:text-slate-400">
                 <span>VAT (5%)</span>
                 <span className="font-semibold tabular-nums">{formatCurrency(selectedOrder.vat)}</span>
               </div>
-              <div className="flex justify-between border-t border-stone-200 pt-2 text-sm font-bold text-stone-900">
+              <div className="flex justify-between border-t border-stone-200 dark:border-[#1F293D] pt-2 text-sm font-bold text-stone-900 dark:text-white">
                 <span>Total Amount</span>
                 <span className="text-base text-emerald-700 tabular-nums">
                   {formatCurrency(selectedOrder.total)}
@@ -630,7 +630,7 @@ export default function OrdersPage() {
             </div>
 
             {/* Modal Actions */}
-            <div className="mt-6 flex items-center justify-end gap-2 border-t border-stone-100 pt-4 print:hidden">
+            <div className="mt-6 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-[#1F293D] pt-4 print:hidden">
               <button
                 type="button"
                 onClick={() => {

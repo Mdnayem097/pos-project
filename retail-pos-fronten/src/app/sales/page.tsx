@@ -59,9 +59,9 @@ export default function SalesPage() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="page-title">Sales</h1>
-          <p className="text-sm text-stone-500">
+          <p className="text-sm text-stone-500 dark:text-slate-400">
             {salesList.length} orders today · Revenue{" "}
-            <span className="font-semibold text-brand-600">{formatCurrency(revenue)}</span>
+            <span className="font-semibold text-brand-600 dark:text-brand-400">{formatCurrency(revenue)}</span>
           </p>
         </div>
         <button type="button" onClick={exportCSV} className="btn-ghost">
@@ -72,25 +72,25 @@ export default function SalesPage() {
 
       <div className="card overflow-hidden">
         {/* Mobile View: Responsive Sales Cards (Zero Horizontal Scroll) */}
-        <div className="block sm:hidden divide-y divide-stone-100">
+        <div className="block sm:hidden divide-y divide-stone-100 dark:divide-[#1F293D]">
           {salesList.length === 0 ? (
-            <div className="px-5 py-8 text-center text-sm text-stone-400">
+            <div className="px-5 py-8 text-center text-sm text-stone-400 dark:text-slate-500">
               No sales recorded yet
             </div>
           ) : (
             salesList.map((s) => (
-              <div key={s.id} className="p-4 space-y-2 bg-white">
+              <div key={s.id} className="p-4 space-y-2 bg-white dark:bg-[#111827]">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-brand-700 text-sm">{s.id}</span>
+                  <span className="font-semibold text-brand-700 dark:text-brand-400 text-sm">{s.id}</span>
                   <Badge tone={statusTone[s.status]}>{s.status}</Badge>
                 </div>
-                <div className="flex items-center justify-between text-xs text-stone-600">
-                  <span className="font-medium text-stone-900">{s.customer}</span>
+                <div className="flex items-center justify-between text-xs text-stone-600 dark:text-slate-400">
+                  <span className="font-medium text-stone-900 dark:text-white">{s.customer}</span>
                   <span>{s.date}</span>
                 </div>
-                <div className="flex items-center justify-between border-t border-stone-100 pt-2 text-xs">
-                  <span className="text-stone-500">{s.items} items · {s.payment}</span>
-                  <span className="font-bold text-stone-900 text-sm tabular-nums">
+                <div className="flex items-center justify-between border-t border-stone-100 dark:border-[#1F293D] pt-2 text-xs">
+                  <span className="text-stone-500 dark:text-slate-400">{s.items} items · {s.payment}</span>
+                  <span className="font-bold text-stone-900 dark:text-white text-sm tabular-nums">
                     {formatCurrency(s.total)}
                   </span>
                 </div>
@@ -102,7 +102,7 @@ export default function SalesPage() {
         {/* Desktop Table View */}
         <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-stone-200 bg-stone-50 text-xs text-stone-500">
+            <thead className="border-b border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/80 text-xs text-stone-500 dark:text-slate-400 font-medium">
               <tr>
                 <th className="px-5 py-3 font-medium">Invoice</th>
                 <th className="px-5 py-3 font-medium">Date</th>
@@ -113,25 +113,25 @@ export default function SalesPage() {
                 <th className="px-5 py-3 text-right font-medium">Total</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100">
+            <tbody className="divide-y divide-stone-100 dark:divide-[#1F293D]">
               {salesList.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-8 text-center text-sm text-stone-400">
+                  <td colSpan={7} className="px-5 py-8 text-center text-sm text-stone-400 dark:text-slate-500">
                     No sales recorded yet
                   </td>
                 </tr>
               ) : (
                 salesList.map((s) => (
-                  <tr key={s.id} className="hover:bg-stone-50">
-                    <td className="px-5 py-3 font-medium text-brand-700">{s.id}</td>
-                    <td className="px-5 py-3 text-stone-600">{s.date}</td>
-                    <td className="px-5 py-3">{s.customer}</td>
-                    <td className="px-5 py-3 text-right">{s.items}</td>
-                    <td className="px-5 py-3 text-stone-600">{s.payment}</td>
+                  <tr key={s.id} className="hover:bg-stone-50 dark:hover:bg-[#162035]/60 transition-colors">
+                    <td className="px-5 py-3 font-medium text-brand-700 dark:text-brand-400">{s.id}</td>
+                    <td className="px-5 py-3 text-stone-600 dark:text-slate-400">{s.date}</td>
+                    <td className="px-5 py-3 font-medium text-stone-900 dark:text-white">{s.customer}</td>
+                    <td className="px-5 py-3 text-right text-stone-600 dark:text-slate-300">{s.items}</td>
+                    <td className="px-5 py-3 text-stone-600 dark:text-slate-400">{s.payment}</td>
                     <td className="px-5 py-3">
                       <Badge tone={statusTone[s.status]}>{s.status}</Badge>
                     </td>
-                    <td className="px-5 py-3 text-right font-semibold">
+                    <td className="px-5 py-3 text-right font-semibold tabular-nums text-stone-900 dark:text-white">
                       {formatCurrency(s.total)}
                     </td>
                   </tr>

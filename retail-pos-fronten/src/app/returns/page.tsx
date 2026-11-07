@@ -245,7 +245,7 @@ export default function ReturnsPage() {
               {totalReturnsCount} {totalReturnsCount === 1 ? "Return" : "Returns"}
             </span>
           </div>
-          <p className="mt-1 text-sm text-stone-500">
+          <p className="mt-1 text-sm text-stone-500 dark:text-slate-400">
             Process customer product returns, track restocking inventory, and manage refunds.
           </p>
         </div>
@@ -274,41 +274,41 @@ export default function ReturnsPage() {
       {/* KPI Stats Cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <div className="card p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+          <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-slate-400">
             <span>Total Returns</span>
             <RotateCcw size={17} className="text-stone-400" />
           </div>
-          <p className="font-display text-2xl font-bold text-stone-900">{totalReturnsCount}</p>
-          <p className="text-xs text-stone-500">Processed refund orders</p>
+          <p className="font-display text-2xl font-bold text-stone-900 dark:text-white">{totalReturnsCount}</p>
+          <p className="text-xs text-stone-500 dark:text-slate-400">Processed refund orders</p>
         </div>
 
         <div className="card p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+          <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-slate-400">
             <span>Total Refunded</span>
             <Receipt size={17} className="text-emerald-600" />
           </div>
-          <p className="font-display text-2xl font-bold text-stone-900 tabular-nums">
+          <p className="font-display text-2xl font-bold text-stone-900 dark:text-white tabular-nums">
             {formatCurrency(totalRefundAmount)}
           </p>
-          <p className="text-xs text-stone-500">Returned to customers</p>
+          <p className="text-xs text-stone-500 dark:text-slate-400">Returned to customers</p>
         </div>
 
         <div className="card p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+          <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-slate-400">
             <span>Items Restocked</span>
             <PackageCheck size={17} className="text-blue-600" />
           </div>
-          <p className="font-display text-2xl font-bold text-stone-900">{totalRestockedItems}</p>
-          <p className="text-xs text-stone-500">Returned back to stock</p>
+          <p className="font-display text-2xl font-bold text-stone-900 dark:text-white">{totalRestockedItems}</p>
+          <p className="text-xs text-stone-500 dark:text-slate-400">Returned back to stock</p>
         </div>
 
         <div className="card p-4 space-y-1">
-          <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+          <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-slate-400">
             <span>Returns Today</span>
             <Clock size={17} className="text-brand-500" />
           </div>
           <p className="font-display text-2xl font-bold text-brand-600">{returnsToday}</p>
-          <p className="text-xs text-stone-500">Logged today</p>
+          <p className="text-xs text-stone-500 dark:text-slate-400">Logged today</p>
         </div>
       </div>
 
@@ -378,7 +378,7 @@ export default function ReturnsPage() {
       {/* Returns Table / Responsive Mobile View */}
       <div className="card overflow-hidden">
         {/* Mobile View: Responsive Return Cards (Zero Horizontal Scroll) */}
-        <div className="block sm:hidden divide-y divide-stone-100">
+        <div className="block sm:hidden divide-y divide-stone-100 dark:divide-[#1F293D]">
           {returnsList.map((ret) => {
             const itemsCount = ret.items?.reduce((s, i) => s + i.qty, 0) || 0;
             const itemsSummary = ret.items
@@ -386,11 +386,11 @@ export default function ReturnsPage() {
               .join(", ");
 
             return (
-              <div key={ret.id} className="p-4 space-y-3 bg-white">
+              <div key={ret.id} className="p-4 space-y-3 bg-white dark:bg-[#111827]">
                 {/* Header: Return # and Status */}
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <span className="font-mono font-bold text-stone-900 text-sm">
+                    <span className="font-mono font-bold text-stone-900 dark:text-white text-sm">
                       {ret.returnNo}
                     </span>
                     <p className="text-[11px] text-stone-400">
@@ -407,9 +407,9 @@ export default function ReturnsPage() {
                 </div>
 
                 {/* Details */}
-                <div className="rounded-lg bg-stone-50 p-2.5 space-y-1.5 text-xs border border-stone-100">
+                <div className="rounded-lg bg-stone-50 dark:bg-[#162035] p-2.5 space-y-1.5 text-xs border border-stone-100 dark:border-[#1F293D]">
                   <div className="flex justify-between">
-                    <span className="text-stone-500">Order:</span>
+                    <span className="text-stone-500 dark:text-slate-400">Order:</span>
                     <Link
                       href="/orders"
                       className="font-medium text-brand-600 hover:text-brand-800"
@@ -419,20 +419,20 @@ export default function ReturnsPage() {
                     </Link>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-stone-500">Customer:</span>
-                    <span className="font-semibold text-stone-900">
+                    <span className="text-stone-500 dark:text-slate-400">Customer:</span>
+                    <span className="font-semibold text-stone-900 dark:text-white">
                       {ret.order?.customerName || ret.order?.customer?.name || "Walk in customer"}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-stone-500">Items:</span>
-                    <span className="font-medium text-stone-800">
+                    <span className="text-stone-500 dark:text-slate-400">Items:</span>
+                    <span className="font-medium text-stone-800 dark:text-slate-200">
                       {itemsCount} items {itemsSummary ? `(${itemsSummary})` : ""}
                     </span>
                   </div>
-                  <div className="flex justify-between border-t border-stone-200/80 pt-1.5">
-                    <span className="text-stone-600 font-medium">Refund ({ret.refundMethod}):</span>
-                    <span className="font-bold text-stone-900 tabular-nums">
+                  <div className="flex justify-between border-t border-stone-200 dark:border-[#1F293D]/80 dark:border-[#1F293D] pt-1.5">
+                    <span className="text-stone-600 dark:text-slate-400 font-medium">Refund ({ret.refundMethod}):</span>
+                    <span className="font-bold text-stone-900 dark:text-white tabular-nums">
                       {formatCurrency(ret.refundAmount)}
                     </span>
                   </div>
@@ -442,7 +442,7 @@ export default function ReturnsPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedReturn(ret)}
-                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-stone-200 bg-white py-2 text-xs font-semibold text-stone-700 hover:bg-stone-50 transition"
+                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-stone-200 dark:border-[#1F293D] bg-white py-2 text-xs font-semibold text-stone-700 dark:text-slate-300 hover:bg-stone-50 dark:bg-[#162035] transition"
                 >
                   <Eye size={14} className="text-brand-600" />
                   <span>View Voucher</span>
@@ -454,7 +454,7 @@ export default function ReturnsPage() {
           {returnsList.length === 0 && !isLoading && (
             <div className="py-12 text-center">
               <RotateCcw size={32} className="mx-auto text-stone-300 mb-2" />
-              <p className="font-semibold text-stone-700">No Return Orders Found</p>
+              <p className="font-semibold text-stone-700 dark:text-slate-300">No Return Orders Found</p>
               <p className="text-xs text-stone-400 mt-0.5">
                 Customer returns will appear here once processed.
               </p>
@@ -465,7 +465,7 @@ export default function ReturnsPage() {
         {/* Desktop Table View */}
         <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-stone-50 border-b border-stone-200 text-stone-600 font-semibold uppercase tracking-wider">
+            <thead className="bg-stone-50 dark:bg-[#162035] border-b border-stone-200 dark:border-[#1F293D] text-stone-600 dark:text-slate-400 font-semibold uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4">Return #</th>
                 <th className="py-3 px-4">Date & Time</th>
@@ -478,7 +478,7 @@ export default function ReturnsPage() {
                 <th className="py-3 px-4 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100 text-stone-700">
+            <tbody className="divide-y divide-stone-100 dark:divide-[#1F293D] text-stone-700 dark:text-slate-300">
               {returnsList.map((ret) => {
                 const itemsCount = ret.items?.reduce((s, i) => s + i.qty, 0) || 0;
                 const itemsSummary = ret.items
@@ -486,12 +486,12 @@ export default function ReturnsPage() {
                   .join(", ");
 
                 return (
-                  <tr key={ret.id} className="hover:bg-stone-50/70 transition">
-                    <td className="py-3.5 px-4 font-mono font-bold text-stone-900">
+                  <tr key={ret.id} className="hover:bg-stone-50 dark:bg-[#162035]/70 dark:bg-[#162035]/70 transition">
+                    <td className="py-3.5 px-4 font-mono font-bold text-stone-900 dark:text-white">
                       {ret.returnNo}
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      <p className="font-medium text-stone-900">
+                      <p className="font-medium text-stone-900 dark:text-white">
                         {new Date(ret.createdAt).toLocaleDateString()}
                       </p>
                       <p className="text-[11px] text-stone-400">
@@ -514,20 +514,20 @@ export default function ReturnsPage() {
                         )}
                       </Link>
                     </td>
-                    <td className="py-3.5 px-4 font-medium text-stone-900">
+                    <td className="py-3.5 px-4 font-medium text-stone-900 dark:text-white">
                       {ret.order?.customerName || ret.order?.customer?.name || "Walk in customer"}
                     </td>
                     <td className="py-3.5 px-4 max-w-xs truncate" title={itemsSummary}>
-                      <span className="font-semibold text-stone-900">{itemsCount} items</span>
-                      <span className="text-stone-500 text-[11px] ml-1.5 truncate">
+                      <span className="font-semibold text-stone-900 dark:text-white">{itemsCount} items</span>
+                      <span className="text-stone-500 dark:text-slate-400 text-[11px] ml-1.5 truncate">
                         ({itemsSummary})
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right font-display font-bold text-stone-900 tabular-nums">
+                    <td className="py-3.5 px-4 text-right font-display font-bold text-stone-900 dark:text-white tabular-nums">
                       {formatCurrency(ret.refundAmount)}
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 font-medium text-stone-800">
+                      <span className="inline-flex items-center gap-1.5 font-medium text-stone-800 dark:text-slate-200">
                         <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
                         {ret.refundMethod}
                       </span>
@@ -541,7 +541,7 @@ export default function ReturnsPage() {
                       <button
                         type="button"
                         onClick={() => setSelectedReturn(ret)}
-                        className="inline-flex items-center gap-1 rounded-lg border border-stone-200 bg-white px-2.5 py-1 text-xs font-semibold text-stone-700 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-700 transition"
+                        className="inline-flex items-center gap-1 rounded-lg border border-stone-200 dark:border-[#1F293D] bg-white px-2.5 py-1 text-xs font-semibold text-stone-700 dark:text-slate-300 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-700 transition"
                       >
                         <Eye size={13} />
                         View
@@ -555,7 +555,7 @@ export default function ReturnsPage() {
                 <tr>
                   <td colSpan={9} className="py-12 text-center">
                     <RotateCcw size={32} className="mx-auto text-stone-300 mb-2" />
-                    <p className="font-semibold text-stone-700">No Return Orders Found</p>
+                    <p className="font-semibold text-stone-700 dark:text-slate-300">No Return Orders Found</p>
                     <p className="text-xs text-stone-400 mt-0.5">
                       Customer returns will appear here once processed.
                     </p>
@@ -578,16 +578,16 @@ export default function ReturnsPage() {
         >
           <div className="card w-full max-w-2xl max-h-[90vh] flex flex-col p-6 shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-[#1F293D]">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand-50 text-brand-600">
                   <RotateCcw size={18} />
                 </span>
                 <div>
-                  <h3 className="font-display text-base font-bold text-stone-900 leading-tight">
+                  <h3 className="font-display text-base font-bold text-stone-900 dark:text-white leading-tight">
                     Process Return Order
                   </h3>
-                  <p className="text-xs text-stone-500">
+                  <p className="text-xs text-stone-500 dark:text-slate-400">
                     {selectedOrderId
                       ? `Select items to return from Order #${selectedOrderId}`
                       : "Step 1: Select an order to return items from"}
@@ -597,7 +597,7 @@ export default function ReturnsPage() {
               <button
                 type="button"
                 onClick={() => setShowNewReturnModal(false)}
-                className="text-stone-400 hover:text-stone-700"
+                className="text-stone-400 hover:text-stone-700 dark:text-slate-300"
               >
                 <X size={18} />
               </button>
@@ -608,34 +608,34 @@ export default function ReturnsPage() {
               {!selectedOrderId ? (
                 /* Step 1: Pick Order */
                 <div className="space-y-3">
-                  <p className="text-xs font-semibold text-stone-700 uppercase tracking-wider">
+                  <p className="text-xs font-semibold text-stone-700 dark:text-slate-300 uppercase tracking-wider">
                     Select Recent Order:
                   </p>
 
                   {isLoadingOrders ? (
                     <div className="py-12 text-center text-xs text-stone-400">Loading orders...</div>
                   ) : (
-                    <div className="divide-y divide-stone-100 border rounded-xl overflow-hidden text-xs">
+                    <div className="divide-y divide-stone-100 dark:divide-[#1F293D] border border-stone-200 dark:border-[#1F293D] rounded-xl overflow-hidden text-xs">
                       {recentOrders.map((ord) => (
                         <div
                           key={ord.id}
-                          className="flex items-center justify-between p-3 hover:bg-stone-50 transition"
+                          className="flex items-center justify-between p-3 hover:bg-stone-50 dark:bg-[#162035] transition"
                         >
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="font-bold text-stone-900">#{ord.id}</span>
-                              <span className="font-mono text-stone-500">({ord.invoiceNo})</span>
-                              <span className="rounded bg-stone-100 px-1.5 py-0.5 text-[10px] font-semibold text-stone-600">
+                              <span className="font-bold text-stone-900 dark:text-white">#{ord.id}</span>
+                              <span className="font-mono text-stone-500 dark:text-slate-400">({ord.invoiceNo})</span>
+                              <span className="rounded bg-stone-100 dark:bg-[#162035] px-1.5 py-0.5 text-[10px] font-semibold text-stone-600 dark:text-slate-400">
                                 {ord.method}
                               </span>
                             </div>
-                            <p className="text-stone-500 text-[11px] mt-0.5">
+                            <p className="text-stone-500 dark:text-slate-400 text-[11px] mt-0.5">
                               {ord.name} • {ord.itemsCount} items •{" "}
                               {new Date(ord.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                           <div className="flex items-center gap-3">
-                            <span className="font-display text-sm font-bold text-stone-900 tabular-nums">
+                            <span className="font-display text-sm font-bold text-stone-900 dark:text-white tabular-nums">
                               {formatCurrency(ord.total)}
                             </span>
                             <button
@@ -655,12 +655,12 @@ export default function ReturnsPage() {
                 /* Step 2: Select Returnable Items */
                 <form onSubmit={handleSubmitReturn} className="space-y-4">
                   {/* Back to Order Selection */}
-                  <div className="flex items-center justify-between bg-stone-50 p-3 rounded-xl border border-stone-200/80 text-xs">
+                  <div className="flex items-center justify-between bg-stone-50 dark:bg-[#162035] p-3 rounded-xl border border-stone-200 dark:border-[#1F293D]/80 dark:border-[#1F293D] text-xs">
                     <div>
-                      <span className="font-semibold text-stone-900">
+                      <span className="font-semibold text-stone-900 dark:text-white">
                         Order #{orderReturnableInfo?.orderId} ({orderReturnableInfo?.invoiceNo})
                       </span>
-                      <p className="text-stone-500 text-[11px]">
+                      <p className="text-stone-500 dark:text-slate-400 text-[11px]">
                         Customer: {orderReturnableInfo?.customerName} • Total:{" "}
                         {formatCurrency(orderReturnableInfo?.total || 0)}
                       </p>
@@ -680,14 +680,14 @@ export default function ReturnsPage() {
 
                   {/* Returnable Items Table */}
                   <div className="space-y-2">
-                    <p className="text-xs font-bold text-stone-800 uppercase tracking-wider">
+                    <p className="text-xs font-bold text-stone-800 dark:text-slate-200 uppercase tracking-wider">
                       Purchased Items Eligible For Return:
                     </p>
 
                     {isLoadingReturnable ? (
                       <div className="py-8 text-center text-xs text-stone-400">Loading items...</div>
                     ) : (
-                      <div className="divide-y divide-stone-100 border rounded-xl overflow-hidden text-xs">
+                      <div className="divide-y divide-stone-100 dark:divide-[#1F293D] border border-stone-200 dark:border-[#1F293D] rounded-xl overflow-hidden text-xs">
                         {orderReturnableInfo?.items.map((item) => {
                           const draft = returnDraft[item.orderItemId] || {
                             qty: 0,
@@ -698,13 +698,13 @@ export default function ReturnsPage() {
                           return (
                             <div
                               key={item.orderItemId}
-                              className={`p-3 space-y-2.5 ${!isEligible ? "bg-stone-50/60 opacity-60" : ""}`}
+                              className={`p-3 space-y-2.5 ${!isEligible ? "bg-stone-50 dark:bg-[#162035]/60 opacity-60" : ""}`}
                             >
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex items-center gap-2.5 min-w-0">
                                   <span className="text-xl">{item.emoji || "📦"}</span>
                                   <div>
-                                    <p className="font-semibold text-stone-900 leading-snug">
+                                    <p className="font-semibold text-stone-900 dark:text-white leading-snug">
                                       {item.productName}
                                     </p>
                                     <p className="text-[11px] text-stone-400 font-mono">
@@ -713,23 +713,23 @@ export default function ReturnsPage() {
                                   </div>
                                 </div>
 
-                                <div className="text-right text-[11px] text-stone-500 shrink-0">
+                                <div className="text-right text-[11px] text-stone-500 dark:text-slate-400 shrink-0">
                                   <span>Purchased: {item.originalQty}</span>
                                   {item.alreadyReturnedQty > 0 && (
                                     <span className="text-amber-600 block">
                                       Already Returned: {item.alreadyReturnedQty}
                                     </span>
                                   )}
-                                  <span className="font-bold text-stone-900 block mt-0.5">
+                                  <span className="font-bold text-stone-900 dark:text-white block mt-0.5">
                                     Returnable: {item.returnableQty}
                                   </span>
                                 </div>
                               </div>
 
                               {isEligible && (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-dashed border-stone-200">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-dashed border-stone-200 dark:border-[#1F293D]">
                                   <div className="flex items-center gap-2">
-                                    <label className="text-[11px] font-semibold text-stone-600">
+                                    <label className="text-[11px] font-semibold text-stone-600 dark:text-slate-400">
                                       Return Qty:
                                     </label>
                                     <input
@@ -744,7 +744,7 @@ export default function ReturnsPage() {
                                           item.returnableQty
                                         )
                                       }
-                                      className="w-16 rounded-md border border-stone-300 py-1 px-2 text-right text-xs font-bold tabular-nums"
+                                      className="w-16 rounded-md border border-stone-300 dark:border-[#1F293D] py-1 px-2 text-right text-xs font-bold tabular-nums"
                                     />
                                     {draft.qty > 0 && (
                                       <span className="text-[11px] font-semibold text-emerald-600">
@@ -760,7 +760,7 @@ export default function ReturnsPage() {
                                       onChange={(e) =>
                                         handleReasonChange(item.orderItemId, e.target.value)
                                       }
-                                      className="w-full rounded-md border border-stone-300 py-1 px-2 text-xs"
+                                      className="w-full rounded-md border border-stone-300 dark:border-[#1F293D] py-1 px-2 text-xs"
                                     >
                                       {RETURN_REASONS.map((r) => (
                                         <option key={r} value={r}>
@@ -781,7 +781,7 @@ export default function ReturnsPage() {
                   {/* Refund Method & Note */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                     <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1">
+                      <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300 mb-1">
                         Refund Method
                       </label>
                       <select
@@ -797,7 +797,7 @@ export default function ReturnsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1">
+                      <label className="block text-xs font-semibold text-stone-700 dark:text-slate-300 mb-1">
                         General Note (Optional)
                       </label>
                       <input
@@ -820,17 +820,17 @@ export default function ReturnsPage() {
                     </div>
 
                     <div className="text-right">
-                      <span className="text-[11px] text-stone-500 uppercase tracking-wider block font-semibold">
+                      <span className="text-[11px] text-stone-500 dark:text-slate-400 uppercase tracking-wider block font-semibold">
                         Total Refund
                       </span>
-                      <span className="font-display text-xl font-bold text-stone-900 tabular-nums">
+                      <span className="font-display text-xl font-bold text-stone-900 dark:text-white tabular-nums">
                         {formatCurrency(estimatedRefund)}
                       </span>
                     </div>
                   </div>
 
                   {/* Form Footer */}
-                  <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100">
+                  <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-stone-100 dark:border-[#1F293D]">
                     <button
                       type="button"
                       onClick={() => setShowNewReturnModal(false)}
@@ -864,17 +864,17 @@ export default function ReturnsPage() {
         >
           <div className="card w-full max-w-md max-h-[90vh] flex flex-col p-6 shadow-2xl print:static print:max-h-none print:w-[80mm] print:max-w-[80mm] print:mx-auto print:overflow-visible print:border-none print:shadow-none print:p-0 print:bg-white">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100 print:hidden">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-[#1F293D] print:hidden">
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={20} className="text-emerald-600" />
-                <h3 className="font-display text-base font-bold text-stone-900">
+                <h3 className="font-display text-base font-bold text-stone-900 dark:text-white">
                   Return Receipt Voucher
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedReturn(null)}
-                className="text-stone-400 hover:text-stone-700"
+                className="text-stone-400 hover:text-stone-700 dark:text-slate-300"
               >
                 <X size={18} />
               </button>
@@ -884,41 +884,41 @@ export default function ReturnsPage() {
             <div className="flex-1 overflow-y-auto py-4 print:overflow-visible print:p-0 print:bg-transparent">
               <div
                 id="printable-return-receipt"
-                className="rounded-xl border border-stone-200 bg-white p-5 font-sans text-stone-900 shadow-sm space-y-4 print:rounded-none print:border-none print:shadow-none print:p-2 print:w-full"
+                className="rounded-xl border border-stone-200 dark:border-[#1F293D] bg-white dark:bg-[#162035] p-5 font-sans text-stone-900 dark:text-white shadow-sm space-y-4 print:rounded-none print:border-none print:shadow-none print:p-2 print:w-full"
               >
                 {/* Store Header */}
                 <div className="text-center">
                   <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-500 text-white shadow-sm mx-auto">
                     <Store size={20} strokeWidth={2.4} />
                   </span>
-                  <h2 className="mt-2 font-display text-lg font-bold text-stone-900">Retail POS</h2>
-                  <p className="text-xs text-stone-500">Main Branch • Counter 1</p>
+                  <h2 className="mt-2 font-display text-lg font-bold text-stone-900 dark:text-white">Retail POS</h2>
+                  <p className="text-xs text-stone-500 dark:text-slate-400">Main Branch • Counter 1</p>
                   <span className="inline-block mt-1 rounded-full bg-emerald-50 px-3 py-0.5 text-[11px] font-semibold text-emerald-700 uppercase tracking-wider border border-emerald-200">
                     Credit Note / Return Voucher
                   </span>
                 </div>
 
                 {/* Meta details */}
-                <div className="rounded-lg border border-stone-200 bg-stone-50 p-3 text-xs space-y-1">
+                <div className="rounded-lg border border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035] p-3 text-xs space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-stone-500">Return Voucher:</span>
-                    <span className="font-mono font-bold text-stone-900">{selectedReturn.returnNo}</span>
+                    <span className="text-stone-500 dark:text-slate-400">Return Voucher:</span>
+                    <span className="font-mono font-bold text-stone-900 dark:text-white">{selectedReturn.returnNo}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-stone-500">Original Invoice:</span>
+                    <span className="text-stone-500 dark:text-slate-400">Original Invoice:</span>
                     <span className="font-semibold text-brand-600">
                       {selectedReturn.order?.invoiceNo || `#${selectedReturn.orderId}`}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-stone-500">Date & Time:</span>
-                    <span className="font-medium text-stone-800">
+                    <span className="text-stone-500 dark:text-slate-400">Date & Time:</span>
+                    <span className="font-medium text-stone-800 dark:text-slate-200">
                       {new Date(selectedReturn.createdAt).toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-stone-500">Customer:</span>
-                    <span className="font-medium text-stone-800">
+                    <span className="text-stone-500 dark:text-slate-400">Customer:</span>
+                    <span className="font-medium text-stone-800 dark:text-slate-200">
                       {selectedReturn.order?.customerName ||
                         selectedReturn.order?.customer?.name ||
                         "Walk in customer"}
@@ -928,23 +928,23 @@ export default function ReturnsPage() {
 
                 {/* Returned Items */}
                 <div className="space-y-2">
-                  <div className="flex justify-between text-xs font-bold text-stone-800 border-b pb-1">
+                  <div className="flex justify-between text-xs font-bold text-stone-800 dark:text-slate-200 border-b pb-1">
                     <span>Returned Items</span>
                     <span>Refund</span>
                   </div>
-                  <div className="divide-y divide-stone-100 text-xs">
+                  <div className="divide-y divide-stone-100 dark:divide-[#1F293D] text-xs">
                     {selectedReturn.items?.map((item) => (
                       <div key={item.id} className="py-2 flex justify-between items-start">
                         <div>
-                          <p className="font-semibold text-stone-900">
+                          <p className="font-semibold text-stone-900 dark:text-white">
                             {item.product?.name || "Product"}
                           </p>
-                          <p className="text-[11px] text-stone-500">
+                          <p className="text-[11px] text-stone-500 dark:text-slate-400">
                             {item.qty} × {formatCurrency(item.unitPrice)}
                             {item.reason && ` • (${item.reason})`}
                           </p>
                         </div>
-                        <p className="font-bold text-stone-900 tabular-nums">
+                        <p className="font-bold text-stone-900 dark:text-white tabular-nums">
                           {formatCurrency(item.refundAmount)}
                         </p>
                       </div>
@@ -963,10 +963,10 @@ export default function ReturnsPage() {
                 </div>
 
                 {/* Method & Restock info */}
-                <div className="text-xs space-y-1 text-stone-600 pt-1">
+                <div className="text-xs space-y-1 text-stone-600 dark:text-slate-400 pt-1">
                   <div className="flex justify-between">
                     <span>Refund Method:</span>
-                    <span className="font-semibold text-stone-900">{selectedReturn.refundMethod}</span>
+                    <span className="font-semibold text-stone-900 dark:text-white">{selectedReturn.refundMethod}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Restock Status:</span>
@@ -975,7 +975,7 @@ export default function ReturnsPage() {
                 </div>
 
                 {/* Footer notes */}
-                <div className="pt-2 border-t text-center text-[11px] text-stone-500">
+                <div className="pt-2 border-t text-center text-[11px] text-stone-500 dark:text-slate-400">
                   <p>Authorized Return Voucher</p>
                   <p className="font-mono mt-1 text-[10px] text-stone-400">
                     *{selectedReturn.returnNo}*
@@ -985,7 +985,7 @@ export default function ReturnsPage() {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center gap-2.5 pt-3 border-t border-stone-100 print:hidden">
+            <div className="flex items-center gap-2.5 pt-3 border-t border-stone-100 dark:border-[#1F293D] print:hidden">
               <button
                 type="button"
                 onClick={() => setSelectedReturn(null)}

@@ -68,41 +68,41 @@ export default function InventoryPage() {
         <div className="card group relative overflow-hidden p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="absolute inset-x-0 top-0 h-[4px] bg-transparent transition-all duration-200 group-hover:bg-brand-500 rounded-t-2xl" />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 transition-colors group-hover:text-stone-800">
+            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400 transition-colors group-hover:text-stone-800 dark:group-hover:text-slate-200">
               Total Items
             </p>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-stone-100 text-stone-700 transition-all duration-200 group-hover:bg-brand-50 group-hover:text-brand-600">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-stone-100 dark:bg-[#162035] text-stone-700 dark:text-slate-200 transition-all duration-200 group-hover:bg-brand-50 dark:group-hover:bg-brand-500/20 group-hover:text-brand-600 dark:group-hover:text-brand-400">
               <Package size={17} />
             </span>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-stone-900 transition-transform duration-200 group-hover:translate-x-0.5">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-stone-900 dark:text-white transition-transform duration-200 group-hover:translate-x-0.5">
             {products.length}
           </p>
-          <p className="mt-1 text-xs text-stone-500">{totalUnits.toLocaleString()} units in stock</p>
+          <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">{totalUnits.toLocaleString()} units in stock</p>
         </div>
 
         {/* Inventory Cost */}
         <div className="card group relative overflow-hidden p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="absolute inset-x-0 top-0 h-[4px] bg-transparent transition-all duration-200 group-hover:bg-brand-600 rounded-t-2xl" />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 transition-colors group-hover:text-stone-800">
+            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400 transition-colors group-hover:text-stone-800 dark:group-hover:text-slate-200">
               Inventory Cost
             </p>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand-600 transition-all duration-200 group-hover:bg-brand-100">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 dark:bg-brand-500/15 text-brand-600 dark:text-brand-400 transition-all duration-200 group-hover:bg-brand-100 dark:group-hover:bg-brand-500/25">
               <Boxes size={17} />
             </span>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-brand-700 transition-transform duration-200 group-hover:translate-x-0.5">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-brand-600 dark:text-brand-400 transition-transform duration-200 group-hover:translate-x-0.5">
             {formatCurrency(stockValue)}
           </p>
-          <p className="mt-1 text-xs text-stone-500">Total valuation at cost</p>
+          <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">Total valuation at cost</p>
         </div>
 
         {/* Low Stock Alert */}
         <div
           onClick={() => setFilter(filter === "low" ? "all" : "low")}
           className={`card group relative overflow-hidden cursor-pointer p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
-            filter === "low" ? "bg-amber-50/30 shadow-sm" : ""
+            filter === "low" ? "bg-amber-50/30 dark:bg-amber-950/20 shadow-sm" : ""
           }`}
         >
           <div
@@ -111,22 +111,22 @@ export default function InventoryPage() {
             }`}
           />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">Low Stock Alert</p>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50 text-amber-600 transition-all duration-200 group-hover:bg-amber-100">
+            <p className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400">Low Stock Alert</p>
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 transition-all duration-200 group-hover:bg-amber-100 dark:group-hover:bg-amber-500/25">
               <AlertTriangle size={17} />
             </span>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-amber-600 transition-transform duration-200 group-hover:translate-x-0.5">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-amber-600 dark:text-amber-400 transition-transform duration-200 group-hover:translate-x-0.5">
             {low}
           </p>
-          <p className="mt-1 text-xs text-stone-500">Items at or below reorder level</p>
+          <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">Items at or below reorder level</p>
         </div>
 
         {/* Out of Stock */}
         <div
           onClick={() => setFilter(filter === "out" ? "all" : "out")}
           className={`card group relative overflow-hidden cursor-pointer p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
-            filter === "out" ? "bg-red-50/30 shadow-sm" : ""
+            filter === "out" ? "bg-red-50/30 dark:bg-rose-950/20 shadow-sm" : ""
           }`}
         >
           <div
@@ -135,37 +135,37 @@ export default function InventoryPage() {
             }`}
           />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-red-700">Out of Stock</p>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-red-50 text-red-600 transition-all duration-200 group-hover:bg-red-100">
+            <p className="text-xs font-semibold uppercase tracking-wider text-red-700 dark:text-rose-400">Out of Stock</p>
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-red-50 dark:bg-rose-500/15 text-red-600 dark:text-rose-400 transition-all duration-200 group-hover:bg-red-100 dark:group-hover:bg-rose-500/25">
               <X size={17} />
             </span>
           </div>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-red-600 transition-transform duration-200 group-hover:translate-x-0.5">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-red-600 dark:text-rose-400 transition-transform duration-200 group-hover:translate-x-0.5">
             {out}
           </p>
-          <p className="mt-1 text-xs text-stone-500">Requires immediate restock</p>
+          <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">Requires immediate restock</p>
         </div>
       </section>
 
       {/* Inventory Presentation */}
       <div className="card overflow-hidden">
         {/* Mobile View: Responsive Stock Cards (Zero Horizontal Scroll) */}
-        <div className="block sm:hidden divide-y divide-stone-100">
+        <div className="block sm:hidden divide-y divide-stone-100 dark:divide-[#1F293D]">
           {filteredProducts.map((p) => {
             const state = stockState(p.stock, p.reorderLevel);
             const pct = Math.min(100, (p.stock / (p.reorderLevel * 3)) * 100);
             return (
-              <div key={p.id} className="p-4 space-y-3 bg-white">
+              <div key={p.id} className="p-4 space-y-3 bg-white dark:bg-[#111827]">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-xl shadow-xs">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 dark:bg-[#162035] text-xl shadow-xs">
                       {p.emoji}
                     </span>
                     <div>
-                      <p className="font-semibold text-stone-900 text-sm leading-tight">{p.name}</p>
+                      <p className="font-semibold text-stone-900 dark:text-white text-sm leading-tight">{p.name}</p>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="font-mono text-[11px] text-stone-500">{p.sku}</span>
-                        <span className="text-[10px] bg-stone-100 text-stone-600 px-1.5 py-0.5 rounded font-medium">
+                        <span className="font-mono text-[11px] text-stone-500 dark:text-slate-400">{p.sku}</span>
+                        <span className="text-[10px] bg-stone-100 dark:bg-[#162035] text-stone-600 dark:text-slate-300 px-1.5 py-0.5 rounded font-medium">
                           {p.category}
                         </span>
                       </div>
@@ -176,27 +176,27 @@ export default function InventoryPage() {
                 </div>
 
                 {/* Stock progress */}
-                <div className="rounded-lg bg-stone-50 p-2.5 space-y-1.5 border border-stone-100">
+                <div className="rounded-lg bg-stone-50 dark:bg-[#162035]/80 p-2.5 space-y-1.5 border border-stone-100 dark:border-[#1F293D]">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-stone-500">Current Stock:</span>
-                    <span className="font-bold text-stone-900 tabular-nums">{p.stock} units</span>
+                    <span className="text-stone-500 dark:text-slate-400">Current Stock:</span>
+                    <span className="font-bold text-stone-900 dark:text-white tabular-nums">{p.stock} units</span>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-stone-200/70">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-stone-200/70 dark:bg-[#1E293B]">
                     <div
                       className={`h-full rounded-full transition-all duration-300 ${state.bar}`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-stone-400">
+                  <div className="flex items-center justify-between text-[11px] text-stone-400 dark:text-slate-500">
                     <span>Reorder threshold</span>
-                    <span className="font-medium text-stone-600 tabular-nums">{p.reorderLevel} units</span>
+                    <span className="font-medium text-stone-600 dark:text-slate-300 tabular-nums">{p.reorderLevel} units</span>
                   </div>
                 </div>
               </div>
             );
           })}
           {filteredProducts.length === 0 && (
-            <div className="p-8 text-center text-sm text-stone-500">
+            <div className="p-8 text-center text-sm text-stone-500 dark:text-stone-400">
               No products match the selected filter.
             </div>
           )}
@@ -205,7 +205,7 @@ export default function InventoryPage() {
         {/* Desktop Table View */}
         <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-stone-200 bg-stone-50 text-xs font-semibold uppercase tracking-wider text-stone-500">
+            <thead className="border-b border-stone-200 dark:border-[#1F293D] bg-stone-50 dark:bg-[#162035]/80 text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-slate-400">
               <tr>
                 <th className="px-5 py-3">Product</th>
                 <th className="px-5 py-3">Category</th>
@@ -214,38 +214,38 @@ export default function InventoryPage() {
                 <th className="px-5 py-3 text-center">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100">
+            <tbody className="divide-y divide-stone-100 dark:divide-[#1F293D]">
               {filteredProducts.map((p) => {
                 const state = stockState(p.stock, p.reorderLevel);
                 const pct = Math.min(100, (p.stock / (p.reorderLevel * 3)) * 100);
                 return (
-                  <tr key={p.id} className="hover:bg-stone-50 transition-colors">
+                  <tr key={p.id} className="hover:bg-stone-50 dark:hover:bg-[#162035]/60 transition-colors">
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-50 text-xl shadow-sm">
+                        <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-50 dark:bg-[#162035] text-xl shadow-sm">
                           {p.emoji}
                         </span>
                         <div>
-                          <p className="font-semibold text-stone-900">{p.name}</p>
-                          <p className="font-mono text-xs text-stone-500">{p.sku}</p>
+                          <p className="font-semibold text-stone-900 dark:text-white">{p.name}</p>
+                          <p className="font-mono text-xs text-stone-500 dark:text-slate-400">{p.sku}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-3 text-stone-600">{p.category}</td>
+                    <td className="px-5 py-3 text-stone-600 dark:text-slate-300">{p.category}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-stone-100">
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-stone-100 dark:bg-[#1E293B]">
                           <div
                             className={`h-full rounded-full ${state.bar}`}
                             style={{ width: `${pct}%` }}
                           />
                         </div>
-                        <span className="w-8 text-right font-semibold tabular-nums text-stone-900">
+                        <span className="w-8 text-right font-semibold tabular-nums text-stone-900 dark:text-white">
                           {p.stock}
                         </span>
                       </div>
                     </td>
-                    <td className="px-5 py-3 text-right font-medium text-stone-600">{p.reorderLevel}</td>
+                    <td className="px-5 py-3 text-right font-medium text-stone-600 dark:text-slate-400">{p.reorderLevel}</td>
                     <td className="px-5 py-3 text-center">
                       <Badge tone={state.tone}>{state.label}</Badge>
                     </td>
@@ -254,7 +254,7 @@ export default function InventoryPage() {
               })}
               {filteredProducts.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-5 py-12 text-center text-stone-500">
+                  <td colSpan={5} className="px-5 py-12 text-center text-stone-500 dark:text-slate-400">
                     No products match the selected filter.
                   </td>
                 </tr>
