@@ -31,6 +31,8 @@ import {
   fetchReturns,
 } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
+import { printReturnVoucher } from "@/lib/printReceipt";
+import { useToast } from "@/context/ToastContext";
 import type {
   Order,
   OrderReturnableInfo,
@@ -47,6 +49,7 @@ const RETURN_REASONS = [
 ] as const;
 
 export default function ReturnsPage() {
+  const toast = useToast();
   const [returnsList, setReturnsList] = useState<ReturnOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -133,7 +136,7 @@ export default function ReturnsPage() {
       }
       setReturnDraft(initialDraft);
     } catch (err: any) {
-      alert(err.message || "Failed to load order returnable items");
+      toast.error("Order Lookup Failed", err.message || "Failed to load order returnable items");
       setSelectedOrderId(null);
     } finally {
       setIsLoadingReturnable(false);
@@ -194,7 +197,7 @@ export default function ReturnsPage() {
       }));
 
     if (itemsPayload.length === 0) {
-      alert("Please select at least 1 item to return.");
+      toast.warning("Select Items", "Please select at least 1 item with quantity > 0 to return.");
       return;
     }
 
@@ -210,8 +213,12 @@ export default function ReturnsPage() {
       setShowNewReturnModal(false);
       setSelectedReturn(created);
       await loadReturns();
+      toast.success(
+        "Return Processed",
+        `Voucher ${created.returnNo} generated for refund amount ${formatCurrency(created.refundAmount)}`
+      );
     } catch (err: any) {
-      alert(err.message || "Failed to process return");
+      toast.error("Return Failed", err.message || "Failed to process return");
     } finally {
       setIsSubmittingReturn(false);
     }
@@ -368,9 +375,95 @@ export default function ReturnsPage() {
         </div>
       </div>
 
-      {/* Returns Table */}
+      {/* Returns Table / Responsive Mobile View */}
       <div className="card overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile View: Responsive Return Cards (Zero Horizontal Scroll) */}
+        <div className="block sm:hidden divide-y divide-stone-100">
+          {returnsList.map((ret) => {
+            const itemsCount = ret.items?.reduce((s, i) => s + i.qty, 0) || 0;
+            const itemsSummary = ret.items
+              ?.map((i) => `${i.qty}× ${i.product?.name || "Item"}`)
+              .join(", ");
+
+            return (
+              <div key={ret.id} className="p-4 space-y-3 bg-white">
+                {/* Header: Return # and Status */}
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <span className="font-mono font-bold text-stone-900 text-sm">
+                      {ret.returnNo}
+                    </span>
+                    <p className="text-[11px] text-stone-400">
+                      {new Date(ret.createdAt).toLocaleDateString()} at{" "}
+                      {new Date(ret.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700">
+                    {ret.status}
+                  </span>
+                </div>
+
+                {/* Details */}
+                <div className="rounded-lg bg-stone-50 p-2.5 space-y-1.5 text-xs border border-stone-100">
+                  <div className="flex justify-between">
+                    <span className="text-stone-500">Order:</span>
+                    <Link
+                      href="/orders"
+                      className="font-medium text-brand-600 hover:text-brand-800"
+                    >
+                      #{ret.orderId}
+                      {ret.order?.invoiceNo && ` (${ret.order.invoiceNo})`}
+                    </Link>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-stone-500">Customer:</span>
+                    <span className="font-semibold text-stone-900">
+                      {ret.order?.customerName || ret.order?.customer?.name || "Walk in customer"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-stone-500">Items:</span>
+                    <span className="font-medium text-stone-800">
+                      {itemsCount} items {itemsSummary ? `(${itemsSummary})` : ""}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border-t border-stone-200/80 pt-1.5">
+                    <span className="text-stone-600 font-medium">Refund ({ret.refundMethod}):</span>
+                    <span className="font-bold text-stone-900 tabular-nums">
+                      {formatCurrency(ret.refundAmount)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* View button */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedReturn(ret)}
+                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg border border-stone-200 bg-white py-2 text-xs font-semibold text-stone-700 hover:bg-stone-50 transition"
+                >
+                  <Eye size={14} className="text-brand-600" />
+                  <span>View Voucher</span>
+                </button>
+              </div>
+            );
+          })}
+
+          {returnsList.length === 0 && !isLoading && (
+            <div className="py-12 text-center">
+              <RotateCcw size={32} className="mx-auto text-stone-300 mb-2" />
+              <p className="font-semibold text-stone-700">No Return Orders Found</p>
+              <p className="text-xs text-stone-400 mt-0.5">
+                Customer returns will appear here once processed.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-stone-50 border-b border-stone-200 text-stone-600 font-semibold uppercase tracking-wider">
               <tr>
@@ -767,11 +860,11 @@ export default function ReturnsPage() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/60 p-4 backdrop-blur-sm animate-in fade-in duration-200 print:static print:inset-auto print:z-auto print:block print:bg-transparent print:p-0 print:m-0 print:backdrop-filter-none print:transform-none"
         >
-          <div className="card w-full max-w-md max-h-[90vh] flex flex-col p-6 shadow-2xl">
+          <div className="card w-full max-w-md max-h-[90vh] flex flex-col p-6 shadow-2xl print:static print:max-h-none print:w-[80mm] print:max-w-[80mm] print:mx-auto print:overflow-visible print:border-none print:shadow-none print:p-0 print:bg-white">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100 print:hidden">
               <div className="flex items-center gap-2">
                 <CheckCircle2 size={20} className="text-emerald-600" />
                 <h3 className="font-display text-base font-bold text-stone-900">
@@ -788,10 +881,10 @@ export default function ReturnsPage() {
             </div>
 
             {/* Printable Voucher Paper */}
-            <div className="flex-1 overflow-y-auto py-4">
+            <div className="flex-1 overflow-y-auto py-4 print:overflow-visible print:p-0 print:bg-transparent">
               <div
-                id="printable-receipt"
-                className="rounded-xl border border-stone-200 bg-white p-5 font-sans text-stone-900 shadow-sm space-y-4"
+                id="printable-return-receipt"
+                className="rounded-xl border border-stone-200 bg-white p-5 font-sans text-stone-900 shadow-sm space-y-4 print:rounded-none print:border-none print:shadow-none print:p-2 print:w-full"
               >
                 {/* Store Header */}
                 <div className="text-center">
@@ -892,7 +985,7 @@ export default function ReturnsPage() {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center gap-2.5 pt-3 border-t border-stone-100">
+            <div className="flex items-center gap-2.5 pt-3 border-t border-stone-100 print:hidden">
               <button
                 type="button"
                 onClick={() => setSelectedReturn(null)}
@@ -902,7 +995,9 @@ export default function ReturnsPage() {
               </button>
               <button
                 type="button"
-                onClick={() => window.print()}
+                onClick={() => {
+                  printReturnVoucher(selectedReturn);
+                }}
                 className="btn-primary flex-1 text-xs inline-flex items-center justify-center gap-2"
               >
                 <Printer size={15} />

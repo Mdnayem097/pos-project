@@ -71,7 +71,36 @@ export default function SalesPage() {
       </div>
 
       <div className="card overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile View: Responsive Sales Cards (Zero Horizontal Scroll) */}
+        <div className="block sm:hidden divide-y divide-stone-100">
+          {salesList.length === 0 ? (
+            <div className="px-5 py-8 text-center text-sm text-stone-400">
+              No sales recorded yet
+            </div>
+          ) : (
+            salesList.map((s) => (
+              <div key={s.id} className="p-4 space-y-2 bg-white">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-brand-700 text-sm">{s.id}</span>
+                  <Badge tone={statusTone[s.status]}>{s.status}</Badge>
+                </div>
+                <div className="flex items-center justify-between text-xs text-stone-600">
+                  <span className="font-medium text-stone-900">{s.customer}</span>
+                  <span>{s.date}</span>
+                </div>
+                <div className="flex items-center justify-between border-t border-stone-100 pt-2 text-xs">
+                  <span className="text-stone-500">{s.items} items · {s.payment}</span>
+                  <span className="font-bold text-stone-900 text-sm tabular-nums">
+                    {formatCurrency(s.total)}
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-stone-200 bg-stone-50 text-xs text-stone-500">
               <tr>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Mail, Phone, Plus, Star, X } from "lucide-react";
 import { createCustomer, fetchCustomers } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
+import { useToast } from "@/context/ToastContext";
 import type { Customer } from "@/lib/types";
 
 function initials(name: string) {
@@ -16,6 +17,7 @@ function initials(name: string) {
 }
 
 export default function CustomersPage() {
+  const toast = useToast();
   const [customerList, setCustomerList] = useState<Customer[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -51,9 +53,10 @@ export default function CustomersPage() {
       setCustomerList((prev) => [created, ...prev]);
       setIsModalOpen(false);
       setFormData({ name: "", phone: "", email: "" });
+      toast.success("Customer Saved", `"${created.name}" added to customer records.`);
     } catch (err: any) {
       console.error("Backend add customer failed:", err);
-      alert(err.message || "Failed to save customer in database.");
+      toast.error("Save Failed", err.message || "Failed to save customer in database.");
     } finally {
       setIsSubmitting(false);
     }

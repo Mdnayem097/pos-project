@@ -28,6 +28,7 @@ import {
   updateProduct,
 } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
+import { useToast } from "@/context/ToastContext";
 import type { Category, CategoryItem, Product } from "@/lib/types";
 
 type StockFilter = "all" | "in-stock" | "low-stock" | "out-of-stock";
@@ -45,6 +46,7 @@ const categoryColors: Record<string, "brand" | "green" | "amber" | "stone"> = {
 };
 
 export default function ProductsPage() {
+  const toast = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
   const [query, setQuery] = useState("");
@@ -222,11 +224,12 @@ export default function ProductsPage() {
         });
 
         setProducts((prev) => [created, ...prev]);
+        toast.success("Product Created", `"${created.name}" added to catalog.`);
       }
       setIsModalOpen(false);
     } catch (err: any) {
       console.error("Backend save failed:", err);
-      alert(err.message || "Failed to save product to database.");
+      toast.error("Save Failed", err.message || "Failed to save product to database.");
     }
   }
 
@@ -240,14 +243,16 @@ export default function ProductsPage() {
   // Confirm delete product
   async function handleConfirmDelete() {
     if (!deleteConfirmProduct) return;
+    const name = deleteConfirmProduct.name;
     try {
       setIsDeleting(true);
       await deleteProduct(deleteConfirmProduct.id);
       setProducts((prev) => prev.filter((p) => p.id !== deleteConfirmProduct.id));
       setDeleteConfirmProduct(null);
+      toast.info("Product Deleted", `"${name}" removed from catalog.`);
     } catch (err: any) {
       console.error("Backend delete failed:", err);
-      alert(err.message || "Failed to delete product from database.");
+      toast.error("Delete Failed", err.message || "Failed to delete product from database.");
     } finally {
       setIsDeleting(false);
     }
@@ -497,7 +502,84 @@ export default function ProductsPage() {
       {/* 4. Products Presentation (Table / Grid) */}
       {viewMode === "table" ? (
         <div className="card overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile View: Responsive Product Cards (Zero Horizontal Scroll) */}
+          <div className="block sm:hidden divide-y divide-stone-100">
+            {filteredProducts.map((p) => {
+              const isOut = p.stock === 0;
+              const isLow = p.stock > 0 && p.stock <= p.reorderLevel;
+
+              return (
+                <div key={p.id} className="p-4 space-y-3 bg-white">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-3">
+                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-2xl shadow-xs">
+                        {p.emoji}
+                      </span>
+                      <div>
+                        <p className="font-semibold text-stone-900 text-sm leading-tight">{p.name}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="font-mono text-[11px] text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded">
+                            {p.sku}
+                          </span>
+                          <Badge tone={categoryColors[p.category] || "brand"}>
+                            {p.category}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                        isOut
+                          ? "bg-red-50 text-red-700 ring-1 ring-red-200"
+                          : isLow
+                          ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200"
+                          : "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+                      }`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${
+                          isOut ? "bg-red-500" : isLow ? "bg-amber-500" : "bg-emerald-500"
+                        }`}
+                      />
+                      {isOut ? "Out of stock" : `${p.stock} units`}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-lg bg-stone-50 p-2.5 text-xs border border-stone-100">
+                    <span className="text-stone-500">
+                      Cost: <strong className="text-stone-700 tabular-nums">{formatCurrency(p.cost)}</strong>
+                    </span>
+                    <span className="text-stone-500">
+                      Price: <strong className="text-brand-700 font-bold text-sm tabular-nums">{formatCurrency(p.price)}</strong>
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-2 pt-1 border-t border-stone-100">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEdit(p)}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-100 transition"
+                    >
+                      <Edit2 size={13} className="text-stone-500" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteConfirmProduct(p)}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-100 transition"
+                    >
+                      <Trash2 size={13} />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead className="border-b border-stone-200 bg-stone-50/90 text-xs font-semibold uppercase tracking-wider text-stone-500">
                 <tr>

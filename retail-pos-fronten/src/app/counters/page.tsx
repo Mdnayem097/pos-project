@@ -12,6 +12,7 @@ import {
   Lock,
   Pencil,
   Plus,
+  Power,
   Printer,
   RefreshCw,
   ShoppingBag,
@@ -32,6 +33,7 @@ import {
   updateCounter,
 } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
+import { useToast } from "@/context/ToastContext";
 import type {
   CloseShiftResult,
   Counter,
@@ -40,6 +42,7 @@ import type {
 } from "@/lib/types";
 
 export default function CountersPage() {
+  const toast = useToast();
   const [counters, setCounters] = useState<Counter[]>([]);
   const [currentStatus, setCurrentStatus] = useState<CurrentCounterStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,6 +57,7 @@ export default function CountersPage() {
   const [editName, setEditName] = useState("");
   const [editIsActive, setEditIsActive] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [activatingId, setActivatingId] = useState<number | null>(null);
 
   // Open Shift Modal
   const [openingCounter, setOpeningCounter] = useState<Counter | null>(null);
@@ -84,6 +88,9 @@ export default function CountersPage() {
       ]);
       setCounters(countersData || []);
       setCurrentStatus(currentData);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("counter-state-updated"));
+      }
     } catch (err) {
       console.error("Failed to load counters data:", err);
     } finally {
@@ -100,13 +107,15 @@ export default function CountersPage() {
     e.preventDefault();
     if (!createName.trim() || isCreating) return;
     setIsCreating(true);
+    const counterName = createName.trim();
     try {
-      await createCounter({ name: createName.trim() });
+      await createCounter({ name: counterName });
       setCreateName("");
       setShowCreateModal(false);
       await loadData();
+      toast.success("Counter Created", `"${counterName}" added successfully.`);
     } catch (err: any) {
-      alert(err.message || "Failed to create counter");
+      toast.error("Failed to Create Counter", err.message || "Failed to create counter");
     } finally {
       setIsCreating(false);
     }
@@ -117,17 +126,47 @@ export default function CountersPage() {
     e.preventDefault();
     if (!editingCounter || !editName.trim() || isUpdating) return;
     setIsUpdating(true);
+    const updatedName = editName.trim();
     try {
       await updateCounter(editingCounter.id, {
-        name: editName.trim(),
+        name: updatedName,
         isActive: editIsActive,
       });
       setEditingCounter(null);
       await loadData();
+      toast.success("Counter Updated", `"${updatedName}" settings saved.`);
     } catch (err: any) {
-      alert(err.message || "Failed to update counter");
+      toast.error("Failed to Update Counter", err.message || "Failed to update counter");
     } finally {
       setIsUpdating(false);
+    }
+  }
+
+  // Quick toggle counter Active / Inactive
+  async function handleToggleCounterStatus(counter: Counter, newActiveStatus: boolean) {
+    if (counter.isOpen && !newActiveStatus) {
+      toast.warning(
+        "Cannot Deactivate",
+        "Cannot deactivate a counter while a shift is currently open. Please close the shift first."
+      );
+      return;
+    }
+    setActivatingId(counter.id);
+    try {
+      await updateCounter(counter.id, { isActive: newActiveStatus });
+      setCounters((prev) =>
+        prev.map((c) =>
+          c.id === counter.id ? { ...c, isActive: newActiveStatus } : c
+        )
+      );
+      toast.success(
+        newActiveStatus ? "Counter Activated" : "Counter Deactivated",
+        `Counter "${counter.name}" is now ${newActiveStatus ? "Active" : "Inactive"}.`
+      );
+    } catch (err: any) {
+      toast.error("Status Update Failed", err.message || "Failed to update counter status");
+    } finally {
+      setActivatingId(null);
     }
   }
 
@@ -141,10 +180,10 @@ export default function CountersPage() {
 
     try {
       const res = await deleteCounter(counter.id);
-      alert(res.message);
+      toast.info("Counter Removed", res.message);
       await loadData();
     } catch (err: any) {
-      alert(err.message || "Failed to delete counter");
+      toast.error("Failed to Delete Counter", err.message || "Failed to delete counter");
     }
   }
 
@@ -160,10 +199,15 @@ export default function CountersPage() {
         openingCash: cash,
         cashierName: cashierNameInput.trim() || "Demo Admin",
       });
+      const counterName = openingCounter.name;
       setOpeningCounter(null);
       await loadData();
+      toast.success(
+        "Register Shift Opened",
+        `"${counterName}" is now OPEN with starting cash ৳${cash}.`
+      );
     } catch (err: any) {
-      alert(err.message || "Failed to open register");
+      toast.error("Failed to Open Register", err.message || "Failed to open register");
     } finally {
       setIsOpeningShift(false);
     }
@@ -181,11 +225,16 @@ export default function CountersPage() {
         closingCash,
         note: closingNoteInput.trim() || undefined,
       });
+      const counterName = closingCounter.name;
       setClosingCounter(null);
       setShiftCloseResult(result);
       await loadData();
+      toast.info(
+        "Shift Closed",
+        `Shift successfully closed on "${counterName}". Summary generated.`
+      );
     } catch (err: any) {
-      alert(err.message || "Failed to close register shift");
+      toast.error("Failed to Close Shift", err.message || "Failed to close register shift");
     } finally {
       setIsClosingShift(false);
     }
@@ -422,9 +471,16 @@ export default function CountersPage() {
                         Closed
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 px-2.5 py-1 text-xs font-semibold text-red-600">
-                        Inactive
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleCounterStatus(c, true)}
+                        disabled={activatingId === c.id}
+                        title="Click to activate this counter"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 px-2.5 py-1 text-xs font-semibold text-red-600 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition"
+                      >
+                        <Power size={12} className="text-red-500" />
+                        {activatingId === c.id ? "Activating..." : "Inactive (Click to activate)"}
+                      </button>
                     )}
                   </div>
                 </div>
@@ -478,10 +534,19 @@ export default function CountersPage() {
                       <Lock size={14} />
                       Close Shift
                     </button>
+                  ) : !c.isActive ? (
+                    <button
+                      type="button"
+                      disabled={activatingId === c.id}
+                      onClick={() => handleToggleCounterStatus(c, true)}
+                      className="btn-primary flex-1 py-2 text-xs !bg-emerald-600 hover:!bg-emerald-700 inline-flex items-center justify-center gap-1.5 shadow-xs"
+                    >
+                      <Power size={14} />
+                      {activatingId === c.id ? "Activating..." : "Activate Counter"}
+                    </button>
                   ) : (
                     <button
                       type="button"
-                      disabled={!c.isActive}
                       onClick={() => {
                         setOpeningCounter(c);
                         setOpeningCashInput("500");
@@ -513,19 +578,32 @@ export default function CountersPage() {
                       setEditName(c.name);
                       setEditIsActive(c.isActive);
                     }}
-                    className="inline-flex items-center gap-1 text-xs text-stone-500 hover:text-stone-900"
+                    className="inline-flex items-center gap-1 text-xs text-stone-500 hover:text-stone-900 transition"
                   >
                     <Pencil size={12} />
                     Edit
                   </button>
 
+                  {/* Active / Deactivate button on the right (replacing Delete) */}
                   <button
                     type="button"
-                    onClick={() => handleDeleteCounter(c)}
-                    className="inline-flex items-center gap-1 text-xs text-stone-400 hover:text-red-600"
+                    disabled={c.isOpen || activatingId === c.id}
+                    onClick={() => handleToggleCounterStatus(c, !c.isActive)}
+                    className={`inline-flex items-center gap-1.5 text-xs font-semibold transition ${
+                      c.isActive
+                        ? "text-stone-400 hover:text-amber-600 disabled:opacity-40 disabled:hover:text-stone-400"
+                        : "text-emerald-600 hover:text-emerald-700"
+                    }`}
+                    title={
+                      c.isOpen
+                        ? "Cannot deactivate while shift is open"
+                        : c.isActive
+                        ? "Deactivate Counter"
+                        : "Activate Counter"
+                    }
                   >
-                    <Trash2 size={12} />
-                    Delete
+                    <Power size={13} className={c.isActive ? "text-stone-400" : "text-emerald-600"} />
+                    <span>{activatingId === c.id ? "Updating..." : c.isActive ? "Deactivate" : "Activate"}</span>
                   </button>
                 </div>
               </div>
@@ -1041,81 +1119,141 @@ export default function CountersPage() {
                   No shift history found for this counter yet.
                 </div>
               ) : (
-                <div className="divide-y divide-stone-100 border rounded-xl overflow-hidden text-xs">
-                  <div className="grid grid-cols-6 gap-2 bg-stone-50 p-3 font-semibold text-stone-700">
-                    <span>Opened</span>
-                    <span>Closed</span>
-                    <span>Cashier</span>
-                    <span className="text-right">Opening Float</span>
-                    <span className="text-right">Closing Cash</span>
-                    <span className="text-right">Difference</span>
+                <>
+                  {/* Mobile View: Responsive Shift Cards (Zero Horizontal Scroll) */}
+                  <div className="block sm:hidden divide-y divide-stone-100 rounded-xl border border-stone-200 overflow-hidden text-xs">
+                    {sessionsHistory.map((s) => {
+                      const diff = Number(s.difference) || 0;
+                      return (
+                        <div key={s.id} className="p-3.5 space-y-2.5 bg-white">
+                          <div className="flex items-center justify-between">
+                            <span className="font-semibold text-stone-900">
+                              {new Date(s.openedAt).toLocaleDateString()}
+                            </span>
+                            {s.closedAt ? (
+                              <span className="rounded bg-stone-100 px-2 py-0.5 text-[11px] font-medium text-stone-600">
+                                Closed {new Date(s.closedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                              </span>
+                            ) : (
+                              <span className="rounded bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
+                                Open Now
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="rounded-lg bg-stone-50 p-2.5 space-y-1.5 border border-stone-100">
+                            <div className="flex justify-between">
+                              <span className="text-stone-500">Cashier:</span>
+                              <span className="font-medium text-stone-800">{s.cashierName}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-stone-500">Opening Float:</span>
+                              <span className="font-semibold tabular-nums text-stone-800">{formatCurrency(s.openingCash)}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-stone-500">Closing Cash:</span>
+                              <span className="font-semibold tabular-nums text-stone-800">
+                                {s.closingCash !== null ? formatCurrency(s.closingCash) : "—"}
+                              </span>
+                            </div>
+                            <div className="flex justify-between border-t border-stone-200/80 pt-1 font-semibold">
+                              <span className="text-stone-600">Difference:</span>
+                              <span
+                                className={`tabular-nums ${
+                                  diff === 0
+                                    ? "text-emerald-600"
+                                    : diff > 0
+                                    ? "text-blue-600"
+                                    : "text-red-600"
+                                }`}
+                              >
+                                {diff > 0 && "+"}
+                                {formatCurrency(diff)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                  {sessionsHistory.map((s) => {
-                    const diff = Number(s.difference) || 0;
-                    return (
-                      <div
-                        key={s.id}
-                        className="grid grid-cols-6 gap-2 p-3 items-center hover:bg-stone-50/50"
-                      >
-                        <div>
-                          <p className="font-semibold text-stone-900">
-                            {new Date(s.openedAt).toLocaleDateString()}
-                          </p>
-                          <p className="text-[11px] text-stone-400">
-                            {new Date(s.openedAt).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </p>
+
+                  {/* Desktop Grid Table */}
+                  <div className="hidden sm:block divide-y divide-stone-100 border rounded-xl overflow-x-auto no-scrollbar text-xs">
+                    <div className="grid grid-cols-6 gap-2 bg-stone-50 p-3 font-semibold text-stone-700 min-w-[550px]">
+                      <span>Opened</span>
+                      <span>Closed</span>
+                      <span>Cashier</span>
+                      <span className="text-right">Opening Float</span>
+                      <span className="text-right">Closing Cash</span>
+                      <span className="text-right">Difference</span>
+                    </div>
+                    {sessionsHistory.map((s) => {
+                      const diff = Number(s.difference) || 0;
+                      return (
+                        <div
+                          key={s.id}
+                          className="grid grid-cols-6 gap-2 p-3 items-center hover:bg-stone-50/50 min-w-[550px]"
+                        >
+                          <div>
+                            <p className="font-semibold text-stone-900">
+                              {new Date(s.openedAt).toLocaleDateString()}
+                            </p>
+                            <p className="text-[11px] text-stone-400">
+                              {new Date(s.openedAt).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </p>
+                          </div>
+                          <div>
+                            {s.closedAt ? (
+                              <>
+                                <p className="font-semibold text-stone-900">
+                                  {new Date(s.closedAt).toLocaleDateString()}
+                                </p>
+                                <p className="text-[11px] text-stone-400">
+                                  {new Date(s.closedAt).toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </p>
+                              </>
+                            ) : (
+                              <span className="rounded bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
+                                Open Now
+                              </span>
+                            )}
+                          </div>
+                          <div className="font-medium text-stone-800">{s.cashierName}</div>
+                          <div className="text-right font-medium tabular-nums text-stone-800">
+                            {formatCurrency(s.openingCash)}
+                          </div>
+                          <div className="text-right font-medium tabular-nums text-stone-800">
+                            {s.closingCash !== null ? formatCurrency(s.closingCash) : "—"}
+                          </div>
+                          <div className="text-right font-bold tabular-nums">
+                            {s.status === "Closed" ? (
+                              <span
+                                className={
+                                  diff === 0
+                                    ? "text-emerald-600"
+                                    : diff > 0
+                                    ? "text-blue-600"
+                                    : "text-red-600"
+                                }
+                              >
+                                {diff > 0 && "+"}
+                                {formatCurrency(diff)}
+                              </span>
+                            ) : (
+                              <span className="text-stone-400">—</span>
+                            )}
+                          </div>
                         </div>
-                        <div>
-                          {s.closedAt ? (
-                            <>
-                              <p className="font-semibold text-stone-900">
-                                {new Date(s.closedAt).toLocaleDateString()}
-                              </p>
-                              <p className="text-[11px] text-stone-400">
-                                {new Date(s.closedAt).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })}
-                              </p>
-                            </>
-                          ) : (
-                            <span className="rounded bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
-                              Open Now
-                            </span>
-                          )}
-                        </div>
-                        <div className="font-medium text-stone-800">{s.cashierName}</div>
-                        <div className="text-right font-medium tabular-nums text-stone-800">
-                          {formatCurrency(s.openingCash)}
-                        </div>
-                        <div className="text-right font-medium tabular-nums text-stone-800">
-                          {s.closingCash !== null ? formatCurrency(s.closingCash) : "—"}
-                        </div>
-                        <div className="text-right font-bold tabular-nums">
-                          {s.status === "Closed" ? (
-                            <span
-                              className={
-                                diff === 0
-                                  ? "text-emerald-600"
-                                  : diff > 0
-                                  ? "text-blue-600"
-                                  : "text-red-600"
-                              }
-                            >
-                              {diff > 0 && "+"}
-                              {formatCurrency(diff)}
-                            </span>
-                          ) : (
-                            <span className="text-stone-400">—</span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                </>
               )}
             </div>
 

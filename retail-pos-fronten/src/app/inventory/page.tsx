@@ -147,9 +147,63 @@ export default function InventoryPage() {
         </div>
       </section>
 
-      {/* Inventory Table */}
+      {/* Inventory Presentation */}
       <div className="card overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile View: Responsive Stock Cards (Zero Horizontal Scroll) */}
+        <div className="block sm:hidden divide-y divide-stone-100">
+          {filteredProducts.map((p) => {
+            const state = stockState(p.stock, p.reorderLevel);
+            const pct = Math.min(100, (p.stock / (p.reorderLevel * 3)) * 100);
+            return (
+              <div key={p.id} className="p-4 space-y-3 bg-white">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-xl shadow-xs">
+                      {p.emoji}
+                    </span>
+                    <div>
+                      <p className="font-semibold text-stone-900 text-sm leading-tight">{p.name}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="font-mono text-[11px] text-stone-500">{p.sku}</span>
+                        <span className="text-[10px] bg-stone-100 text-stone-600 px-1.5 py-0.5 rounded font-medium">
+                          {p.category}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Badge tone={state.tone}>{state.label}</Badge>
+                </div>
+
+                {/* Stock progress */}
+                <div className="rounded-lg bg-stone-50 p-2.5 space-y-1.5 border border-stone-100">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-stone-500">Current Stock:</span>
+                    <span className="font-bold text-stone-900 tabular-nums">{p.stock} units</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-stone-200/70">
+                    <div
+                      className={`h-full rounded-full transition-all duration-300 ${state.bar}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-stone-400">
+                    <span>Reorder threshold</span>
+                    <span className="font-medium text-stone-600 tabular-nums">{p.reorderLevel} units</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          {filteredProducts.length === 0 && (
+            <div className="p-8 text-center text-sm text-stone-500">
+              No products match the selected filter.
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-stone-200 bg-stone-50 text-xs font-semibold uppercase tracking-wider text-stone-500">
               <tr>

@@ -353,8 +353,8 @@ export default function RolesPage() {
 
       {/* Add / Edit Role Modal with Checkbox Grid */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm overflow-y-auto">
-          <div className="my-8 w-full max-w-3xl rounded-2xl border border-[#fae5d7] bg-white p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm overflow-y-auto">
+          <div className="my-4 sm:my-8 w-full max-w-3xl rounded-2xl border border-[#fae5d7] bg-white p-4 sm:p-6 shadow-2xl">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-stone-100 pb-4">
               <div className="flex items-center gap-2.5">
@@ -427,8 +427,55 @@ export default function RolesPage() {
                 </button>
               </div>
 
-              {/* Checkbox Grid Table */}
-              <div className="overflow-x-auto rounded-xl border border-stone-200 max-h-[360px] overflow-y-auto">
+              {/* Mobile Module Cards (Zero Horizontal Scroll) */}
+              <div className="block sm:hidden rounded-xl border border-stone-200 max-h-[360px] overflow-y-auto divide-y divide-stone-100 bg-white">
+                {modules.map((mod) => {
+                  const allSelected = isModuleAllSelected(mod);
+                  return (
+                    <div key={mod.module} className="p-3 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-xs text-stone-900">{mod.label}</span>
+                        <button
+                          type="button"
+                          onClick={() => toggleModuleAll(mod)}
+                          className={`text-[11px] font-medium px-2 py-0.5 rounded transition ${
+                            allSelected
+                              ? "bg-brand-100 text-brand-700 font-bold"
+                              : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+                          }`}
+                        >
+                          {allSelected ? "All ✓" : "Select All"}
+                        </button>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5 pt-0.5">
+                        {mod.actions.map((act) => {
+                          const pKey = `${mod.module}:${act.key}`;
+                          const isChecked = selectedPermissions.includes(pKey);
+                          return (
+                            <button
+                              key={act.key}
+                              type="button"
+                              onClick={() => togglePermission(pKey)}
+                              className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium border transition ${
+                                isChecked
+                                  ? "bg-brand-500 border-brand-500 text-white shadow-xs"
+                                  : "bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100"
+                              }`}
+                            >
+                              <span className="text-[10px]">{isChecked ? "✓" : "+"}</span>
+                              <span className="capitalize">{act.key}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop Checkbox Grid Table */}
+              <div className="hidden sm:block overflow-x-auto rounded-xl border border-stone-200 max-h-[360px] overflow-y-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="sticky top-0 bg-stone-50 text-stone-600 font-semibold border-b border-stone-200 z-10">
                     <tr>

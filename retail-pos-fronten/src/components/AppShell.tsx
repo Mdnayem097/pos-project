@@ -17,15 +17,39 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   // Role / permission route guards
   useEffect(() => {
     if (!isLoading && user) {
-      // If Cashier tries to open Dashboard, Products or Inventory
+      // Permission-based route guards:
       if (
-        user.role === "cashier" &&
-        (pathname === "/" || pathname === "/products" || pathname === "/inventory")
+        pathname === "/products" &&
+        !hasPermission("products:view") &&
+        !hasPermission("products:read") &&
+        !hasPermission("products:manage")
       ) {
-        router.replace("/pos");
+        router.replace(hasPermission("pos:access") ? "/pos" : "/");
+      }
+      if (
+        pathname === "/inventory" &&
+        !hasPermission("inventory:view") &&
+        !hasPermission("inventory:read") &&
+        !hasPermission("inventory:manage")
+      ) {
+        router.replace(hasPermission("pos:access") ? "/pos" : "/");
+      }
+      if (
+        pathname === "/users" &&
+        !hasPermission("users:view") &&
+        !hasPermission("users:manage")
+      ) {
+        router.replace("/");
+      }
+      if (
+        pathname === "/roles" &&
+        !hasPermission("roles:view") &&
+        !hasPermission("roles:manage")
+      ) {
+        router.replace("/");
       }
     }
-  }, [isLoading, user, pathname, router]);
+  }, [isLoading, user, pathname, router, hasPermission]);
 
   if (isLoginPage) {
     return <main className="min-h-screen bg-stone-50">{children}</main>;
@@ -48,13 +72,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-stone-100">
+    <div className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-stone-100 print:min-h-0 print:bg-white print:block">
       {user?.mustChangePassword && <ChangePasswordModal forced={true} />}
-      <Sidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar />
-        <main className="flex-1 px-3 pb-28 pt-6 sm:px-4 lg:px-[25px] lg:pb-10">
-          <div className="w-full">{children}</div>
+      <div className="print:hidden">
+        <Sidebar />
+      </div>
+      <div className="flex min-w-0 max-w-full flex-1 flex-col overflow-x-hidden print:block">
+        <div className="print:hidden">
+          <Topbar />
+        </div>
+        <main className="flex-1 w-full max-w-full min-w-0 px-3 pb-28 pt-4 sm:pt-6 sm:px-4 lg:px-[25px] lg:pb-10 print:p-0 print:m-0 print:w-full overflow-x-hidden">
+          <div className="w-full max-w-full min-w-0">{children}</div>
         </main>
       </div>
     </div>
